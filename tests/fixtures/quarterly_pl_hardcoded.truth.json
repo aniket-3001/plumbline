@@ -1,0 +1,24 @@
+{
+  "workbook": "quarterly_pl_hardcoded.xlsx",
+  "difficulty": "hard",
+  "why_hard": "The hardcoded total equals the correct sum today, so every value-based check passes and the arithmetic ties. Only a structural check (constant where the row expects a formula) or a sensitivity probe (perturb an input, observe the total fail to respond) can catch it.",
+  "seeded_errors": [
+    {
+      "id": "pl-opex-hardcoded",
+      "sheet": "P&L",
+      "cell": "C11",
+      "panko_class": "hardcoding",
+      "description": "Total Opex is a typed constant, not a SUM. It matches the lines beneath it today and silently diverges the moment any input changes.",
+      "actual_value": 30000,
+      "expected_formula": "=SUM(C8:C10)",
+      "detectable_by": [
+        "pattern_break",
+        "sensitivity_probe"
+      ],
+      "detectable_by_value_check": false,
+      "propagates_to": [
+        "C13"
+      ]
+    }
+  ]
+}
