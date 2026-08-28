@@ -89,7 +89,8 @@ def main() -> int:
         print(
             f"  {wb.name[:46]:46} seeds {manifest['seed_count']:2d}  "
             f"found {card.true_positives:2d}  fp {card.false_positives:3d}  "
-            f"proved {card.proved:2d}  {elapsed:5.1f}s"
+            f"proved {card.proved:2d}  {elapsed:5.1f}s",
+            flush=True,   # long run: progress must be visible while it happens
         )
 
     summary = total.to_dict()
