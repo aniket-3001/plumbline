@@ -174,6 +174,37 @@ concealing a known limitation is how a submission fails before scoring.
 
 ---
 
+## 6b. Implementation findings from the proof of concept (2026-08-28)
+
+**xlcalculator's in-memory counterfactual APIs silently return wrong numbers.** This matters more
+than it sounds: the entire product claim is *"we prove findings by recomputation,"* so a broken
+recompute path does not fail loudly — it ships **fake proofs**.
+
+Two approaches were tried and both are unusable:
+
+| Approach | What happens |
+|---|---|
+| `Evaluator.set_cell_value(addr, "=SUM(C8:C10)")` | Sets `.value` to the formula *string* but leaves `.formula` and its AST intact. `evaluate()` still returns the **old** number. Looks like a successful repair that changed nothing |
+| Replace `cell.formula` with a new `XLFormula(...)`, then `model.build_code()` | The constructor does not populate `terms` / `associated_cells`, so range lookups resolve to nothing. Returned `C11 = 0.0` while the dependent `C13 = 72000.0` — **internally inconsistent**, and neither value is correct |
+
+**Adopted approach: patch a copy with openpyxl, write it, re-parse with `ModelCompiler`.** Slower,
+but it goes through the identical code path as the original parse, so the counterfactual is
+trustworthy. For a tool whose product *is* the proof, correctness of the recompute path outranks its
+speed.
+
+Verified on the fixture: `C11: 27000 -> 30000 (+3000)`, propagating to `C13: 45000 -> 42000 (-3000)`.
+The omitted Rent line is 3000/quarter, so both deltas are exactly right.
+
+**Second finding:** xlcalculator returns its own `Number` wrapper type, not Python numerics. It fails
+`format()` and compares unexpectedly. Everything crossing the boundary out of the engine goes through
+a `native()` coercion.
+
+**Consequence for the evaluation:** any future speed optimisation of the counterfactual path needs a
+differential test against the write-and-reparse ground truth, or we risk reintroducing silent
+wrongness into the one thing we promise is sound.
+
+---
+
 ## 7. What existed before vs what we add *(ground rule 2)*
 
 **Existed:** xlcalculator (MIT formula engine), the Enron corpus (CC BY 4.0), Panko's error taxonomy

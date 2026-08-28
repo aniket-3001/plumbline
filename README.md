@@ -63,7 +63,10 @@ and the decision it drove, including experiments that were removed.*
 
 | Stage | What was tried and why | Evidence | Decision / learning |
 |---|---|---|---|
-| — | — | — | — |
+| PoC | Structural pattern-break detection with no model in the loop, to establish the floor before adding anything | On the seeded fixture: 1 finding, 0 false positives across 12 formula cells. `C11: 27000 → 30000 (+3000)`, propagating to `C13: 45000 → 42000 (−3000)` — both deltas exactly the omitted Rent line | **Kept.** Deterministic detection alone already finds a real class of error and proves it. Establishes the baseline the model layers must beat |
+| PoC | Counterfactual recomputation via `Evaluator.set_cell_value`, the obvious API | Returned the **unchanged** value 27000 for a "repaired" cell — it sets `.value` but leaves the formula AST intact | **Removed.** Silently produces fake proofs |
+| PoC | Counterfactual by swapping in a new `XLFormula` and calling `build_code()` | Returned `C11 = 0.0` while dependent `C13 = 72000.0` — internally inconsistent, both wrong. The constructor never populates range terms | **Removed.** See `Docs/DESIGN.md` §6b |
+| PoC | Patch a copy with openpyxl, write, re-parse | Correct deltas, correct propagation, correct untouched columns | **Kept.** Slower, but identical code path to the original parse. For a tool whose product *is* the proof, soundness outranks speed |
 
 ## Reproduction
 

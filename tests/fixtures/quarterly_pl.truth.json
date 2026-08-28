@@ -1,0 +1,17 @@
+{
+  "workbook": "quarterly_pl.xlsx",
+  "seeded_errors": [
+    {
+      "id": "pl-opex-offbyone",
+      "sheet": "P&L",
+      "cell": "C11",
+      "panko_class": "mechanical/pointing",
+      "description": "SUM range omits the Rent line (row 10) that every other quarter includes.",
+      "actual_formula": "=SUM(C8:C9)",
+      "expected_formula": "=SUM(C8:C10)",
+      "propagates_to": [
+        "C13"
+      ]
+    }
+  ]
+}
