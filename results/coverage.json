@@ -1,0 +1,147 @@
+{
+  "workbooks_scanned": 100,
+  "workbooks_readable": 99,
+  "workbooks_without_formulas": 47,
+  "workbooks_with_formulas": 52,
+  "workbooks_fully_supported": 44,
+  "formula_cells": 64552,
+  "formula_cells_supported": 63508,
+  "top_functions": [
+    [
+      "SUM",
+      11760
+    ],
+    [
+      "IF",
+      3880
+    ],
+    [
+      "AVERAGE",
+      1010
+    ],
+    [
+      "LN",
+      802
+    ],
+    [
+      "STDEV",
+      782
+    ],
+    [
+      "SQRT",
+      780
+    ],
+    [
+      "ROUND",
+      648
+    ],
+    [
+      "VLOOKUP",
+      609
+    ],
+    [
+      "SUBTOTAL",
+      223
+    ],
+    [
+      "OR",
+      115
+    ],
+    [
+      "AND",
+      115
+    ],
+    [
+      "NA",
+      72
+    ],
+    [
+      "MAX",
+      72
+    ],
+    [
+      "MIN",
+      69
+    ],
+    [
+      "ISNUMBER",
+      32
+    ],
+    [
+      "WORKDAY",
+      27
+    ],
+    [
+      "SUMIF",
+      13
+    ],
+    [
+      "CELL",
+      10
+    ],
+    [
+      "COUNTA",
+      10
+    ],
+    [
+      "NOW",
+      9
+    ],
+    [
+      "TODAY",
+      8
+    ],
+    [
+      "ABS",
+      8
+    ],
+    [
+      "COUNT",
+      6
+    ],
+    [
+      "PMT",
+      4
+    ],
+    [
+      "TEXT",
+      2
+    ],
+    [
+      "WEEKDAY",
+      1
+    ],
+    [
+      "MONTH",
+      1
+    ]
+  ],
+  "top_unsupported": [
+    [
+      "STDEV",
+      782
+    ],
+    [
+      "SUBTOTAL",
+      223
+    ],
+    [
+      "WORKDAY",
+      27
+    ],
+    [
+      "CELL",
+      10
+    ],
+    [
+      "TEXT",
+      2
+    ]
+  ],
+  "read_failures": {
+    "KeyError": 1
+  },
+  "corpus_size": 15871,
+  "seed": 17,
+  "formula_cell_coverage_pct": 98.38
+}
