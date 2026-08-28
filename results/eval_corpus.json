@@ -1,0 +1,103 @@
+{
+  "scanned": 43,
+  "accepted": 12,
+  "rejected": {
+    "no_formulas": 19,
+    "volatile": 4,
+    "too_few_formulas": 4,
+    "compile_failed:KeyError": 2,
+    "runtime_references": 1,
+    "no_repeated_patterns": 1
+  },
+  "seed": 17,
+  "thresholds": {
+    "min_formula_cells": 15,
+    "min_pattern_rows": 2
+  },
+  "workbooks": [
+    {
+      "path": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+      "formula_cells": 1474,
+      "pattern_rows": 6,
+      "cells_checked": 150,
+      "pre_existing_findings": 0
+    },
+    {
+      "path": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+      "formula_cells": 402,
+      "pattern_rows": 36,
+      "cells_checked": 150,
+      "pre_existing_findings": 8
+    },
+    {
+      "path": "chris_germany__2230__2000ces08.xlsx",
+      "formula_cells": 709,
+      "pattern_rows": 4,
+      "cells_checked": 150,
+      "pre_existing_findings": 1
+    },
+    {
+      "path": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+      "formula_cells": 611,
+      "pattern_rows": 20,
+      "cells_checked": 150,
+      "pre_existing_findings": 3
+    },
+    {
+      "path": "lisa_gang__22348__EES_Schedule.xlsx",
+      "formula_cells": 3688,
+      "pattern_rows": 16,
+      "cells_checked": 150,
+      "pre_existing_findings": 8
+    },
+    {
+      "path": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+      "formula_cells": 1397,
+      "pattern_rows": 46,
+      "cells_checked": 150,
+      "pre_existing_findings": 0
+    },
+    {
+      "path": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+      "formula_cells": 110,
+      "pattern_rows": 4,
+      "cells_checked": 110,
+      "pre_existing_findings": 0
+    },
+    {
+      "path": "kate_symes__18314__EES April Dailies.xlsx",
+      "formula_cells": 1672,
+      "pattern_rows": 475,
+      "cells_checked": 150,
+      "pre_existing_findings": 0
+    },
+    {
+      "path": "diana_scholtes__8612__SchedC0514_Power West.xlsx",
+      "formula_cells": 78,
+      "pattern_rows": 9,
+      "cells_checked": 78,
+      "pre_existing_findings": 0
+    },
+    {
+      "path": "darron_c_giron__8011__EMW 0921.xlsx",
+      "formula_cells": 1746,
+      "pattern_rows": 174,
+      "cells_checked": 150,
+      "pre_existing_findings": 120
+    },
+    {
+      "path": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+      "formula_cells": 963,
+      "pattern_rows": 24,
+      "cells_checked": 150,
+      "pre_existing_findings": 18
+    },
+    {
+      "path": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+      "formula_cells": 116,
+      "pattern_rows": 20,
+      "cells_checked": 116,
+      "pre_existing_findings": 1
+    }
+  ]
+}
