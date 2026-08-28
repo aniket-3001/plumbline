@@ -1,0 +1,42 @@
+[project]
+name = "plumbline"
+version = "0.1.0"
+description = "Audits spreadsheets and proves every finding by recomputation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Aniket Gupta" }]
+
+dependencies = [
+    "xlcalculator>=0.5.0",   # MIT — formula evaluation + model graph
+    "openpyxl>=3.1.0",       # MIT — workbook reading/writing, cell metadata
+    "networkx>=3.2",         # BSD — dependency graph analysis
+    "pydantic>=2.6",         # MIT — typed finding/report schemas
+    "typer>=0.12",           # MIT — CLI
+    "rich>=13.7",            # MIT — terminal report rendering
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+]
+
+[project.scripts]
+plumbline = "plumbline.cli:app"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

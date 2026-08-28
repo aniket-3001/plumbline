@@ -1,0 +1,42 @@
+# Data — corpus is large and downloadable; never commit it
+data/raw/
+data/corpus/
+data/seeded/
+*.xlsx
+*.xls
+!tests/fixtures/*.xlsx
+
+# Results are regenerated, but keep the committed evaluation snapshots
+results/scratch/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Env / secrets — never commit credentials (ground rule 8)
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tooling caches present in the workspace
+.tokensave/
