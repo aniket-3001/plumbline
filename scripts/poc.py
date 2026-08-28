@@ -119,14 +119,18 @@ def detect_row_pattern_breaks(formulas: dict[str, str]) -> list[Finding]:
         for ref, col, text in members:
             if shapes[ref] == majority:
                 continue
-            twin = next(t for r, c, t in members if shapes[r] == majority)
-            twin_row, twin_col = split_ref(next(r for r, c, t in members if shapes[r] == majority))
+            conformers = [(r, c, t) for r, c, t in members if shapes[r] == majority]
+            twin_ref, twin_col, twin = min(conformers, key=lambda m: abs(m[1] - col))
+            twin_row, _ = split_ref(twin_ref)
+            expected = rebase(twin, twin_row, twin_col, row, col)
+            if expected is None or expected == text:
+                continue
             findings.append(
                 Finding(
                     sheet="",
                     cell=ref,
                     actual=text,
-                    expected=rebase(twin, twin_row, twin_col, row, col),
+                    expected=expected,
                     reason=(
                         f"{majority_n} of {len(members)} formula cells in row {row} share one "
                         f"shape; {ref} does not."
@@ -136,18 +140,34 @@ def detect_row_pattern_breaks(formulas: dict[str, str]) -> list[Finding]:
     return findings
 
 
-def rebase(formula: str, from_row: int, from_col: int, to_row: int, to_col: int) -> str:
-    """Translate a formula written for one cell into the equivalent for another."""
+MAX_COL = 16384  # Excel's last column, XFD
+
+
+def rebase(formula: str, from_row: int, from_col: int, to_row: int, to_col: int) -> str | None:
+    """Translate a formula written for one cell into the equivalent for another.
+
+    Returns None when the translation would land outside the sheet. That happens
+    for real: if the reference peer sits far to the right of the target cell, every
+    relative column shifts left by that distance and can run off the left edge.
+    Callers must treat None as "no expectation available" and skip the finding --
+    a translated formula that points nowhere is not a repair worth proposing.
+    """
+    failed = False
 
     def repl(m: re.Match) -> str:
+        nonlocal failed
         col_abs, col_letters, row_abs, row_digits = m.groups()
         ref_col = column_index_from_string(col_letters)
         ref_row = int(row_digits)
         new_col = ref_col if col_abs else ref_col + (to_col - from_col)
         new_row = ref_row if row_abs else ref_row + (to_row - from_row)
+        if not (1 <= new_col <= MAX_COL) or new_row < 1:
+            failed = True
+            return m.group(0)
         return f"{col_abs}{get_column_letter(new_col)}{row_abs}{new_row}"
 
-    return A1_REF.sub(repl, formula.upper())
+    out = A1_REF.sub(repl, formula.upper())
+    return None if failed else out
 
 
 def prove(path: str, sheet: str, finding: Finding, watch: list[str]) -> Finding:

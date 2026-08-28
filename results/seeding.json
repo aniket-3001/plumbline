@@ -1,0 +1,1540 @@
+{
+  "workbooks_seeded": 21,
+  "workbooks_skipped": 3,
+  "total_seeds": 54,
+  "by_panko_class": {
+    "hardcoding": 32,
+    "mechanical": 14,
+    "logic": 8
+  },
+  "by_difficulty": {
+    "silent": 32,
+    "realistic": 20,
+    "obvious": 2
+  },
+  "rng_seed": 42,
+  "seeds_per_workbook_cap": 4,
+  "skipped": [
+    {
+      "workbook": "daren_farmer__6140__Consolidated_2000.xlsx",
+      "reason": "no viable seed sites"
+    },
+    {
+      "workbook": "diana_scholtes__8612__SchedC0514_Power West.xlsx",
+      "reason": "no viable seed sites"
+    },
+    {
+      "workbook": "tracy_geaccone__40381__San Juan.xlsx",
+      "reason": "no viable seed sites"
+    }
+  ],
+  "manifests": [
+    {
+      "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+      "seeded": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [
+        "Cost Basis!H46",
+        "Cost Basis!H51",
+        "Variable O&M!D31"
+      ],
+      "seeds": [
+        {
+          "seed_id": "benjamin_rogers__1229__ENRON_$orion_1099-1",
+          "panko_class": "hardcoding",
+          "sheet": "Variable O&M",
+          "cell": "R26",
+          "original_formula": "=R23*R24",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "benjamin_rogers__1229__ENRON_$orion_1099-2",
+          "panko_class": "hardcoding",
+          "sheet": "Variable O&M",
+          "cell": "O14",
+          "original_formula": "=O11*O12",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+      "seeded": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+      "seed_count": 4,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-0",
+          "panko_class": "mechanical",
+          "sheet": "Balance Sheet",
+          "cell": "E24",
+          "original_formula": "=+E22+E20",
+          "seeded_formula": "=+E21+E20",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 2733760,
+          "seeded_value": 1733760,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-1",
+          "panko_class": "hardcoding",
+          "sheet": "Balance Sheet",
+          "cell": "E30",
+          "original_formula": "=E28+E24",
+          "seeded_formula": 2866592,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 2866592,
+          "seeded_value": 2866592,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-2",
+          "panko_class": "mechanical",
+          "sheet": "Balance Sheet",
+          "cell": "G30",
+          "original_formula": "=G28+G24",
+          "seeded_formula": "=G27+G24",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 1468800,
+          "seeded_value": 1008800,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-3",
+          "panko_class": "hardcoding",
+          "sheet": "Balance Sheet",
+          "cell": "E12",
+          "original_formula": "=SUM(E10:E11)",
+          "seeded_formula": 939790,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 939790,
+          "seeded_value": 939790,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\chris_germany__1938__Mar2002_EstateGas.xlsx",
+      "seeded": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "chris_germany__1938__Mar2002_EstateGas-0",
+          "panko_class": "mechanical",
+          "sheet": "Sheet1",
+          "cell": "U8",
+          "original_formula": "=+T8",
+          "seeded_formula": "=+T7",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 2.1562,
+          "seeded_value": 10000,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "chris_germany__1938__Mar2002_EstateGas-2",
+          "panko_class": "hardcoding",
+          "sheet": "Sheet1",
+          "cell": "AH25",
+          "original_formula": "=+AG25",
+          "seeded_formula": 5000,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 5000,
+          "seeded_value": 5000,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "chris_germany__2230__2000ces08.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\chris_germany__2230__2000ces08.xlsx",
+      "seeded": "chris_germany__2230__2000ces08.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [
+        "Pricing!I23"
+      ],
+      "seeds": [
+        {
+          "seed_id": "chris_germany__2230__2000ces08-0",
+          "panko_class": "hardcoding",
+          "sheet": "Pricing",
+          "cell": "G54",
+          "original_formula": "=SUM(G52,G47:G48,G53)",
+          "seeded_formula": 4.7356,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 4.7356,
+          "seeded_value": 4.7356,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "chris_germany__2230__2000ces08-1",
+          "panko_class": "mechanical",
+          "sheet": "Pricing",
+          "cell": "E52",
+          "original_formula": "=ROUND(+E47/(1-E51)+(E49+E50),4)-E47",
+          "seeded_formula": "=ROUND(+E46/(1-E51)+(E49+E50),4)-E47",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 0.14810000000000034,
+          "seeded_value": "#VALUE!",
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "chris_germany__2230__2000ces08-3",
+          "panko_class": "logic",
+          "sheet": "Pricing",
+          "cell": "E54",
+          "original_formula": "=SUM(E52,E47:E48,E53)",
+          "seeded_formula": "=AVERAGE(E52,E47:E48,E53)",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 4.7356,
+          "seeded_value": null,
+          "value_changed": true,
+          "difficulty": "obvious",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+      "seeded": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+      "seed_count": 1,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002-3",
+          "panko_class": "hardcoding",
+          "sheet": "14",
+          "cell": "G31",
+          "original_formula": "=SUM(G7:G30)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+      "seeded": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [
+        "Jan 2002!Y38",
+        "Jan 2002!Y39",
+        "Jan.2002!Y38",
+        "Jan.2002!Y39",
+        "MANUAL!Y7",
+        "MANUAL!Y20",
+        "Mar01!V38",
+        "Mar01!V39",
+        "Apr01!V38",
+        "Apr01!V39",
+        "May 01!V38",
+        "May 01!V39",
+        "June 01!V38",
+        "June 01!V39",
+        "July 01!V38",
+        "July 01!V39",
+        "AUGUST 01!V38",
+        "AUGUST 01!V39",
+        "SEPT 01 !V38",
+        "SEPT 01 !V39",
+        "OCT 01!V39",
+        "OCT 01!V40",
+        "NOV 01!V38",
+        "NOV 01!V39",
+        "Dec 01!Y38",
+        "Dec 01!Y39"
+      ],
+      "seeds": [
+        {
+          "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-0",
+          "panko_class": "mechanical",
+          "sheet": "Jan01",
+          "cell": "D38",
+          "original_formula": "=SUM(D6:D36)+D37",
+          "seeded_formula": "=SUM(D6:D35)+D37",
+          "description": "Range end pulled in by one row, dropping the last line.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": -3574,
+          "seeded_value": -11887,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-1",
+          "panko_class": "logic",
+          "sheet": "Jan01",
+          "cell": "F38",
+          "original_formula": "=SUM(F6:F36)+F37",
+          "seeded_formula": "=AVERAGE(F6:F36)+F37",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": -2899,
+          "seeded_value": 3784.2258064516127,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-2",
+          "panko_class": "hardcoding",
+          "sheet": "Feb01",
+          "cell": "F38",
+          "original_formula": "=SUM(F6:F36)+F37",
+          "seeded_formula": -10531,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": -10531,
+          "seeded_value": -10531,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\darron_c_giron__8011__EMW 0921.xlsx",
+      "seeded": "darron_c_giron__8011__EMW 0921.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [
+        "Physical!M17",
+        "DPR!M63",
+        "DPR!M64",
+        "DPR!M65",
+        "DPR!M66",
+        "DPR!M70",
+        "DPR!M71",
+        "DPR!M72",
+        "DPR!M73",
+        "DPR!M74",
+        "DPR!M75",
+        "DPR!M76",
+        "DPR!M80",
+        "DPR!M81",
+        "DPR!M85",
+        "DPR!M86",
+        "DPR!M87",
+        "DPR!M88",
+        "DPR!M89",
+        "DPR!M90",
+        "DPR!M91",
+        "DPR!M95",
+        "DPR!M96",
+        "DPR!M97",
+        "DPR!M98",
+        "DPR!M99",
+        "DPR!M100",
+        "DPR!M101",
+        "DPR!M105",
+        "DPR!M106",
+        "DPR!M107",
+        "DPR!M108",
+        "DPR!M120",
+        "DPR!M121",
+        "DPR!M122",
+        "DPR!M123",
+        "DPR!M124",
+        "DPR!M125",
+        "DPR!M126",
+        "P&L Without Sharing!M63",
+        "P&L Without Sharing!M64",
+        "P&L Without Sharing!M65",
+        "P&L Without Sharing!M66",
+        "P&L Without Sharing!M70",
+        "P&L Without Sharing!M71",
+        "P&L Without Sharing!M72",
+        "P&L Without Sharing!M73",
+        "P&L Without Sharing!M74",
+        "P&L Without Sharing!M75",
+        "P&L Without Sharing!M76",
+        "P&L Without Sharing!M80",
+        "P&L Without Sharing!M85",
+        "P&L Without Sharing!M86",
+        "P&L Without Sharing!M87",
+        "P&L Without Sharing!M88",
+        "P&L Without Sharing!M89",
+        "P&L Without Sharing!M90",
+        "P&L Without Sharing!M91",
+        "P&L Without Sharing!M95",
+        "P&L Without Sharing!M96",
+        "P&L Without Sharing!M97",
+        "P&L Without Sharing!M98",
+        "P&L Without Sharing!M99",
+        "P&L Without Sharing!M100",
+        "P&L Without Sharing!M101",
+        "P&L Without Sharing!M105",
+        "P&L Without Sharing!M106",
+        "P&L Without Sharing!M107",
+        "P&L Without Sharing!M108",
+        "P&L Without Sharing!M120",
+        "P&L Without Sharing!M124",
+        "P&L Without Sharing!M125",
+        "P&L Without Sharing!M126",
+        "P&L!M63",
+        "P&L!M64",
+        "P&L!M65",
+        "P&L!M66",
+        "P&L!M70",
+        "P&L!M71",
+        "P&L!M72",
+        "P&L!M73",
+        "P&L!M74",
+        "P&L!M75",
+        "P&L!M76",
+        "P&L!M80",
+        "P&L!M81",
+        "P&L!M85",
+        "P&L!M86",
+        "P&L!M87",
+        "P&L!M88",
+        "P&L!M89",
+        "P&L!M90",
+        "P&L!M91",
+        "P&L!M95",
+        "P&L!M96",
+        "P&L!M97",
+        "P&L!M98",
+        "P&L!M99",
+        "P&L!M100",
+        "P&L!M101",
+        "P&L!M105",
+        "P&L!M106",
+        "P&L!M107",
+        "P&L!M108",
+        "P&L!M120",
+        "P&L!M121",
+        "P&L!M122",
+        "P&L!M123",
+        "P&L!M124",
+        "P&L!M125",
+        "P&L!M126",
+        "NSS1!M2",
+        "NSS1!I17",
+        "NSS1!F27",
+        "NSS2!M2",
+        "NSS2!I17",
+        "NSS2!F27",
+        "MEH!M2",
+        "MEH!I17",
+        "MEH!F27"
+      ],
+      "seeds": [
+        {
+          "seed_id": "darron_c_giron__8011__EMW 0921-1",
+          "panko_class": "hardcoding",
+          "sheet": "P&L",
+          "cell": "G109",
+          "original_formula": "=SUM(G105:G108)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "darron_c_giron__8011__EMW 0921-2",
+          "panko_class": "hardcoding",
+          "sheet": "P&L Without Sharing",
+          "cell": "K67",
+          "original_formula": "=SUM(K63:K66)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\fletcher_sturm__10987__1019optsheet.xlsx",
+      "seeded": "fletcher_sturm__10987__1019optsheet.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [
+        "sheet 1!A24",
+        "sheet 1!B26",
+        "sheet 1!B27",
+        "sheet 1!B28",
+        "sheet 1!B29",
+        "sheet 1!B30",
+        "sheet 1!A36",
+        "sheet 1!B38",
+        "sheet 1!A41",
+        "sheet 1!B42",
+        "sheet 1!B43",
+        "sheet 1!A150",
+        "sheet 1!B152",
+        "sheet 1!B153",
+        "sheet 1!B154",
+        "sheet 1!B155",
+        "sheet 1!B156",
+        "sheet 1!A161",
+        "sheet 1!B163",
+        "sheet 1!A166",
+        "sheet 1!B167",
+        "sheet 1!B168",
+        "sheet 1!A179",
+        "sheet 1!A180",
+        "sheet 1!A181",
+        "sheet 1!A182",
+        "sheet 1!A184",
+        "sheet 1!A185",
+        "sheet 1!A186",
+        "sheet 1!A187",
+        "sheet 1!A188",
+        "sheet 1!A189",
+        "sheet 1!A193",
+        "sheet 1!A194",
+        "sheet 1!A195",
+        "sheet 1!A196",
+        "sheet 1!A197",
+        "sheet 1!A198",
+        "sheet 1!A199",
+        "sheet 1!A200",
+        "sheet 1!A201",
+        "sheet 1!A202",
+        "sheet 1!A206",
+        "sheet 1!A207",
+        "sheet 1!A208",
+        "sheet 1!A210",
+        "sheet 1!A211",
+        "sheet 1!A212",
+        "sheet 1!A213",
+        "sheet 1!C217",
+        "sheet 1!C218",
+        "sheet 1!C219",
+        "sheet 1!C222",
+        "sheet 1!C223",
+        "sheet 1!C224",
+        "sheet 1!A229",
+        "sheet 1!A230",
+        "sheet 1!A231",
+        "sheet 1!A235",
+        "sheet 1!A236",
+        "sheet 1!A237",
+        "sheet 1!C241",
+        "sheet 1!C242",
+        "sheet 1!C243",
+        "sheet 1!C244",
+        "sheet 1!C245",
+        "sheet 1!C246",
+        "sheet 1!C247",
+        "sheet 1!C252",
+        "sheet 1!C253",
+        "sheet 1!C254",
+        "sheet 1!C255",
+        "sheet 1!C256",
+        "sheet 1!C257",
+        "sheet 1!C258"
+      ],
+      "seeds": [
+        {
+          "seed_id": "fletcher_sturm__10987__1019optsheet-0",
+          "panko_class": "hardcoding",
+          "sheet": "sheet 1",
+          "cell": "C169",
+          "original_formula": "=C168",
+          "seeded_formula": 30,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 30,
+          "seeded_value": 30,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "fletcher_sturm__10987__1019optsheet-1",
+          "panko_class": "hardcoding",
+          "sheet": "sheet 1",
+          "cell": "C44",
+          "original_formula": "=C43",
+          "seeded_formula": 26.15,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 26.15,
+          "seeded_value": 26.15,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "john_forney__15523__s_9-12-01.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\john_forney__15523__s_9-12-01.xlsx",
+      "seeded": "john_forney__15523__s_9-12-01.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "john_forney__15523__s_9-12-01-1",
+          "panko_class": "mechanical",
+          "sheet": "Sheet1",
+          "cell": "O2",
+          "original_formula": "=O5-O6-O7",
+          "seeded_formula": "=O4-O6-O7",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 360,
+          "seeded_value": 163,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "john_forney__15523__s_9-12-01-3",
+          "panko_class": "hardcoding",
+          "sheet": "Sheet1",
+          "cell": "T22",
+          "original_formula": "=SUM(T5,T8:T20)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "john_zufferli__16801__marks.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\john_zufferli__16801__marks.xlsx",
+      "seeded": "john_zufferli__16801__marks.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [
+        "Sheet1!K32"
+      ],
+      "seeds": [
+        {
+          "seed_id": "john_zufferli__16801__marks-0",
+          "panko_class": "mechanical",
+          "sheet": "Sheet1",
+          "cell": "K34",
+          "original_formula": "=AVERAGE(K10:K32)",
+          "seeded_formula": "=AVERAGE(K10:K31)",
+          "description": "Range end pulled in by one row, dropping the last line.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 20.880434782608695,
+          "seeded_value": 19.90909090909091,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "john_zufferli__16801__marks-1",
+          "panko_class": "mechanical",
+          "sheet": "Sheet1",
+          "cell": "J34",
+          "original_formula": "=AVERAGE(J10:J32)",
+          "seeded_formula": "=AVERAGE(J10:J31)",
+          "description": "Range end pulled in by one row, dropping the last line.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 21.434782608695652,
+          "seeded_value": 20.431818181818183,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\juan_hernandez__17720__SCHED2001.xlsx",
+      "seeded": "juan_hernandez__17720__SCHED2001.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "juan_hernandez__17720__SCHED2001-2",
+          "panko_class": "hardcoding",
+          "sheet": "AUG'01",
+          "cell": "D36",
+          "original_formula": "=COUNTIF(D1:D35,\"N\")",
+          "seeded_formula": 2,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 2,
+          "seeded_value": 2,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "juan_hernandez__17720__SCHED2001-3",
+          "panko_class": "hardcoding",
+          "sheet": "SEPT'01",
+          "cell": "Q38",
+          "original_formula": "=COUNTIF(Q1:Q36,\"D\")",
+          "seeded_formula": 3,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 3,
+          "seeded_value": 3,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\kate_symes__18314__EES April Dailies.xlsx",
+      "seeded": "kate_symes__18314__EES April Dailies.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "kate_symes__18314__EES April Dailies-0",
+          "panko_class": "hardcoding",
+          "sheet": "4-2",
+          "cell": "T17",
+          "original_formula": "=P17+Q17+R17+S17",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "kate_symes__18314__EES April Dailies-2",
+          "panko_class": "mechanical",
+          "sheet": "4-5",
+          "cell": "E32",
+          "original_formula": "=SUM(E8:E31)",
+          "seeded_formula": "=SUM(E8:E30)",
+          "description": "Range end pulled in by one row, dropping the last line.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": -1276.9,
+          "seeded_value": -1227.2,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "kate_symes__18314__EES April Dailies-3",
+          "panko_class": "hardcoding",
+          "sheet": "4-10",
+          "cell": "T30",
+          "original_formula": "=P30+Q30+R30+S30",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+      "seeded": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "lindy_donoho__21972__TW2010ProjCap&Rev-0",
+          "panko_class": "hardcoding",
+          "sheet": "Summary Ctrc's & Resubscription",
+          "cell": "I25",
+          "original_formula": "=I8+I13+I18+I23",
+          "seeded_formula": 13343910,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 13343910,
+          "seeded_value": 13343910,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "lindy_donoho__21972__TW2010ProjCap&Rev-1",
+          "panko_class": "mechanical",
+          "sheet": "Summary Ctrc's & Resubscription",
+          "cell": "G32",
+          "original_formula": "=G30*G31*365",
+          "seeded_formula": "=G29*G31*365",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 88692526.395,
+          "seeded_value": 113283225,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "lindy_donoho__21972__TW2010ProjCap&Rev-2",
+          "panko_class": "hardcoding",
+          "sheet": "Summary Ctrc's & Resubscription",
+          "cell": "E25",
+          "original_formula": "=E8+E13+E18+E23",
+          "seeded_formula": 127470133,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 127470133,
+          "seeded_value": 127470133,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\lisa_gang__22348__EES_Schedule.xlsx",
+      "seeded": "lisa_gang__22348__EES_Schedule.xlsx",
+      "seed_count": 4,
+      "pre_existing_findings": [
+        "EES-Schedule day 1!D81",
+        "EES-Schedule day 1!D106",
+        "EES-Schedule day 1!D107",
+        "EES-Schedule day 1!D108",
+        "day 2!D81",
+        "day 2!D106",
+        "day 2!D107",
+        "day 2!D108"
+      ],
+      "seeds": [
+        {
+          "seed_id": "lisa_gang__22348__EES_Schedule-0",
+          "panko_class": "logic",
+          "sheet": "EES-Schedule day 1",
+          "cell": "U52",
+          "original_formula": "=SUM(U17:U38)-SUM(U39:U50)-U16",
+          "seeded_formula": "=AVERAGE(U17:U38)-SUM(U39:U50)-U16",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 102.6083792218073,
+          "seeded_value": -350.8007116872836,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "lisa_gang__22348__EES_Schedule-1",
+          "panko_class": "hardcoding",
+          "sheet": "EES-Schedule day 1",
+          "cell": "Y136",
+          "original_formula": "=SUM(Y134:Y135)",
+          "seeded_formula": 832.4785050824601,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 832.4785050824601,
+          "seeded_value": 832.4785050824601,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "lisa_gang__22348__EES_Schedule-2",
+          "panko_class": "hardcoding",
+          "sheet": "EES-Schedule day 1",
+          "cell": "M52",
+          "original_formula": "=SUM(M17:M38)-SUM(M39:M50)-M16",
+          "seeded_formula": 124.0956401586173,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 124.0956401586173,
+          "seeded_value": 124.0956401586173,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "lisa_gang__22348__EES_Schedule-3",
+          "panko_class": "logic",
+          "sheet": "day 2",
+          "cell": "V52",
+          "original_formula": "=SUM(V17:V38)-SUM(V39:V50)-V16",
+          "seeded_formula": "=AVERAGE(V17:V38)-SUM(V39:V50)-V16",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 181.6989362394756,
+          "seeded_value": -449.25560921506985,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "mary_fischer__25634__31Q.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\mary_fischer__25634__31Q.xlsx",
+      "seeded": "mary_fischer__25634__31Q.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [
+        "E3.XLS!S38",
+        "E-6.XLS!Q19",
+        "E16.XLS!W47",
+        "E20.XLS!K41"
+      ],
+      "seeds": [
+        {
+          "seed_id": "mary_fischer__25634__31Q-0",
+          "panko_class": "logic",
+          "sheet": "E1.XLS ",
+          "cell": "S34",
+          "original_formula": "=SUM(O34:Q34)",
+          "seeded_formula": "=AVERAGE(O34:Q34)",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 0,
+          "seeded_value": "#VALUE!",
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "mary_fischer__25634__31Q-1",
+          "panko_class": "logic",
+          "sheet": "E1.XLS ",
+          "cell": "M25",
+          "original_formula": "=SUM(M19:M23)",
+          "seeded_formula": "=AVERAGE(M19:M23)",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 0,
+          "seeded_value": "#VALUE!",
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "mary_fischer__25634__31Q-3",
+          "panko_class": "hardcoding",
+          "sheet": "E1.XLS ",
+          "cell": "I39",
+          "original_formula": "=SUM(I30:I38)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+      "seeded": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+      "seed_count": 1,
+      "pre_existing_findings": [
+        "Options!C34"
+      ],
+      "seeds": [
+        {
+          "seed_id": "mike_carson__27556__102601 NE & NY Optionsheet-1",
+          "panko_class": "mechanical",
+          "sheet": "Options",
+          "cell": "C44",
+          "original_formula": "=C43",
+          "seeded_formula": "=C42",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": null,
+          "seeded_value": 0,
+          "value_changed": true,
+          "difficulty": "obvious",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+      "seeded": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-0",
+          "panko_class": "mechanical",
+          "sheet": "Sheet1",
+          "cell": "F22",
+          "original_formula": "=-(F20*F21)",
+          "seeded_formula": "=-(F19*F21)",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": -137751,
+          "seeded_value": -0.0185,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-2",
+          "panko_class": "hardcoding",
+          "sheet": "Sheet1",
+          "cell": "K20",
+          "original_formula": "=K17*K18*K19",
+          "seeded_formula": 7358400,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 7358400,
+          "seeded_value": 7358400,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-3",
+          "panko_class": "hardcoding",
+          "sheet": "Sheet1",
+          "cell": "D22",
+          "original_formula": "=-(D20*D21)",
+          "seeded_formula": -61320,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": -61320,
+          "seeded_value": -61320,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\robin_rodrigue__33241__Phillip e-mail.xlsx",
+      "seeded": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [
+        "Report!AG21",
+        "Report!AG26",
+        "Report!AG69",
+        "Report!AG70",
+        "Report!AG71",
+        "Report!AG72",
+        "Report!AG75",
+        "Report!AG77",
+        "Report!AG78",
+        "Report!AG79",
+        "Report!AG80",
+        "Report!AG81",
+        "Report!AG82",
+        "Report!AG83",
+        "Report!AG84",
+        "Report!AG85",
+        "Report!AG87",
+        "Report!AG88"
+      ],
+      "seeds": [
+        {
+          "seed_id": "robin_rodrigue__33241__Phillip e-mail-0",
+          "panko_class": "hardcoding",
+          "sheet": "Report",
+          "cell": "L67",
+          "original_formula": "=SUM(M69:M71)-M63+M66",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "robin_rodrigue__33241__Phillip e-mail-1",
+          "panko_class": "logic",
+          "sheet": "Report",
+          "cell": "AE86",
+          "original_formula": "=SUM(AE77:AE85)",
+          "seeded_formula": "=AVERAGE(AE77:AE85)",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": -20375,
+          "seeded_value": -2263.8888888888887,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "robin_rodrigue__33241__Phillip e-mail-3",
+          "panko_class": "hardcoding",
+          "sheet": "Report",
+          "cell": "Y50",
+          "original_formula": "=SUM(Y41:Y49)",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\scott_neal__38672__6th floorplan 01.30a.xlsx",
+      "seeded": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+      "seed_count": 4,
+      "pre_existing_findings": [
+        "Sheet1!K7",
+        "Floor Plan!I14",
+        "Floor Plan!I21",
+        "Floor Plan!I26",
+        "Floor Plan!H38",
+        "Floor Plan!I40",
+        "Floor Plan!C76",
+        "Floor Plan!J78"
+      ],
+      "seeds": [
+        {
+          "seed_id": "scott_neal__38672__6th floorplan 01.30a-0",
+          "panko_class": "hardcoding",
+          "sheet": "Floor Plan",
+          "cell": "Y41",
+          "original_formula": "=Z41+1",
+          "seeded_formula": 229,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 229,
+          "seeded_value": 229,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "scott_neal__38672__6th floorplan 01.30a-1",
+          "panko_class": "mechanical",
+          "sheet": "Gen Invets",
+          "cell": "I23",
+          "original_formula": "=J23+1",
+          "seeded_formula": "=J22+1",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 149,
+          "seeded_value": 1,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "scott_neal__38672__6th floorplan 01.30a-2",
+          "panko_class": "hardcoding",
+          "sheet": "Floor Plan",
+          "cell": "AB91",
+          "original_formula": "=AC91+1",
+          "seeded_formula": 142,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 142,
+          "seeded_value": 142,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "scott_neal__38672__6th floorplan 01.30a-3",
+          "panko_class": "mechanical",
+          "sheet": "Floor Plan",
+          "cell": "AA84",
+          "original_formula": "=AB84+1",
+          "seeded_formula": "=AB83+1",
+          "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 160,
+          "seeded_value": 1,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+      "seeded": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+      "seed_count": 2,
+      "pre_existing_findings": [
+        "Headcount!C52",
+        "Headcount!C53",
+        "Headcount!C54",
+        "Headcount!B63",
+        "Headcount!D72",
+        "Assumptions!L52",
+        "Detail Expenses!P30",
+        "Detail Expenses!P33",
+        "Detail Expenses!P34",
+        "Detail Expenses!P36",
+        "Detail Expenses!P37",
+        "Detail Expenses!P41",
+        "Detail Expenses!P45",
+        "Detail Expenses!P46",
+        "Detail Expenses!P47",
+        "Detail Expenses!P49",
+        "Detail Expenses!P50",
+        "Detail Expenses!P51",
+        "Detail Expenses!P52",
+        "Detail Expenses!P55",
+        "Detail Expenses!P56",
+        "Detail Expenses!P57",
+        "Detail Expenses!P58",
+        "Detail Expenses!P61",
+        "Detail Expenses!P62",
+        "Detail Expenses!P63",
+        "Detail Expenses!P64",
+        "Detail Expenses!P66",
+        "Detail Expenses!P67",
+        "Detail Expenses!P68",
+        "Detail Expenses!P69",
+        "Detail Expenses!P70",
+        "Detail Expenses!P72",
+        "Detail Expenses!P73",
+        "Detail Expenses!P75",
+        "Detail Expenses!D98",
+        "Summary!C9",
+        "Summary!P13",
+        "Summary!P14",
+        "Summary!P15",
+        "Summary!P20",
+        "Summary!P21",
+        "Summary!P22",
+        "Summary!P23",
+        "Summary!P24",
+        "Summary!P25",
+        "Summary!P26",
+        "Summary!P27",
+        "Summary!P28",
+        "Summary!P29",
+        "Summary!P30",
+        "Summary!P33",
+        "Upload!A6",
+        "Upload!A7",
+        "Upload!A8",
+        "Upload!A9",
+        "Upload!A10",
+        "Upload!A11",
+        "Upload!A12",
+        "Upload!A13",
+        "Upload!A14",
+        "Upload!A15",
+        "Upload!A16",
+        "Upload!A17",
+        "Upload!A18",
+        "Upload!A19",
+        "Upload!A20",
+        "Upload!A21",
+        "Upload!A22",
+        "Upload!A23",
+        "Upload!A24",
+        "Upload!A25",
+        "Upload!A26",
+        "Upload!A27",
+        "Upload!A28",
+        "Upload!A29",
+        "Upload!A30",
+        "Upload!A31",
+        "Upload!A32",
+        "Upload!A33",
+        "Upload!A34",
+        "Upload!A35",
+        "Upload!A36",
+        "Upload!A37",
+        "Upload!A38",
+        "Upload!A39",
+        "Upload!A40",
+        "Upload!A41",
+        "Upload!A42",
+        "Upload!A43",
+        "Upload!O44"
+      ],
+      "seeds": [
+        {
+          "seed_id": "stacey_white__39000__Power CBO 2002 Plan Expense-0",
+          "panko_class": "hardcoding",
+          "sheet": "Summary",
+          "cell": "N18",
+          "original_formula": "=+'Detail Expenses'!N47",
+          "seeded_formula": 0,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 0,
+          "seeded_value": 0,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "stacey_white__39000__Power CBO 2002 Plan Expense-1",
+          "panko_class": "hardcoding",
+          "sheet": "Detail Expenses",
+          "cell": "F76",
+          "original_formula": "=F75+F74+F71+F63+F62+F61+F60+F59+F56+F55+F54+F48+F47+F46+F45+F44+F35+F32",
+          "seeded_formula": 150,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 150,
+          "seeded_value": 150,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    },
+    {
+      "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+      "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+      "seeded": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+      "seed_count": 3,
+      "pre_existing_findings": [],
+      "seeds": [
+        {
+          "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-0",
+          "panko_class": "hardcoding",
+          "sheet": "mtm by region thru 02-10",
+          "cell": "X22",
+          "original_formula": "=SUM(X3:X21)",
+          "seeded_formula": 4668792.88,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 4668792.88,
+          "seeded_value": 4668792.88,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-1",
+          "panko_class": "logic",
+          "sheet": "mtm by ctpty thru 02-10",
+          "cell": "HH134",
+          "original_formula": "=SUM(HH33:HH133)",
+          "seeded_formula": "=AVERAGE(HH33:HH133)",
+          "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+          "detectable_by": [
+            "pattern_break"
+          ],
+          "baseline_value": 462435,
+          "seeded_value": 4578.564356435643,
+          "value_changed": true,
+          "difficulty": "realistic",
+          "propagates_to": []
+        },
+        {
+          "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-2",
+          "panko_class": "hardcoding",
+          "sheet": "mtm by region thru 02-10",
+          "cell": "GE22",
+          "original_formula": "=SUM(GE3:GE21)",
+          "seeded_formula": 4089.86,
+          "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+          "detectable_by": [
+            "dead_cell",
+            "sensitivity_probe"
+          ],
+          "baseline_value": 4089.86,
+          "seeded_value": 4089.86,
+          "value_changed": false,
+          "difficulty": "silent",
+          "propagates_to": []
+        }
+      ]
+    }
+  ]
+}

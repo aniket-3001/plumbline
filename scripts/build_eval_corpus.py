@@ -159,6 +159,7 @@ def main() -> int:
     rejected = reasons()
     accepted: list[dict] = []
     scanned = 0
+    EVAL.mkdir(parents=True, exist_ok=True)
 
     for path in paths:
         if len(accepted) >= args.target:
@@ -167,17 +168,17 @@ def main() -> int:
         ok, reason, stats = screen(path)
         if ok:
             accepted.append(stats)
+            # Copy immediately. Screening a large workbook is slow, so a run that
+            # saved nothing until the end would throw away hours of work if it were
+            # interrupted -- and it was.
+            shutil.copy2(CORPUS / stats["path"], EVAL / path.name)
             print(f"  [{len(accepted):3d}] {stats['path'][:64]:64} "
-                  f"{stats['formula_cells']:5d} formulas, {stats['pattern_rows']:3d} pattern rows")
+                  f"{stats['formula_cells']:5d} formulas, {stats['pattern_rows']:3d} pattern rows",
+                  flush=True)
         else:
             rejected[reason] += 1
-        if scanned % 100 == 0:
+        if scanned % 25 == 0:
             print(f"  … {scanned} screened, {len(accepted)} accepted", flush=True)
-
-    EVAL.mkdir(parents=True, exist_ok=True)
-    for stats in accepted:
-        src = CORPUS / stats["path"]
-        shutil.copy2(src, EVAL / src.name)
 
     funnel = {
         "scanned": scanned,
