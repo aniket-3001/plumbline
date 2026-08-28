@@ -1,147 +1,253 @@
 {
-  "workbooks_scanned": 100,
-  "workbooks_readable": 99,
-  "workbooks_without_formulas": 47,
-  "workbooks_with_formulas": 52,
-  "workbooks_fully_supported": 44,
-  "formula_cells": 64552,
-  "formula_cells_supported": 63508,
+  "workbooks_scanned": 1500,
+  "workbooks_readable": 1496,
+  "workbooks_without_formulas": 609,
+  "workbooks_with_formulas": 887,
+  "workbooks_fully_supported": 748,
+  "formula_cells": 1706537,
+  "formula_cells_supported": 1586272,
   "top_functions": [
     [
-      "SUM",
-      11760
-    ],
-    [
       "IF",
-      3880
+      279379
     ],
     [
-      "AVERAGE",
-      1010
-    ],
-    [
-      "LN",
-      802
-    ],
-    [
-      "STDEV",
-      782
-    ],
-    [
-      "SQRT",
-      780
-    ],
-    [
-      "ROUND",
-      648
+      "SUM",
+      181637
     ],
     [
       "VLOOKUP",
-      609
+      77039
     ],
     [
-      "SUBTOTAL",
-      223
+      "MATCH",
+      51328
     ],
     [
-      "OR",
-      115
+      "INDEX",
+      46587
     ],
     [
-      "AND",
-      115
+      "RAND",
+      45550
     ],
     [
-      "NA",
-      72
-    ],
-    [
-      "MAX",
-      72
-    ],
-    [
-      "MIN",
-      69
-    ],
-    [
-      "ISNUMBER",
-      32
-    ],
-    [
-      "WORKDAY",
-      27
-    ],
-    [
-      "SUMIF",
-      13
-    ],
-    [
-      "CELL",
-      10
-    ],
-    [
-      "COUNTA",
-      10
-    ],
-    [
-      "NOW",
-      9
-    ],
-    [
-      "TODAY",
-      8
-    ],
-    [
-      "ABS",
-      8
-    ],
-    [
-      "COUNT",
-      6
-    ],
-    [
-      "PMT",
-      4
-    ],
-    [
-      "TEXT",
-      2
-    ],
-    [
-      "WEEKDAY",
-      1
+      "NORMINV",
+      40984
     ],
     [
       "MONTH",
-      1
+      24683
+    ],
+    [
+      "ROUND",
+      21621
+    ],
+    [
+      "EXP",
+      16866
+    ],
+    [
+      "WEEKDAY",
+      14405
+    ],
+    [
+      "LN",
+      10735
+    ],
+    [
+      "MID",
+      10595
+    ],
+    [
+      "COUNTIF",
+      10208
+    ],
+    [
+      "FIND",
+      9796
+    ],
+    [
+      "MAX",
+      8488
+    ],
+    [
+      "AVERAGE",
+      8357
+    ],
+    [
+      "YEAR",
+      7949
+    ],
+    [
+      "ABS",
+      7924
+    ],
+    [
+      "ISNUMBER",
+      7713
+    ],
+    [
+      "LEFT",
+      7487
+    ],
+    [
+      "VALUE",
+      7435
+    ],
+    [
+      "AND",
+      7392
+    ],
+    [
+      "HLOOKUP",
+      6563
+    ],
+    [
+      "MIN",
+      6413
+    ],
+    [
+      "DATE",
+      5654
+    ],
+    [
+      "OFFSET",
+      5516
+    ],
+    [
+      "OR",
+      5374
+    ],
+    [
+      "CONCATENATE",
+      5342
+    ],
+    [
+      "ISNA",
+      4875
     ]
   ],
   "top_unsupported": [
     [
-      "STDEV",
-      782
+      "INDEX",
+      46587
+    ],
+    [
+      "NORMINV",
+      40984
+    ],
+    [
+      "VALUE",
+      7435
+    ],
+    [
+      "HLOOKUP",
+      6563
+    ],
+    [
+      "OFFSET",
+      5516
     ],
     [
       "SUBTOTAL",
-      223
-    ],
-    [
-      "WORKDAY",
-      27
-    ],
-    [
-      "CELL",
-      10
+      4127
     ],
     [
       "TEXT",
+      3212
+    ],
+    [
+      "DATEVALUE",
+      2968
+    ],
+    [
+      "INDIRECT",
+      2644
+    ],
+    [
+      "STDEV",
+      939
+    ],
+    [
+      "LOOKUP",
+      751
+    ],
+    [
+      "REGION",
+      656
+    ],
+    [
+      "ROW",
+      369
+    ],
+    [
+      "DAYS360",
+      236
+    ],
+    [
+      "WORKDAY",
+      110
+    ],
+    [
+      "REPT",
+      81
+    ],
+    [
+      "CELL",
+      72
+    ],
+    [
+      "ADDRESS",
+      26
+    ],
+    [
+      "TIME",
+      24
+    ],
+    [
+      "COLUMN",
+      16
+    ],
+    [
+      "NORMSDIST",
+      12
+    ],
+    [
+      "CORREL",
+      6
+    ],
+    [
+      "MEDIAN",
+      5
+    ],
+    [
+      "IN",
+      3
+    ],
+    [
+      "WHERE",
+      3
+    ],
+    [
+      "FUTURES",
       2
     ]
   ],
   "read_failures": {
-    "KeyError": 1
+    "KeyError": 4
   },
   "corpus_size": 15871,
   "seed": 17,
-  "formula_cell_coverage_pct": 98.38
+  "formula_cell_coverage_pct": 92.95,
+  "parse_check": {
+    "sampled": 80,
+    "parsed": 72,
+    "failures": {
+      "MemoryError": 1,
+      "AttributeError": 2,
+      "ValueError": 1,
+      "KeyError": 4
+    }
+  }
 }

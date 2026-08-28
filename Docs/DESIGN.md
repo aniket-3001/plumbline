@@ -205,6 +205,65 @@ wrongness into the one thing we promise is sound.
 
 ---
 
+## 6c. Coverage measured on the real corpus (2026-08-29)
+
+### Headline: **93.0% of formula cells are evaluable**
+
+Sample of 1,500 workbooks (seed 17), **1,706,537 formula cells**. Compile check: **72/80 workbooks
+(90%)** actually compile under `ModelCompiler`, failing with `MemoryError` (1), `AttributeError` (2),
+`ValueError` (1), `KeyError` (4). *Readable is not compilable* — both numbers matter.
+
+**This corrects an earlier figure of 98.4% taken from a 100-workbook sample.** That sample was not
+representative, and the error was not random: it produced a confident claim that `INDEX` "does not
+appear in this corpus at all," explained by a plausible story about 2001-era spreadsheets predating
+the `INDEX/MATCH` idiom. `INDEX` is in fact the **5th most-used function, 46,587 uses**. The story
+was a rationalisation of a sampling artefact. Sample size for any coverage claim is now 1,000+.
+
+### The gap is concentrated and cheap to close
+
+| Implement | Uses | Coverage after |
+|---|---|---|
+| `INDEX` | 46,587 | 95.7% |
+| `NORMINV` | 40,984 | **98.1%** |
+| `VALUE` | 7,435 | 98.5% |
+| `HLOOKUP` | 6,563 | 98.9% |
+| `OFFSET` | 5,516 | 99.2% |
+| `SUBTOTAL` | 4,127 | 99.5% |
+| `TEXT` | 3,212 | 99.7% |
+| `DATEVALUE` | 2,968 | 99.8% |
+
+Two functions recover 73% of the gap. `NORMINV` is `scipy.stats.norm.ppf`, and scipy is already an
+xlcalculator dependency. `INDEX` is a straightforward array indexer. **Decision: extend the function
+registry rather than switch engines.**
+
+`NORMINV` at 41k uses and `RAND` at 46k is a fingerprint of what Enron actually was — an energy
+trading firm running Monte Carlo risk simulations.
+
+### Serious finding: volatile functions break the proof mechanism
+
+**`RAND` appears in 45,550 cells — 2.67% of the corpus.** xlcalculator *supports* it, so it does not
+show up as a coverage gap. That makes it more dangerous, not less.
+
+Our entire product claim is proof-by-recomputation: evaluate baseline, evaluate counterfactual,
+report the delta. On a workbook containing `RAND`, **every evaluation returns different numbers**, so
+the delta between two runs is noise. The tool would emit confident, precise, meaningless proofs —
+the same failure class as the `set_cell_value` bug in §6b, and just as silent.
+
+Mitigations, in order of preference:
+1. **Detect and freeze.** Before auditing, replace volatile calls (`RAND`, `RANDBETWEEN`, `NOW`,
+   `TODAY`) with their current cached values, then audit the frozen workbook.
+2. **Detect and exclude.** Skip findings whose dependency cone touches a volatile cell, and say so.
+3. **Never: audit anyway.** A proof that cannot be reproduced is not a proof.
+
+Regardless of choice, **the evaluation must include a determinism check**: evaluate the same workbook
+twice and assert identical results before trusting any delta computed from it.
+
+`OFFSET` and `INDIRECT` (5,516 + 2,644 cells, 0.5%) are a separate architectural problem, not merely
+missing functions — they construct references at runtime, so the dependency graph is not statically
+knowable. Out of scope; report as unauditable.
+
+---
+
 ## 7. What existed before vs what we add *(ground rule 2)*
 
 **Existed:** xlcalculator (MIT formula engine), the Enron corpus (CC BY 4.0), Panko's error taxonomy
