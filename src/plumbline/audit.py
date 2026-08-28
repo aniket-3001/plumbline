@@ -53,6 +53,8 @@ class AuditReport:
     findings: list[Finding] = field(default_factory=list)
     formula_cells: int = 0
     skipped: str | None = None
+    dead_candidates: int = 0
+    dead_screened_out: int = 0
 
     @property
     def proved(self) -> list[Finding]:
@@ -63,6 +65,8 @@ class AuditReport:
             "workbook": self.workbook,
             "formula_cells": self.formula_cells,
             "skipped": self.skipped,
+            "dead_candidates": self.dead_candidates,
+            "dead_screened_out": self.dead_screened_out,
             "findings": [f.to_dict() for f in self.findings],
             "counts": {
                 "total": len(self.findings),
@@ -197,6 +201,101 @@ def detect_dead_cells(path: str, sheet: str, formulas: dict[str, str]) -> list[F
             )
         )
     return findings
+
+
+def _close(a, b, rel: float = 1e-6) -> bool:
+    """Numeric equality with a tolerance, so float noise is not read as a difference."""
+    if a is None or b is None:
+        return False
+    if isinstance(a, bool) or isinstance(b, bool):
+        return a == b
+    try:
+        fa, fb = float(a), float(b)
+    except (TypeError, ValueError):
+        return str(a) == str(b)
+    return abs(fa - fb) <= rel * max(1.0, abs(fa), abs(fb))
+
+
+def screen_dead_cells(path: str, candidates: list[Finding]) -> list[Finding]:
+    """Keep only constants that look like the frozen output of their row's formula.
+
+    Without this, the detector drowns in false positives on real sheets. Enron
+    workbooks are full of rows like `A7=data, B7=30468, C7==+B7, D7==+C7, E7=10000`
+    -- a carry-forward chain where some cells are genuine typed inputs sitting
+    among formulas. Flagging every input as a dead formula produced 40 false
+    positives on a single workbook.
+
+    The discriminator applies Plumbline's own thesis: compute what the expected
+    formula would actually yield in that position. If it equals the constant, the
+    cell really does look like a formula someone froze. If it differs, the constant
+    is data that merely happens to live in a formula row.
+
+    Each expected formula is evaluated in a **scratch cell**, not in the candidate's
+    own position. Writing them all back in place was the obvious approach and it is
+    wrong: one candidate's expected formula frequently reads another candidate, so
+    the replacements cascade and every value comes out contaminated. Measured on a
+    real workbook, in-place screening discarded all 41 candidates including the
+    known seeded error.
+
+    A1 references are literal text, so a formula means the same thing wherever it
+    sits on its own sheet. Parking each one in a far-right scratch column leaves
+    every original cell untouched, needs a single extra parse for the whole
+    workbook, and cannot cascade.
+
+    Deliberate limitation: a hardcode whose value has already drifted away from its
+    inputs is dropped. That case is far more often intentional data than a frozen
+    formula, and the silent-time-bomb case we care about -- correct today, wrong
+    tomorrow -- is precisely the one where constant and formula still agree.
+    """
+    if not candidates:
+        return []
+
+    from openpyxl.utils import get_column_letter
+
+    SCRATCH_COL = 16000  # far right of any real content, well inside Excel's XFD limit
+    tmp = os.path.join(tempfile.gettempdir(), f"plumbline_screen_{os.getpid()}.xlsx")
+
+    try:
+        from openpyxl import load_workbook
+
+        wb = load_workbook(path)
+        scratch: dict[int, Finding] = {}
+        per_sheet_row: dict[str, int] = defaultdict(int)
+        for i, f in enumerate(candidates):
+            if f.sheet not in wb.sheetnames:
+                continue
+            per_sheet_row[f.sheet] += 1
+            row = per_sheet_row[f.sheet]
+            col_offset = row // 1_000_000  # stay inside Excel's row limit
+            addr = f"{get_column_letter(SCRATCH_COL + col_offset)}{(row % 1_000_000) + 1}"
+            wb[f.sheet][addr] = f.expected
+            scratch[i] = (f, f"{f.sheet}!{addr}")
+        if not scratch:
+            return candidates
+        wb.save(tmp)
+
+        _, ev = _load(tmp)
+        kept = []
+        for _, (f, addr) in scratch.items():
+            try:
+                would_be = native(ev.evaluate(addr))
+            except Exception:  # noqa: BLE001
+                continue
+            if _close(would_be, _as_number(f.actual)):
+                kept.append(f)
+        return kept
+    except Exception:  # noqa: BLE001 -- screening must never abort an audit
+        return candidates
+    finally:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+
+
+def _as_number(text: str):
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        return None
 
 
 def _write_variant(path: str, edits: dict[tuple[str, str], object], dest: str) -> None:
@@ -341,9 +440,15 @@ def audit(path: str | Path, *, check_determinism: bool = True) -> AuditReport:
     report.formula_cells = sum(len(v) for v in sheets.values())
 
     findings: list[Finding] = []
+    dead_candidates: list[Finding] = []
     for sheet, formulas in sheets.items():
         findings.extend(detect_pattern_breaks(sheet, formulas))
-        findings.extend(detect_dead_cells(path, sheet, formulas))
+        dead_candidates.extend(detect_dead_cells(path, sheet, formulas))
+
+    report.dead_candidates = len(dead_candidates)
+    screened = screen_dead_cells(path, dead_candidates)
+    report.dead_screened_out = len(dead_candidates) - len(screened)
+    findings.extend(screened)
 
     report.findings = prove(path, findings)
     return report
