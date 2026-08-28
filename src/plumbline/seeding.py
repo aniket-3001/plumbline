@@ -1,0 +1,377 @@
+"""Inject realistic errors into real workbooks, and record exactly what was injected.
+
+Seeding realism decides whether the final number means anything. Invent errors and
+the benchmark is fake-easy; a panel that sells rubric quality for a living will see
+it immediately. So the taxonomy is Panko's, from the field-audit literature, not
+one of our own devising:
+
+    mechanical   typing and pointing slips -- the reference lands one row off
+    logic        wrong formula for the intent -- AVERAGE where SUM belongs
+    omission     something missing from the model -- a line left out of a total
+    hardcoding   an input buried inside a formula, or a formula replaced by a
+                 constant that is correct today and dead tomorrow
+
+Design rules, each there for a reason:
+
+  * **Seed into real Enron workbooks**, never synthetic ones. A detector tuned on
+    tidy fixtures will not survive a real trading model.
+  * **Only seed where a majority pattern exists.** An error is only findable if
+    something establishes what "right" looked like. Seeding into a lone formula
+    creates an unfindable case that silently punishes recall.
+  * **Verify every seed actually changed the numbers** (except hardcode-dead, which
+    is defined by *not* changing them today). A seed that alters nothing is not an
+    error, it is noise in the ground truth.
+  * **Record the pre-existing findings** in the untouched workbook. Real spreadsheets
+    already contain real anomalies, so a detector hit that is not our seed is not
+    automatically a false positive. Conflating those two would understate precision.
+"""
+
+from __future__ import annotations
+
+import json
+import random
+import re
+import sys
+import warnings
+from collections import defaultdict
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
+
+from openpyxl import load_workbook
+from openpyxl.utils import get_column_letter
+
+warnings.filterwarnings("ignore")
+
+_SCRIPTS = Path(__file__).resolve().parents[2] / "scripts"
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
+
+from poc import A1_REF, native, normalise, split_ref  # noqa: E402
+
+RANGE_REF = re.compile(r"(\$?[A-Z]{1,3}\$?[0-9]{1,7}):(\$?[A-Z]{1,3}\$?[0-9]{1,7})")
+
+
+@dataclass
+class Seed:
+    """One injected error, and everything needed to score a detector against it."""
+
+    seed_id: str
+    panko_class: str
+    sheet: str
+    cell: str
+    original_formula: str
+    seeded_formula: str | object
+    description: str
+    detectable_by: list[str]
+    baseline_value: object = None
+    seeded_value: object = None
+    value_changed: bool = True
+    difficulty: str = "realistic"
+    propagates_to: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    def classify_difficulty(self) -> str:
+        """How much does this error announce itself?
+
+        Reporting one blended accuracy number over both kinds would be
+        misleading: a detector that only catches cells that broke loudly looks
+        identical to one that catches silent corruption, and only the second is
+        worth having. So the classes are scored separately.
+
+          obvious    the cell now reads 0, blank or an Excel error. A human
+                     scanning the sheet would very likely spot it.
+          realistic  the cell still holds a plausible number. Nothing looks
+                     wrong, and this is the error that survives review.
+          silent     the value is unchanged today and only diverges later
+                     (hardcoded formulas). The hardest class.
+        """
+        if self.panko_class == "hardcoding" and not self.value_changed:
+            return "silent"
+        v = self.seeded_value
+        if v is None or v == 0 or (isinstance(v, str) and v.startswith("<error")):
+            return "obvious"
+        return "realistic"
+
+
+def _majority_rows(formulas: dict[str, str]) -> dict[int, list[tuple[str, int, str]]]:
+    """Rows where at least 3 formula cells agree on a single shape.
+
+    These are the only places worth seeding: the agreement is what makes a
+    deviation detectable in principle.
+    """
+    by_row: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
+    for ref, text in formulas.items():
+        try:
+            row, col = split_ref(ref)
+        except ValueError:
+            continue
+        by_row[row].append((ref, col, text))
+
+    out = {}
+    for row, members in by_row.items():
+        if len(members) < 3:
+            continue
+        shapes = {normalise(t, row, c) for _, c, t in members}
+        if len(shapes) == 1:  # unanimous -- the cleanest possible ground truth
+            out[row] = members
+    return out
+
+
+def _shift_range_end(formula: str, delta: int) -> str | None:
+    """Move the end of the first range by `delta` rows. Returns None if no range."""
+    m = RANGE_REF.search(formula)
+    if not m:
+        return None
+    end = m.group(2)
+    em = re.fullmatch(r"(\$?)([A-Z]{1,3})(\$?)([0-9]{1,7})", end)
+    if not em:
+        return None
+    new_row = int(em.group(4)) + delta
+    if new_row < 1:
+        return None
+    new_end = f"{em.group(1)}{em.group(2)}{em.group(3)}{new_row}"
+    return formula[: m.start(2)] + new_end + formula[m.end(2) :]
+
+
+def _swap_function(formula: str, old: str, new: str) -> str | None:
+    pattern = re.compile(rf"(?<![A-Za-z0-9_.]){old}\s*\(", re.I)
+    if not pattern.search(formula):
+        return None
+    return pattern.sub(f"{new}(", formula, count=1)
+
+
+def _shift_first_reference(formula: str, delta: int) -> str | None:
+    """Move the first cell reference by `delta` rows -- the classic pointing slip.
+
+    Most real formulas are plain references (`=D19`), not ranges, so a seeder that
+    only knows how to shrink a SUM range finds nothing to do in a typical workbook.
+    This is the more common mechanical error in the field: the formula was copied or
+    dragged and landed one row off.
+    """
+    if RANGE_REF.search(formula):
+        return None  # handled by _shift_range_end; keep the two classes distinct
+
+    m = A1_REF.search(formula)
+    if not m:
+        return None
+    col_abs, col_letters, row_abs, row_digits = m.groups()
+    if row_abs:  # anchored on purpose; moving it would be a different error class
+        return None
+    new_row = int(row_digits) + delta
+    if new_row < 1:
+        return None
+    replacement = f"{col_abs}{col_letters}{row_abs}{new_row}"
+    return formula[: m.start()] + replacement + formula[m.end() :]
+
+
+def plan_seeds(path: Path, rng: random.Random, max_seeds: int = 3) -> list[dict]:
+    """Choose what to inject, without touching the file yet."""
+    from poc import load_formulas
+
+    sheets = load_formulas(str(path))
+    candidates: list[dict] = []
+
+    for sheet, formulas in sheets.items():
+        for row, members in _majority_rows(formulas).items():
+            # Seed the interior, never the first cell -- the majority must survive.
+            for ref, col, text in members[1:]:
+                up = text.upper()
+
+                if RANGE_REF.search(text):
+                    shifted = _shift_range_end(text, -1)
+                    if shifted and shifted != text:
+                        candidates.append(
+                            dict(
+                                panko_class="mechanical",
+                                sheet=sheet,
+                                cell=ref,
+                                original_formula=text,
+                                seeded_formula=shifted,
+                                description="Range end pulled in by one row, dropping the last line.",
+                                detectable_by=["pattern_break"],
+                            )
+                        )
+                else:
+                    pointed = _shift_first_reference(text, -1)
+                    if pointed and pointed != text:
+                        candidates.append(
+                            dict(
+                                panko_class="mechanical",
+                                sheet=sheet,
+                                cell=ref,
+                                original_formula=text,
+                                seeded_formula=pointed,
+                                description=(
+                                    "Reference lands one row above its neighbours' -- "
+                                    "the formula was dragged or copied off by one."
+                                ),
+                                detectable_by=["pattern_break"],
+                            )
+                        )
+
+                if "SUM(" in up:
+                    swapped = _swap_function(text, "SUM", "AVERAGE")
+                    if swapped:
+                        candidates.append(
+                            dict(
+                                panko_class="logic",
+                                sheet=sheet,
+                                cell=ref,
+                                original_formula=text,
+                                seeded_formula=swapped,
+                                description="SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+                                detectable_by=["pattern_break"],
+                            )
+                        )
+
+                candidates.append(
+                    dict(
+                        panko_class="hardcoding",
+                        sheet=sheet,
+                        cell=ref,
+                        original_formula=text,
+                        seeded_formula=None,  # filled at injection time with the live value
+                        description=(
+                            "Formula replaced by its current value: correct today, "
+                            "silently dead the moment an input moves."
+                        ),
+                        detectable_by=["dead_cell", "sensitivity_probe"],
+                    )
+                )
+
+    rng.shuffle(candidates)
+
+    # At most one seed per cell, and spread across classes so no single class dominates.
+    chosen: list[dict] = []
+    used_cells: set[tuple[str, str]] = set()
+    per_class: dict[str, int] = defaultdict(int)
+    cap = max(1, max_seeds // 2)
+    for cand in candidates:
+        key = (cand["sheet"], cand["cell"])
+        if key in used_cells or per_class[cand["panko_class"]] >= cap:
+            continue
+        chosen.append(cand)
+        used_cells.add(key)
+        per_class[cand["panko_class"]] += 1
+        if len(chosen) >= max_seeds:
+            break
+    return chosen
+
+
+def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
+    """Write the seeded workbook and verify each seed actually did something."""
+    from xlcalculator import Evaluator, ModelCompiler
+
+    base_model = ModelCompiler().read_and_parse_archive(str(src))
+    base_ev = Evaluator(base_model)
+
+    def base_value(sheet: str, cell: str):
+        try:
+            return native(base_ev.evaluate(f"{sheet}!{cell}"))
+        except Exception:  # noqa: BLE001
+            return None
+
+    wb = load_workbook(src)
+    seeds: list[Seed] = []
+
+    for i, cand in enumerate(plan):
+        sheet, cell = cand["sheet"], cand["cell"]
+        before = base_value(sheet, cell)
+        seeded_formula = cand["seeded_formula"]
+        if cand["panko_class"] == "hardcoding":
+            if before is None:
+                continue
+            seeded_formula = before  # a constant equal to today's correct answer
+        wb[sheet][cell] = seeded_formula
+        seeds.append(
+            Seed(
+                seed_id=f"{src.stem}-{i}",
+                panko_class=cand["panko_class"],
+                sheet=sheet,
+                cell=cell,
+                original_formula=cand["original_formula"],
+                seeded_formula=seeded_formula,
+                description=cand["description"],
+                detectable_by=cand["detectable_by"],
+                baseline_value=before,
+            )
+        )
+
+    if not seeds:
+        return []
+
+    wb.save(dest)
+
+    # Verify: did each seed change the numbers? Hardcoding is the deliberate
+    # exception -- it is defined by looking identical today.
+    seeded_model = ModelCompiler().read_and_parse_archive(str(dest))
+    seeded_ev = Evaluator(seeded_model)
+    kept: list[Seed] = []
+    for seed in seeds:
+        try:
+            after = native(seeded_ev.evaluate(f"{seed.sheet}!{seed.cell}"))
+        except Exception:  # noqa: BLE001
+            after = None
+        seed.seeded_value = after
+        seed.value_changed = after != seed.baseline_value
+        if seed.panko_class == "hardcoding":
+            # Must NOT have changed, or it is not the hard case we meant to build.
+            if seed.value_changed:
+                continue
+        elif not seed.value_changed:
+            # Changed nothing: not an error, just noise in the ground truth.
+            continue
+        seed.difficulty = seed.classify_difficulty()
+        kept.append(seed)
+
+    if len(kept) != len(seeds):
+        # Rewrite with only the verified seeds so the file matches the manifest.
+        wb2 = load_workbook(src)
+        for seed in kept:
+            wb2[seed.sheet][seed.cell] = seed.seeded_formula
+        wb2.save(dest)
+
+    return kept
+
+
+def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int = 3) -> dict | None:
+    """Seed one workbook and return its ground-truth manifest."""
+    from poc import detect_row_pattern_breaks, load_formulas
+
+    plan = plan_seeds(src, rng, max_seeds=max_seeds)
+    if not plan:
+        return None
+
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / src.name
+    seeds = apply_seeds(src, dest, plan)
+    if not seeds:
+        if dest.exists():
+            dest.unlink()
+        return None
+
+    # What does the untouched workbook already flag? Those are not our seeds, and
+    # counting them as false positives would understate precision.
+    try:
+        pre_existing = [
+            f"{sheet}!{f.cell}"
+            for sheet, refs in load_formulas(str(src)).items()
+            for f in detect_row_pattern_breaks(refs)
+        ]
+    except Exception:  # noqa: BLE001
+        pre_existing = []
+
+    manifest = {
+        "workbook": src.name,
+        "source": str(src),
+        "seeded": dest.name,
+        "seed_count": len(seeds),
+        "pre_existing_findings": pre_existing,
+        "seeds": [s.to_dict() for s in seeds],
+    }
+    (dest_dir / f"{src.stem}.truth.json").write_text(
+        json.dumps(manifest, indent=2, default=str), encoding="utf-8"
+    )
+    return manifest
