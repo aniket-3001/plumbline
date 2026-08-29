@@ -26,7 +26,7 @@ Three traces, chosen to cover the outcomes that actually occur:
 
 | Trace | Workbook | What it shows |
 |---|---|---|
-| [`trace_estategas`](../results/trajectories/trace_estategas.md) | `chris_germany__1938` | The screen discarding 40 of 41 candidates |
+| [`trace_estategas`](../results/trajectories/trace_estategas.md) | `chris_germany__1938` | The screen discarding 27 of 28 candidates |
 | [`trace_floorplan`](../results/trajectories/trace_floorplan.md) | `scott_neal__38672` | Proof failures and demotions |
 | [`trace_refused`](../results/trajectories/trace_refused.md) | volatile fixture | A workbook refused before any audit runs |
 
@@ -46,8 +46,8 @@ Three traces, chosen to cover the outcomes that actually occur:
 On `chris_germany__1938`, 1,396 formula cells:
 
 ```
-1 detect    pattern_breaks 1 · dead_candidates 41
-2 screen    kept 1 · dropped 40
+1 detect    pattern_breaks 1 · dead_candidates 28
+2 screen    kept 1 · dropped 27
               Sheet1!B7   30468   would be =+A7
               Sheet1!E7   10000   would be =+D7
               Sheet1!B10  30523   would be =+A10
@@ -58,7 +58,7 @@ On `chris_germany__1938`, 1,396 formula cells:
 5 triage    proved 2 · suspected 0 · report, do not act
 ```
 
-**The 40 discards are the point.** A trace listing only survivors tells you what the
+**The 27 discards are the point.** A trace listing only survivors tells you what the
 tool believes; a trace listing what it discarded tells you whether to believe it.
 `B7 = 30468` sits in a row of carry-forward formulas and *looks* like a frozen
 formula, but `=+A7` would not produce 30468 — so it is ordinary typed data and the
@@ -67,7 +67,7 @@ detector from 40 false positives to 0.
 
 ### Trace 2 — retries, failures, and demotion
 
-`scott_neal__38672` attempts 18 proofs and 3 fail, each differently:
+`scott_neal__38672` attempts 14 proofs and 3 fail, each differently:
 
 ```
 Floor Plan!I40   repair changes nothing; not reported

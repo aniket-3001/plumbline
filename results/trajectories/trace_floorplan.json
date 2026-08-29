@@ -1,7 +1,7 @@
 {
   "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
-  "seconds": 10.8,
-  "min_peers": 3,
+  "seconds": 8.8,
+  "min_peers": 2,
   "steps": [
     {
       "stage": "0 readiness",
@@ -15,11 +15,11 @@
     },
     {
       "stage": "1 detect",
-      "tool": "detect_pattern_breaks + detect_dead_cells(min_peers=3)",
+      "tool": "detect_pattern_breaks + detect_dead_cells(min_peers=2)",
       "returned": {
         "formula_cells": 400,
         "pattern_breaks": 10,
-        "dead_candidates": 102
+        "dead_candidates": 71
       },
       "decision": "pass every candidate to the screen",
       "why": "Detection is deliberately loose. Precision is bought downstream, by recomputation, not by guessing harder here."
@@ -28,15 +28,10 @@
       "stage": "2 screen",
       "tool": "screen_dead_cells (evaluates each candidate formula in a scratch column)",
       "returned": {
-        "kept": 8,
-        "dropped": 94
+        "kept": 4,
+        "dropped": 67
       },
       "dropped_examples": [
-        {
-          "cell": "Floor Plan!Q3",
-          "value": "3",
-          "would_be": "=R3+1"
-        },
         {
           "cell": "Floor Plan!W3",
           "value": "662",
@@ -58,30 +53,35 @@
           "would_be": "=Q32+1"
         },
         {
-          "cell": "Floor Plan!W32",
-          "value": "601",
-          "would_be": "=X32+1"
-        },
-        {
           "cell": "Floor Plan!AC32",
           "value": "800",
           "would_be": "=AD32+1"
         },
         {
-          "cell": "Floor Plan!J35",
-          "value": "4",
-          "would_be": "=K35+1"
+          "cell": "Floor Plan!Q35",
+          "value": "6",
+          "would_be": "=R35+1"
+        },
+        {
+          "cell": "Floor Plan!W35",
+          "value": "387",
+          "would_be": "=X35+1"
+        },
+        {
+          "cell": "Floor Plan!J41",
+          "value": "5",
+          "would_be": "=K41+1"
         }
       ],
-      "decision": "discard 94 of 102 candidates",
+      "decision": "discard 67 of 71 candidates",
       "why": "A typed constant among formulas is usually just data. Only one whose value equals what the row's formula would produce looks like a frozen formula. This step took the dead-cell detector from 40 false positives to 0 on the workbook that first exposed it."
     },
     {
       "stage": "3 prove",
       "tool": "prove (write a repaired copy, re-parse, compare; or perturb an input)",
       "returned": {
-        "attempted": 18,
-        "proved": 15,
+        "attempted": 14,
+        "proved": 11,
         "unproved": 3,
         "deferred_budget": 0
       },
@@ -131,14 +131,14 @@
           "outcome": "recomputation failed: ValueExcelError"
         }
       ],
-      "decision": "15 findings survive; 3 are demoted to suspected",
+      "decision": "11 findings survive; 3 are demoted to suspected",
       "why": "This is the only gate that can promote a suspicion to a finding. A repair that changes no number proves nothing and is reported as suspected, never as an error."
     },
     {
       "stage": "5 triage",
       "tool": "report.render_markdown",
       "returned": {
-        "proved": 15,
+        "proved": 11,
         "suspected": 3,
         "blind_spots_declared": true
       },

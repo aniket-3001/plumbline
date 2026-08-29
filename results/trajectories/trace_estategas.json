@@ -1,7 +1,7 @@
 {
   "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
-  "seconds": 1.9,
-  "min_peers": 3,
+  "seconds": 2.1,
+  "min_peers": 2,
   "steps": [
     {
       "stage": "0 readiness",
@@ -15,11 +15,11 @@
     },
     {
       "stage": "1 detect",
-      "tool": "detect_pattern_breaks + detect_dead_cells(min_peers=3)",
+      "tool": "detect_pattern_breaks + detect_dead_cells(min_peers=2)",
       "returned": {
         "formula_cells": 1396,
         "pattern_breaks": 1,
-        "dead_candidates": 41
+        "dead_candidates": 28
       },
       "decision": "pass every candidate to the screen",
       "why": "Detection is deliberately loose. Precision is bought downstream, by recomputation, not by guessing harder here."
@@ -29,23 +29,13 @@
       "tool": "screen_dead_cells (evaluates each candidate formula in a scratch column)",
       "returned": {
         "kept": 1,
-        "dropped": 40
+        "dropped": 27
       },
       "dropped_examples": [
-        {
-          "cell": "Sheet1!B7",
-          "value": "30468",
-          "would_be": "=+A7"
-        },
         {
           "cell": "Sheet1!E7",
           "value": "10000",
           "would_be": "=+D7"
-        },
-        {
-          "cell": "Sheet1!B10",
-          "value": "30523",
-          "would_be": "=+A10"
         },
         {
           "cell": "Sheet1!E10",
@@ -58,11 +48,6 @@
           "would_be": "=+D11"
         },
         {
-          "cell": "Sheet1!B25",
-          "value": "1198917",
-          "would_be": "=+A25"
-        },
-        {
           "cell": "Sheet1!E25",
           "value": "5000",
           "would_be": "=+D25"
@@ -71,9 +56,24 @@
           "cell": "Sheet1!E26",
           "value": "2.25",
           "would_be": "=+D26"
+        },
+        {
+          "cell": "Sheet1!E28",
+          "value": "-5000",
+          "would_be": "=+D28"
+        },
+        {
+          "cell": "Sheet1!E29",
+          "value": "2.25",
+          "would_be": "=+D29"
+        },
+        {
+          "cell": "Sheet1!E34",
+          "value": "6000",
+          "would_be": "=+D34"
         }
       ],
-      "decision": "discard 40 of 41 candidates",
+      "decision": "discard 27 of 28 candidates",
       "why": "A typed constant among formulas is usually just data. Only one whose value equals what the row's formula would produce looks like a frozen formula. This step took the dead-cell detector from 40 false positives to 0 on the workbook that first exposed it."
     },
     {

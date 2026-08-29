@@ -51,6 +51,20 @@ PY -m pytest tests/ -q
 
 Expected: `153 passed`. If this fails, stop — nothing downstream will be meaningful.
 
+Then check that the commands in this guide actually run, which the unit tests do not
+cover:
+
+```bash
+PY scripts/smoke.py --quick
+```
+
+Expected: `all 6 documented commands work.` Drop `--quick` after §4 to include the
+three that need the seeded corpus, including the exact shot the video script puts on
+screen. This exists because `pip install -e .` had never once been run here — the
+tests pass without it, so `plumbline audit` was documented for weeks while not
+existing — and because a detector change later moved three documented figures without
+any test noticing.
+
 ---
 
 ## 2. Get the data

@@ -202,9 +202,14 @@ def render(t: dict) -> str:
                 out.append("")
         out.append(f"**Decision.** {s['decision']}")
         out.append("")
-        out.append(f"**Why.** {s.get('why', s.get('human_checkpoint', ''))}")
-        out.append("")
-        if s.get("human_checkpoint") and s.get("why"):
+        if s.get("why"):
+            out.append(f"**Why.** {s['why']}")
+            out.append("")
+        # The checkpoint gets its own heading whenever there is one. It used to be
+        # folded into "Why" on the only stage that has one, so the trace described a
+        # human checkpoint without ever naming it as such -- which is the one thing
+        # this section exists to make findable.
+        if s.get("human_checkpoint"):
             out.append(f"**Human checkpoint.** {s['human_checkpoint']}")
             out.append("")
     return "\n".join(out)
