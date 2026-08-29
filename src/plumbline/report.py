@@ -186,12 +186,25 @@ def _trunc(text, n: int = 28) -> str:
     return text if len(text) <= n else text[: n - 1] + "…"
 
 
+#: Markdown is written to a file with an explicit encoding and can be typeset.
+#: The console cannot: a legacy Windows code page turns an em dash into a
+#: UnicodeEncodeError, and an audit tool that crashes while printing its findings
+#: is worse than one that prints them plainly.
+_ASCII = {"—": "-", "–": "-", "…": "...", "→": "->", " ": " "}
+
+
+def _ascii(text: str) -> str:
+    for char, plain in _ASCII.items():
+        text = text.replace(char, plain)
+    return text.encode("ascii", "replace").decode("ascii")
+
+
 def render_terminal(report) -> str:
-    """Compact version for the console."""
+    """Compact version for the console. ASCII only, by construction."""
     lines = [f"Plumbline - {report.workbook}"]
     if report.skipped:
         lines.append(f"  not audited: {report.skipped}")
-        return "\n".join(lines)
+        return _ascii("\n".join(lines))
 
     proved = report.proved
     lines.append(f"  {report.formula_cells:,} formula cells checked")
@@ -207,4 +220,4 @@ def render_terminal(report) -> str:
     unproved = len(report.findings) - len(proved)
     if unproved:
         lines.append(f"  ({unproved} further cell(s) look irregular but could not be proved)")
-    return "\n".join(lines)
+    return _ascii("\n".join(lines))

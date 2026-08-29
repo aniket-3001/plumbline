@@ -74,6 +74,34 @@ class TestTerminalReport:
         """Windows consoles and pipes mangle non-ASCII; the report must survive them."""
         render_terminal(clean_report).encode("ascii")
 
+    def test_is_ascii_even_when_values_are_missing_or_truncated(self):
+        """The clean fixture never reaches the em dash placeholder or the ellipsis,
+        so passing on it proves nothing. This exercises both."""
+        from plumbline.audit import AuditReport, Finding
+
+        report = AuditReport(workbook="x.xlsx", formula_cells=9)
+        report.findings = [
+            Finding(
+                sheet="S", cell="C11", detector="pattern_break", panko_class="mechanical",
+                actual="=SUM(" + "C8:C9," * 30 + "C10)", expected="=SUM(C8:C10)",
+                reason="r", proved=True, proof="p",
+                baseline_value=None, repaired_value=None, delta=None,
+            ),
+            Finding(
+                sheet="S", cell="D11", detector="pattern_break", panko_class="mechanical",
+                actual="=1", expected="=2", reason="r",
+            ),
+        ]
+        render_terminal(report).encode("ascii")
+
+    def test_the_cli_itself_prints_ascii(self, capsys):
+        """`check` lives outside report.py and had its own em dash, mojibaked into a
+        byte that was not even valid UTF-8."""
+        main(["check", str(CLEAN)])
+        out = capsys.readouterr().out
+        out.encode("ascii")
+        assert "Plumbline readiness" in out
+
     def test_mentions_the_proof(self, clean_report):
         assert "PROVED" in render_terminal(clean_report)
 

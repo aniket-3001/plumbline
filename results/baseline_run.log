@@ -1,11 +1,11 @@
 auditing 21 seeded workbooks
 
-  benjamin_rogers__1229__ENRON_$orion_1099.xlsx  seeds  2  found  2  fp   0  proved  2            4.2s
-  benjamin_rogers__1257__Case 1 Ch 3 version 3.x seeds  4  found  1  fp   0  proved  1            0.4s
-  chris_germany__1938__Mar2002_EstateGas.xlsx    seeds  2  found  2  fp   0  proved  2            2.3s
-  chris_germany__2230__2000ces08.xlsx            seeds  3  found  1  fp   0  proved  0            2.6s
-  darrell_schoolcraft__7407__SUNFLOWER - NNG - H seeds  1  found  1  fp   0  proved  1           10.6s
-  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx seeds  3  found  1  fp   0  proved  0  defer 3  88.5s
+  benjamin_rogers__1229__ENRON_$orion_1099.xlsx  seeds  2  found  2  fp   0  proved  2            3.6s
+  benjamin_rogers__1257__Case 1 Ch 3 version 3.x seeds  4  found  2  fp   0  proved  2            0.6s
+  chris_germany__1938__Mar2002_EstateGas.xlsx    seeds  2  found  2  fp   0  proved  2            2.4s
+  chris_germany__2230__2000ces08.xlsx            seeds  2  found  1  fp   0  proved  0            2.3s
+  darrell_schoolcraft__7407__SUNFLOWER - NNG - H seeds  1  found  1  fp   0  proved  1            9.1s
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx seeds  4  found  4  fp   0  proved  2  defer 6  89.0s
 WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
 WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
 WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
@@ -90,74 +90,10 @@ WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being 
 WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
 WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
 WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
-  darron_c_giron__8011__EMW 0921.xlsx            seeds  2  found  2  fp   0  proved  0  defer 97  61.9s
-  fletcher_sturm__10987__1019optsheet.xlsx       seeds  2  found  0  fp   0  proved  0  defer 50   4.8s
-  john_forney__15523__s_9-12-01.xlsx             seeds  2  found  2  fp   0  proved  2            0.7s
-  john_zufferli__16801__marks.xlsx               seeds  2  found  0  fp   1  proved  0            0.2s
-  juan_hernandez__17720__SCHED2001.xlsx          seeds  2  found  2  fp   0  proved  0           11.1s
-  kate_symes__18314__EES April Dailies.xlsx      seeds  3  found  1  fp   0  proved  1           19.0s
-  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    seeds  3  found  3  fp   0  proved  3           38.8s
-  lisa_gang__22348__EES_Schedule.xlsx            seeds  4  found  3  fp   0  proved  3          137.2s
-  mary_fischer__25634__31Q.xlsx                  seeds  3  found  3  fp   0  proved  0           21.3s
-  mike_carson__27556__102601 NE & NY Optionsheet seeds  1  found  1  fp   0  proved  0            1.8s
-  richard_ring__31589__Renewable_Positions_2001_ seeds  3  found  2  fp   0  proved  2            0.6s
-  robin_rodrigue__33241__Phillip e-mail.xlsx     seeds  3  found  3  fp   0  proved  3           10.0s
-  scott_neal__38672__6th floorplan 01.30a.xlsx   seeds  4  found  4  fp   0  proved  4           12.1s
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
-  stacey_white__39000__Power CBO 2002 Plan Expen seeds  2  found  2  fp   0  proved  0  defer 68  32.2s
-  stacey_white__39165__Power - Non-Terminated MT seeds  3  found  3  fp   0  proved  3           23.8s
-
-==================================================================
-  ARM: deterministic audit
-==================================================================
-  workbooks           21  (0 skipped)
-  seeded errors       54
-  found               39
-  missed              15
-  false positives     1
-  pre-existing hits   368  (excluded from scoring)
-
-  precision           0.975
-  recall              0.722
-  F1                  0.830
-  proof rate          0.692
-
-  recall by difficulty:
-    obvious    0.500   (1/2)
-    realistic  0.750   (15/20)
-    silent     0.719   (23/32)
-
-  proof budget        25 per workbook
-  hit the budget      4 workbook(s), 218 finding(s) reported
-                      but not proved. Detection is unaffected.
-
-  wall clock          484.3s
-
-wrote results\baseline.json
+  darron_c_giron__8011__EMW 0921.xlsx            seeds  3  found  3  fp   0  proved  0  defer 98  63.1s
+  fletcher_sturm__10987__1019optsheet.xlsx       seeds  2  found  0  fp   0  proved  0  defer 50   4.7s
+  john_forney__15523__s_9-12-01.xlsx             seeds  1  found  1  fp   0  proved  1            0.3s
+  john_zufferli__16801__marks.xlsx               seeds  1  found  1  fp   0  proved  1            0.2s
+  juan_hernandez__17720__SCHED2001.xlsx          seeds  2  found  2  fp   0  proved  0           11.9s
+  kate_symes__18314__EES April Dailies.xlsx      seeds  3  found  1  fp   0  proved  1           19.7s
+  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    seeds  2  found  2  fp   0  proved  2           25.9s

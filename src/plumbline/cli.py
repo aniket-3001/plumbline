@@ -46,7 +46,7 @@ def _check(path: Path) -> int:
         print(f"no such file: {path}", file=sys.stderr)
         return 2
 
-    print(f"Plumbline readiness — {path.name}\n")
+    print(f"Plumbline readiness - {path.name}\n")
     vol = find_volatile(path)
     print(f"  volatile functions   {vol.summary()}")
     if vol.is_volatile:

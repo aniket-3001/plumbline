@@ -45,7 +45,7 @@ Throughout this guide `PY` means the interpreter inside the venv —
 PY -m pytest tests/ -q
 ```
 
-Expected: `92 passed`. If this fails, stop — nothing downstream will be meaningful.
+Expected: `143 passed`. If this fails, stop — nothing downstream will be meaningful.
 
 ---
 
@@ -124,12 +124,12 @@ Runtime: ~2 minutes. Output goes to `data/seeded/` and `results/seeding.json`.
 Expected shape (exact numbers depend on which workbooks your corpus scan accepted):
 
 ```
-seeded 21 workbooks, 54 errors, skipped 3
+seeded 21 workbooks, 53 errors, skipped 3
 
 by Panko class:          by difficulty:
-  hardcoding   32 (59%)    silent      32 (59%)
-  mechanical   14 (26%)    realistic   20 (37%)
-  logic         8 (15%)    obvious      2 ( 4%)
+  hardcoding   30 (57%)    silent      30 (57%)
+  mechanical   17 (32%)    realistic   22 (41%)
+  logic         6 (11%)    obvious      1 ( 2%)
 ```
 
 Difficulty is assigned by what the error looks like *after* injection:
