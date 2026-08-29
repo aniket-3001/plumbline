@@ -160,6 +160,16 @@ mean less than it appears to.
 | Layer 2 | Evaluate the model layer against a stub | A model layer exercised only against a stub is not evidence of anything | **Split into `dump` / `replay`.** Real prompts, real replies, real guard — see [`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md), which states plainly that replies 01 and 02 came from Claude Opus 5 in a Claude Code session rather than the API, because this machine has no key |
 
 
+## Documentation
+
+| | |
+|---|---|
+| [`Docs/REPRODUCTION.md`](Docs/REPRODUCTION.md) | Clean-machine setup, exact commands, expected output, versions, runtime, cost |
+| [`Docs/DESIGN.md`](Docs/DESIGN.md) | Architecture, why each layer exists, and what the evaluation taught (§6d) |
+| [`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md) | Whole-pipeline traces and the Layer 2 agent, with its instructions |
+| [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md) | The threshold sweep, hand-labelled, and why the worse-scoring arm shipped |
+| [`Docs/VIDEO_SCRIPT.md`](Docs/VIDEO_SCRIPT.md) | Script and shot list for the solution video |
+
 ## Reproduction
 
 Full clean-machine guide: [`Docs/REPRODUCTION.md`](Docs/REPRODUCTION.md).
