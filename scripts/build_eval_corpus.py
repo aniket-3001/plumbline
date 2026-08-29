@@ -150,6 +150,14 @@ def main() -> int:
         return 1
 
     paths = sorted(p for p in CORPUS.rglob("*.xlsx") if p.is_file())
+    if not paths:
+        # An interrupted or partially-extracted download leaves the directory there
+        # and empty, and without this the run reports a clean funnel of zeros --
+        # which reads as "no workbook qualified" rather than "there was no data".
+        print("no .xlsx files under data/corpus -- the download may have been "
+              "interrupted; re-run scripts/fetch_corpus.py (it resumes)", file=sys.stderr)
+        return 1
+
     rng = random.Random(args.seed)
     rng.shuffle(paths)
     paths = paths[: args.scan]

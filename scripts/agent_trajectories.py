@@ -123,11 +123,19 @@ def replay() -> int:
             },
         )()
 
-        interp = interpret(
-            str(ROOT / "data" / "seeded" / record["workbook"]),
-            finding,
-            lambda system, user, _r=reply: _r,
-        )
+        # Replay must not need the workbook. `interpret` normally rebuilds the
+        # context from the file, but the context was recorded at dump time and the
+        # prompt is what the guard is checked against -- so the recorded one is used
+        # directly. Without this, replay worked here and failed on every clean clone,
+        # because the seeded workbooks are regenerable and therefore not committed.
+        import plumbline.agent as agent
+
+        original = agent.build_context
+        agent.build_context = lambda *a, _ctx=record["context"], **k: _ctx
+        try:
+            interp = interpret("<recorded>", finding, lambda system, user, _r=reply: _r)
+        finally:
+            agent.build_context = original
         (OUT / f"{stem}.trajectory.json").write_text(
             json.dumps(
                 {
