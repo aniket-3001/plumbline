@@ -1,3 +1,17 @@
+# Normalise line endings in the repository to LF.
+#
+# Without this, every file a script regenerates on Windows comes back with CRLF and
+# git reports it as modified even when the content is byte-identical. That made
+# `scripts/smoke.py` -- the command the reproduction guide tells a reader to run --
+# leave a dirty working tree, which reads as "running the verification changed
+# something" when nothing changed at all.
 * text=auto eol=lf
+
+# Excel workbooks are binary. Never touch them: line-ending translation corrupts a
+# zip archive, and the test fixtures are committed evidence.
 *.xlsx binary
-*.xls binary
+*.xlsm binary
+*.xls  binary
+*.7z   binary
+*.png  binary
+*.pdf  binary
