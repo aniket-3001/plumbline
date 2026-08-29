@@ -40,7 +40,7 @@ from openpyxl.utils import column_index_from_string, get_column_letter
 CELL_RE = re.compile(r"\b([A-Z]{1,3})([1-9][0-9]{0,6})\b")
 
 #: Default model. Kept in one place so a change is a one-line diff.
-DEFAULT_MODEL = "claude-sonnet-5"
+DEFAULT_MODEL = "claude-opus-5"
 
 SYSTEM_PROMPT = """\
 You are assisting a spreadsheet audit. A deterministic engine has already found \
@@ -239,6 +239,31 @@ def _known_cells(ctx: dict) -> set[str]:
     return {f"{c}{r}" for c, r in CELL_RE.findall(_render_user_prompt(ctx))}
 
 
+#: Typography a model reaches for that a legacy Windows console cannot encode.
+_PLAIN = {
+    "—": "-", "–": "-", "…": "...", "→": "->",
+    "‘": "'", "’": "'", "“": '"', "”": '"',
+    " ": " ", "≤": "<=", "≥": ">=", "×": "x",
+}
+
+
+def _plain(text: str) -> str:
+    """Fold model prose to ASCII.
+
+    Model output is untrusted input, and this is not hypothetical: the very first
+    live call returned an arrow and an em dash. Printing either to a Windows console
+    on a legacy code page raises UnicodeEncodeError, so an audit that had already
+    produced valid deterministic findings would die while displaying them.
+
+    Normalising here rather than at each display site means every consumer -- the
+    terminal report, the JSON, a future caller -- gets text it can render, and there
+    is one place to look when something odd appears in a finding.
+    """
+    for char, plain in _PLAIN.items():
+        text = text.replace(char, plain)
+    return text.encode("ascii", "replace").decode("ascii")
+
+
 def interpret(path: str, finding, client: Client) -> Interpretation:
     """Ask the model for intent, then let the graph veto anything it invented."""
     ctx = build_context(path, finding)
@@ -257,9 +282,9 @@ def interpret(path: str, finding, client: Client) -> Interpretation:
     rejected = [c for c in claimed if c not in known]
 
     interp = Interpretation(
-        intent=str(payload.get("intent", ""))[:400],
+        intent=_plain(str(payload.get("intent", ""))[:400]),
         deliberate=payload.get("deliberate"),
-        explanation=str(payload.get("explanation", ""))[:800],
+        explanation=_plain(str(payload.get("explanation", ""))[:800]),
         cells_referenced=[c for c in claimed if c in known],
         rejected_cells=rejected,
     )
@@ -280,10 +305,21 @@ def _strip_fence(text: str) -> str:
     return text.strip()
 
 
-def anthropic_client(model: str = DEFAULT_MODEL, max_tokens: int = 700) -> Callable[[str, str], str]:
+def anthropic_client(
+    model: str = DEFAULT_MODEL,
+    max_tokens: int = 2000,
+    effort: str = "medium",
+) -> Callable[[str, str], str]:
     """Real client. Requires ANTHROPIC_API_KEY in the environment.
 
-    Imported lazily so the deterministic arm never needs the SDK installed.
+    Imported lazily so the deterministic arm never needs the SDK installed -- the
+    whole point of the layering is that the product runs, and is measured, without
+    a key or a network.
+
+    `effort` is deliberately not `high`. The model's job here is small and bounded:
+    read a dozen labelled cells and say what one of them was for. Recomputation has
+    already established that it is wrong. Paying for deep reasoning on a question
+    that narrow buys nothing, and the guard rejects invented references either way.
     """
 
     def call(system: str, user: str) -> str:
@@ -294,8 +330,15 @@ def anthropic_client(model: str = DEFAULT_MODEL, max_tokens: int = 700) -> Calla
             model=model,
             max_tokens=max_tokens,
             system=system,
+            thinking={"type": "adaptive"},
+            output_config={"effort": effort},
             messages=[{"role": "user", "content": user}],
         )
+        # A safety decline is a legitimate outcome, not an exception. Returning the
+        # empty string lets `interpret` record it as an unparsable reply rather than
+        # crashing an audit that has already produced valid deterministic findings.
+        if resp.stop_reason == "refusal":
+            return ""
         return "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
 
     return call

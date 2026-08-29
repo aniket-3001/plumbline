@@ -48,3 +48,5 @@ desktop.ini
 
 # Tooling caches present in the workspace
 .tokensave/
+# Raw LLM replies: large, regenerable, and the scored summary is what matters
+results/llm_baseline_raw/

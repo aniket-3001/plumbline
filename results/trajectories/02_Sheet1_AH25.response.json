@@ -1,13 +1,1 @@
-{
- "intent": "Carry the Anadarko Energy Services Company position forward from AG25, as every other cell in row 25 carries the value from the column to its left.",
- "deliberate": null,
- "explanation": "AH25 holds the typed number 5000 where AD25 through AG25 and AI25 all hold a carry-forward formula, and 5000 is exactly what AG25 reports today, so the number is correct as of this file and nothing on the sheet looks wrong. The labels give no reason for this one column to be entered by hand rather than computed, so whether it was a deliberate override or a formula typed over cannot be told from the sheet; what is certain from the recomputation is that it no longer tracks AG25, which moved to 6000 while AH25 stayed at 5000.",
- "cells_referenced": [
-  "AH25",
-  "AG25",
-  "AD25",
-  "AE25",
-  "AF25",
-  "AI25"
- ]
-}
+{"intent": "AH25 should carry forward the prior period's value for Anadarko Energy Services Company by referencing AG25 (=+AG25), continuing the chained roll-forward seen across AD25 through AI25.", "deliberate": null, "explanation": "The row propagates a single value left-to-right via a chain of simple references (AD25=+AC25, AE25=+AD25, AF25=+AE25, AG25=+AF25, AI25=+AH25), so AH25 is the only break in that chain and is hard-coded at 5000. Because the hard-coded number happens to match the current upstream value, the break is invisible until AG25 changes — the recomputation shows AH25 stays at 5000 while the formula would give 6000 — and there is no label or adjacent note indicating an intentional override, so the motive is unclear.", "cells_referenced": ["AH25", "AG25", "AF25", "AE25", "AD25", "AC25", "AI25"]}

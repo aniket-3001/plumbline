@@ -269,3 +269,70 @@ class TestGuardScope:
 
         assert interp.ok is False
         assert "SUMMARY!B12" in interp.rejected_cells
+
+
+class TestModelOutputIsUntrustedText:
+    """The model returns prose, and prose can carry anything.
+
+    Not hypothetical: the first live call against the real API returned an arrow
+    and an em dash. Printing either to a Windows console on a legacy code page
+    raises UnicodeEncodeError, so an audit that had already produced valid
+    deterministic findings would crash while displaying them.
+    """
+
+    @staticmethod
+    def _interp(payload):
+        import json
+
+        import plumbline.agent as agent
+        from plumbline.agent import interpret
+
+        ctx = {
+            "sheet": "S", "cell": "B2", "row_label": "r", "column_label": "c",
+            "actual_formula": "=A1", "expected_formula": "=A2",
+            "row_peers": [{"cell": "C2", "formula": "=B2", "value": 1}],
+            "precedents": [], "proof": "B2: 1 -> 2 (+1)",
+        }
+        finding = type("F", (), {
+            "sheet": "S", "cell": "B2", "actual": "=A1",
+            "expected": "=A2", "proof": "B2: 1 -> 2 (+1)",
+        })()
+        original = agent.build_context
+        agent.build_context = lambda *a, **k: ctx
+        try:
+            return interpret("x.xlsx", finding, lambda s, u: json.dumps(payload))
+        finally:
+            agent.build_context = original
+
+    def test_typography_is_folded_not_dropped(self):
+        interp = self._interp({
+            "intent": "Chain A1\u2192B2\u2192C2",
+            "deliberate": False,
+            "explanation": "The value \u2014 5000 \u2014 is \u201cfrozen\u201d and \u2265 the prior.",
+            "cells_referenced": ["B2"],
+        })
+        interp.intent.encode("ascii")
+        interp.explanation.encode("ascii")
+        assert "->" in interp.intent, "an arrow should become ->, not vanish"
+        assert "-" in interp.explanation and '"frozen"' in interp.explanation
+        assert ">=" in interp.explanation
+
+    def test_arbitrary_unicode_cannot_crash_a_consumer(self):
+        interp = self._interp({
+            "intent": "\u4f60\u597d \U0001f600 \u0645\u0631\u062d\u0628\u0627",
+            "deliberate": None,
+            "explanation": "\u2603" * 50,
+            "cells_referenced": [],
+        })
+        interp.intent.encode("ascii")
+        interp.explanation.encode("ascii")
+
+    def test_ordinary_text_is_untouched(self):
+        interp = self._interp({
+            "intent": "Sum the column.",
+            "deliberate": True,
+            "explanation": "B2 should read A2, not A1.",
+            "cells_referenced": ["B2"],
+        })
+        assert interp.intent == "Sum the column."
+        assert interp.explanation == "B2 should read A2, not A1."

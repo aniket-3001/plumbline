@@ -43,10 +43,23 @@ sys.path.insert(0, str(ROOT / "scripts"))
 OUT = ROOT / "results" / "trajectories"
 
 
-def dump(workbook: Path, limit: int) -> int:
-    from plumbline.agent import SYSTEM_PROMPT, _render_user_prompt, build_context
+def dump(workbook: Path, limit: int, live: bool = False) -> int:
+    from plumbline.agent import SYSTEM_PROMPT, _render_user_prompt, anthropic_client, build_context
     from plumbline.audit import audit
     from plumbline.cli import _unreadable
+
+    # `--live` is the same prompts through the real API, written straight to
+    # <stem>.response.json so `replay` then validates them exactly as it validates a
+    # recorded reply. The two paths must not diverge: if the live path had its own
+    # validation, the offline verdicts would stop being evidence about the live one.
+    call = None
+    if live:
+        import os
+
+        if not os.environ.get("ANTHROPIC_API_KEY"):
+            print("--live needs ANTHROPIC_API_KEY in the environment", file=sys.stderr)
+            return 2
+        call = anthropic_client()
 
     # Without this, an unreadable path reports "nothing proved", which is true but
     # deeply misleading: it reads as "this workbook is clean" rather than "this file
@@ -88,8 +101,17 @@ def dump(workbook: Path, limit: int) -> int:
             newline="\n",
         )
         print(f"  wrote {stem}.prompt.json  ({finding.sheet}!{finding.cell})")
+
+        if call is not None:
+            reply = call(SYSTEM_PROMPT, _render_user_prompt(ctx))
+            (OUT / f"{stem}.response.json").write_text(reply, encoding="utf-8", newline="\n")
+            print(f"         live reply recorded ({len(reply)} chars)")
+
     print(f"\n{len(proved)} prompt(s) in {OUT.relative_to(ROOT)}")
-    print("Record each reply as <stem>.response.json, then run: replay")
+    if call is None:
+        print("Record each reply as <stem>.response.json, then run: replay")
+    else:
+        print("Live replies recorded. Run `replay` to validate them through the guard.")
     return 0
 
 
@@ -176,9 +198,11 @@ def main(argv=None) -> int:
     d = sub.add_parser("dump", help="write the exact prompts for a workbook's proved findings")
     d.add_argument("workbook", type=Path)
     d.add_argument("--limit", type=int, default=6)
+    d.add_argument("--live", action="store_true",
+                   help="send the prompts through the real API and record the replies")
     sub.add_parser("replay", help="validate recorded replies through the real guard")
     args = p.parse_args(argv)
-    return dump(args.workbook, args.limit) if args.cmd == "dump" else replay()
+    return dump(args.workbook, args.limit, args.live) if args.cmd == "dump" else replay()
 
 
 if __name__ == "__main__":

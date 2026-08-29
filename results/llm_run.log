@@ -1,0 +1,5 @@
+direct-prompt baseline: 21 workbooks, claude-opus-5
+
+  benjamin_rogers__1229__ENRON_$orion_1099.xls   reported   6  tp  2  fp   0  pre   4  $  0.21
+  benjamin_rogers__1257__Case 1 Ch 3 version 3   reported   3  tp  2  fp   0  pre   1  $  0.32
+  chris_germany__1938__Mar2002_EstateGas.xlsx    reported   2  tp  2  fp   0  pre   0  $  0.56
