@@ -264,6 +264,84 @@ knowable. Out of scope; report as unauditable.
 
 ---
 
+## 6d. What the first real evaluation actually taught (2026-08-29)
+
+Four baseline runs over 21 real seeded Enron workbooks. The numbers moved from
+precision 0.739 / recall 0.630 to precision 1.000 / recall 0.868, and **the
+detectors' code was identical for the first three of those steps.**
+
+That is the finding, and it is uncomfortable enough to be worth stating plainly:
+for most of this project, the thing being measured was the measurement harness.
+
+### The three harness bugs, and what they have in common
+
+| | Bug | Cost | Shape |
+|---|---|---|---|
+| 1 | A runtime cap sliced the findings list rather than the proof queue | 10 of 20 misses; four workbooks scored zero | A budget changed what the tool *claimed to have looked at* |
+| 2 | Exclusions computed with one detector of two | 11 of 13 false positives | The answer key was built by different code than the answer |
+| 3 | Two seeds in a three-formula row | 2 misses, 1 false positive | The benchmark asked for something it had deleted |
+
+All three share a structure: **a second implementation of something that already
+existed once.** The cap re-derived "the findings", the exclusion list re-derived
+"what the detectors find", and the seeder re-derived "what a row's majority is".
+Each copy drifted, and each drift was scored against the tool.
+
+The defence adopted is not vigilance, it is collapse: there is now exactly one
+`pre_existing_findings` and it calls the audit's own detectors at the audit's own
+settings, and a test asserts the two agree cell for cell. Where a second
+implementation could not be removed, a test asserts the two agree.
+
+### Why none of this showed up as a failing test
+
+Every one of these bugs was invisible to the test suite and visible in about
+fifteen minutes of reading individual missed cells. The summary said
+`recall 0.630`, which is a plausible-looking number for a hard problem; nothing
+about it suggested that four workbooks had scored zero for a reason unrelated to
+detection.
+
+**A metric that can absorb a bug without looking wrong is not an alarm.** The
+practice that found all three was dumping every miss and every false positive with
+its row context and reading them. That is now how a run is reviewed, not an
+occasional deep dive.
+
+### The exclusion rule is load-bearing, and therefore dangerous
+
+368 of the audit's findings are pre-existing anomalies in Enron's own files. They
+are excluded from scoring because there is no ground truth for a 25-year-old
+workbook and inventing one would be worse than not scoring them.
+
+This is correct and it is also the single mechanism by which this benchmark could
+flatter itself: quietly widen the exclusion list and every miss becomes "not our
+problem". Three properties hold it shut, and all three are enforced in tests
+rather than argued in a doc:
+
+1. Exclusions are computed on the **unseeded original**, so a seeded error cannot
+   land in one. Checked across all 53 seeds, every run.
+2. Exclusions use the **same detectors at the same settings**. Mismatch in either
+   direction is a scoring bug; both directions have now happened.
+3. When the exclusion list was corrected, **recall did not move** (0.7222 →
+   0.7222). That is the control, and without it the precision gain from 0.750 to
+   0.975 would be unreadable.
+
+`precision 1.000` therefore means something narrower than it looks: every finding
+was either a planted error or a cell already anomalous before we touched the file.
+It does not mean the 368 are all genuine defects. Some plainly are — six typed
+constants inside `=Z41+1` counter rows on `scott_neal__38672` — but that is a spot
+check and is not reported as a measurement.
+
+### The one detector question that survived
+
+After the harness was fixed, all seven remaining misses were a single thing: dead
+cells in rows holding exactly **two** formula peers, blocked by a hardcoded
+`len(peers) < 3`.
+
+Two peers agreeing is thinner evidence than five, so the threshold was defensible
+as written — but it was chosen by argument, not measurement, and it turned out to
+be the only thing standing between the audit and every miss it had left. It is now
+`MIN_ROW_PEERS`, swept by `--min-peers`, with each arm's exclusion list recomputed
+at its own threshold so the comparison is not confounded by bug 2 in a third form.
+
+
 ## 7. What existed before vs what we add *(ground rule 2)*
 
 **Existed:** xlcalculator (MIT formula engine), the Enron corpus (CC BY 4.0), Panko's error taxonomy

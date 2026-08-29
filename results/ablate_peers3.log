@@ -5,3 +5,25 @@ auditing 21 seeded workbooks
   chris_germany__1938__Mar2002_EstateGas.xlsx    seeds  2  found  2  fp   0  proved  2            2.0s
   chris_germany__2230__2000ces08.xlsx            seeds  2  found  1  fp   0  proved  0            2.2s
   darrell_schoolcraft__7407__SUNFLOWER - NNG - H seeds  1  found  1  fp   0  proved  1            7.8s
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx seeds  4  found  4  fp   0  proved  2  defer 6  73.7s
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.

@@ -1,18 +1,18 @@
 {
   "summary": {
-    "true_positives": 8,
+    "true_positives": 17,
     "false_positives": 0,
-    "false_negatives": 3,
-    "pre_existing_hits": 4,
-    "proved": 7,
+    "false_negatives": 5,
+    "pre_existing_hits": 227,
+    "proved": 11,
     "precision": 1.0,
-    "recall": 0.7273,
-    "f1": 0.8421,
-    "proof_rate": 0.875,
+    "recall": 0.7727,
+    "f1": 0.8718,
+    "proof_rate": 0.6471,
     "recall_by_difficulty": {
       "obvious": 0.0,
       "realistic": 1.0,
-      "silent": 0.5714
+      "silent": 0.6154
     },
     "by_difficulty": {
       "obvious": {
@@ -20,11 +20,11 @@
         "missed": 0
       },
       "silent": {
-        "found": 4,
-        "missed": 3
+        "found": 8,
+        "missed": 5
       },
       "realistic": {
-        "found": 4,
+        "found": 9,
         "missed": 0
       }
     }
@@ -216,6 +216,196 @@
         },
         "silent": {
           "found": 1,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+      "formula_cells": 6549,
+      "seeds": 4,
+      "findings": 31,
+      "proved": 2,
+      "seconds": 73.72,
+      "detected": 31,
+      "proof_truncated": true,
+      "proof_deferred": 6,
+      "true_positives": 4,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 27,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 0.5,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 2,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+      "formula_cells": 1744,
+      "seeds": 3,
+      "findings": 123,
+      "proved": 0,
+      "seconds": 52.39,
+      "detected": 123,
+      "proof_truncated": true,
+      "proof_deferred": 98,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 120,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+      "formula_cells": 447,
+      "seeds": 2,
+      "findings": 75,
+      "proved": 0,
+      "seconds": 4.16,
+      "detected": 75,
+      "proof_truncated": true,
+      "proof_deferred": 50,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "pre_existing_hits": 75,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "john_forney__15523__s_9-12-01.xlsx",
+      "formula_cells": 48,
+      "seeds": 1,
+      "findings": 1,
+      "proved": 1,
+      "seconds": 0.27,
+      "detected": 1,
+      "proof_truncated": false,
+      "proof_deferred": 0,
+      "true_positives": 1,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "john_zufferli__16801__marks.xlsx",
+      "formula_cells": 39,
+      "seeds": 1,
+      "findings": 2,
+      "proved": 1,
+      "seconds": 0.17,
+      "detected": 2,
+      "proof_truncated": false,
+      "proof_deferred": 0,
+      "true_positives": 1,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 1,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
           "missed": 0
         }
       }
