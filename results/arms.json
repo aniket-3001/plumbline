@@ -1,0 +1,2258 @@
+{
+  "naive": {
+    "summary": {
+      "true_positives": 46,
+      "false_positives": 4420,
+      "false_negatives": 7,
+      "pre_existing_hits": 368,
+      "proved": 0,
+      "precision": 0.0103,
+      "recall": 0.8679,
+      "f1": 0.0204,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 1.0,
+        "realistic": 1.0,
+        "silent": 0.7667
+      },
+      "by_difficulty": {
+        "realistic": {
+          "found": 22,
+          "missed": 0
+        },
+        "obvious": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 23,
+          "missed": 7
+        }
+      },
+      "arm": "naive",
+      "workbooks": 21,
+      "total_seconds": 27.7,
+      "reported_total": 4834
+    },
+    "workbooks": [
+      {
+        "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+        "seeds": 2,
+        "reported": 8,
+        "seconds": 0.39,
+        "true_positives": 2,
+        "false_positives": 3,
+        "false_negatives": 0,
+        "pre_existing_hits": 3,
+        "proved": 0,
+        "precision": 0.4,
+        "recall": 1.0,
+        "f1": 0.5714,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+        "seeds": 4,
+        "reported": 2,
+        "seconds": 0.1,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+        "seeds": 2,
+        "reported": 42,
+        "seconds": 0.41,
+        "true_positives": 2,
+        "false_positives": 40,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 0.0476,
+        "recall": 1.0,
+        "f1": 0.0909,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__2230__2000ces08.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 0.68,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 3.25,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+        "seeds": 4,
+        "reported": 34,
+        "seconds": 2.54,
+        "true_positives": 4,
+        "false_positives": 3,
+        "false_negatives": 0,
+        "pre_existing_hits": 27,
+        "proved": 0,
+        "precision": 0.5714,
+        "recall": 1.0,
+        "f1": 0.7273,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+        "seeds": 3,
+        "reported": 125,
+        "seconds": 2.51,
+        "true_positives": 3,
+        "false_positives": 2,
+        "false_negatives": 0,
+        "pre_existing_hits": 120,
+        "proved": 0,
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1": 0.75,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+        "seeds": 2,
+        "reported": 111,
+        "seconds": 0.13,
+        "true_positives": 0,
+        "false_positives": 36,
+        "false_negatives": 2,
+        "pre_existing_hits": 75,
+        "proved": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "john_forney__15523__s_9-12-01.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 0.07,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "john_zufferli__16801__marks.xlsx",
+        "seeds": 1,
+        "reported": 2,
+        "seconds": 0.02,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 1.01,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+        "seeds": 3,
+        "reported": 4227,
+        "seconds": 1.69,
+        "true_positives": 1,
+        "false_positives": 4223,
+        "false_negatives": 2,
+        "pre_existing_hits": 3,
+        "proved": 0,
+        "precision": 0.0002,
+        "recall": 0.3333,
+        "f1": 0.0005,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+        "seeds": 2,
+        "reported": 8,
+        "seconds": 5.66,
+        "true_positives": 2,
+        "false_positives": 6,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "f1": 0.4,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
+        "seeds": 4,
+        "reported": 12,
+        "seconds": 4.27,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 8,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mary_fischer__25634__31Q.xlsx",
+        "seeds": 3,
+        "reported": 7,
+        "seconds": 1.48,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 4,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+        "seeds": 1,
+        "reported": 16,
+        "seconds": 0.18,
+        "true_positives": 1,
+        "false_positives": 13,
+        "false_negatives": 0,
+        "pre_existing_hits": 2,
+        "proved": 0,
+        "precision": 0.0714,
+        "recall": 1.0,
+        "f1": 0.1333,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 1.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 1,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+        "seeds": 3,
+        "reported": 4,
+        "seconds": 0.03,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+        "seeds": 3,
+        "reported": 21,
+        "seconds": 0.63,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 18,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+        "seeds": 4,
+        "reported": 112,
+        "seconds": 0.37,
+        "true_positives": 4,
+        "false_positives": 94,
+        "false_negatives": 0,
+        "pre_existing_hits": 14,
+        "proved": 0,
+        "precision": 0.0408,
+        "recall": 1.0,
+        "f1": 0.0784,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+        "seeds": 2,
+        "reported": 93,
+        "seconds": 0.77,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 91,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+        "seeds": 4,
+        "reported": 4,
+        "seconds": 1.5,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 3,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      }
+    ]
+  },
+  "screened": {
+    "summary": {
+      "true_positives": 46,
+      "false_positives": 0,
+      "false_negatives": 7,
+      "pre_existing_hits": 368,
+      "proved": 0,
+      "precision": 1.0,
+      "recall": 0.8679,
+      "f1": 0.9293,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 1.0,
+        "realistic": 1.0,
+        "silent": 0.7667
+      },
+      "by_difficulty": {
+        "realistic": {
+          "found": 22,
+          "missed": 0
+        },
+        "obvious": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 23,
+          "missed": 7
+        }
+      },
+      "arm": "screened",
+      "workbooks": 21,
+      "total_seconds": 61.5,
+      "reported_total": 414
+    },
+    "workbooks": [
+      {
+        "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+        "seeds": 2,
+        "reported": 5,
+        "seconds": 0.67,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 3,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+        "seeds": 4,
+        "reported": 2,
+        "seconds": 0.07,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 0.63,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__2230__2000ces08.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 0.52,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 4.17,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+        "seeds": 4,
+        "reported": 31,
+        "seconds": 5.36,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 27,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+        "seeds": 3,
+        "reported": 123,
+        "seconds": 4.85,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 120,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+        "seeds": 2,
+        "reported": 75,
+        "seconds": 0.33,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 75,
+        "proved": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "john_forney__15523__s_9-12-01.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 0.08,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "john_zufferli__16801__marks.xlsx",
+        "seeds": 1,
+        "reported": 2,
+        "seconds": 0.03,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 2.78,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+        "seeds": 3,
+        "reported": 4,
+        "seconds": 5.69,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 3,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 10.06,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
+        "seeds": 4,
+        "reported": 12,
+        "seconds": 13.62,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 8,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mary_fischer__25634__31Q.xlsx",
+        "seeds": 3,
+        "reported": 7,
+        "seconds": 3.98,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 4,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+        "seeds": 1,
+        "reported": 3,
+        "seconds": 0.53,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 2,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 1.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 1,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+        "seeds": 3,
+        "reported": 4,
+        "seconds": 0.15,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+        "seeds": 3,
+        "reported": 21,
+        "seconds": 0.71,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 18,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+        "seeds": 4,
+        "reported": 18,
+        "seconds": 0.76,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 14,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+        "seeds": 2,
+        "reported": 93,
+        "seconds": 2.6,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 91,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+        "seeds": 4,
+        "reported": 4,
+        "seconds": 3.91,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 3,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      }
+    ]
+  },
+  "full": {
+    "summary": {
+      "true_positives": 46,
+      "false_positives": 0,
+      "false_negatives": 7,
+      "pre_existing_hits": 368,
+      "proved": 32,
+      "precision": 1.0,
+      "recall": 0.8679,
+      "f1": 0.9293,
+      "proof_rate": 0.6957,
+      "recall_by_difficulty": {
+        "obvious": 1.0,
+        "realistic": 1.0,
+        "silent": 0.7667
+      },
+      "by_difficulty": {
+        "realistic": {
+          "found": 22,
+          "missed": 0
+        },
+        "obvious": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 23,
+          "missed": 7
+        }
+      },
+      "arm": "full",
+      "workbooks": 21,
+      "total_seconds": 463.4,
+      "reported_total": 414
+    },
+    "workbooks": [
+      {
+        "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+        "seeds": 2,
+        "reported": 5,
+        "seconds": 4.27,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 3,
+        "proved": 2,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+        "seeds": 4,
+        "reported": 2,
+        "seconds": 0.38,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 0,
+        "proved": 2,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 1.6,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 2,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "chris_germany__2230__2000ces08.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 1.88,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "pre_existing_hits": 1,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 1
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 10.07,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+        "seeds": 4,
+        "reported": 31,
+        "seconds": 84.21,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 27,
+        "proved": 2,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.5,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+        "seeds": 3,
+        "reported": 123,
+        "seconds": 61.92,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 120,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+        "seeds": 2,
+        "reported": 75,
+        "seconds": 4.62,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 75,
+        "proved": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "john_forney__15523__s_9-12-01.xlsx",
+        "seeds": 1,
+        "reported": 1,
+        "seconds": 0.28,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "john_zufferli__16801__marks.xlsx",
+        "seeds": 1,
+        "reported": 2,
+        "seconds": 0.17,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 12.38,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+        "seeds": 3,
+        "reported": 4,
+        "seconds": 13.57,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 2,
+        "pre_existing_hits": 3,
+        "proved": 1,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1": 0.5,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 2
+          }
+        }
+      },
+      {
+        "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+        "seeds": 2,
+        "reported": 2,
+        "seconds": 33.11,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 2,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
+        "seeds": 4,
+        "reported": 12,
+        "seconds": 144.16,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 8,
+        "proved": 4,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mary_fischer__25634__31Q.xlsx",
+        "seeds": 3,
+        "reported": 7,
+        "seconds": 22.0,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 4,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+        "seeds": 1,
+        "reported": 3,
+        "seconds": 1.8,
+        "true_positives": 1,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 2,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 1.0,
+          "realistic": 0.0,
+          "silent": 0.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 1,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 0,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+        "seeds": 3,
+        "reported": 4,
+        "seconds": 0.75,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 1,
+        "proved": 3,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+        "seeds": 3,
+        "reported": 21,
+        "seconds": 9.57,
+        "true_positives": 3,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 18,
+        "proved": 3,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 1,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+        "seeds": 4,
+        "reported": 18,
+        "seconds": 11.74,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 14,
+        "proved": 4,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 2,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+        "seeds": 2,
+        "reported": 93,
+        "seconds": 33.01,
+        "true_positives": 2,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 91,
+        "proved": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 0.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 0.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 0,
+            "missed": 0
+          },
+          "silent": {
+            "found": 2,
+            "missed": 0
+          }
+        }
+      },
+      {
+        "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+        "seeds": 4,
+        "reported": 4,
+        "seconds": 11.86,
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "pre_existing_hits": 0,
+        "proved": 4,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "proof_rate": 1.0,
+        "recall_by_difficulty": {
+          "obvious": 0.0,
+          "realistic": 1.0,
+          "silent": 1.0
+        },
+        "by_difficulty": {
+          "obvious": {
+            "found": 0,
+            "missed": 0
+          },
+          "realistic": {
+            "found": 3,
+            "missed": 0
+          },
+          "silent": {
+            "found": 1,
+            "missed": 0
+          }
+        }
+      }
+    ]
+  }
+}

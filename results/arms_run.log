@@ -1,0 +1,217 @@
+
+==================================================================
+  ARM: naive
+==================================================================
+  benjamin_rogers__1229__ENRON_$orion_1099.xlsx  reported   8  tp  2  fp   3    0.4s
+  benjamin_rogers__1257__Case 1 Ch 3 version 3.x reported   2  tp  2  fp   0    0.1s
+  chris_germany__1938__Mar2002_EstateGas.xlsx    reported  42  tp  2  fp  40    0.4s
+  chris_germany__2230__2000ces08.xlsx            reported   2  tp  1  fp   0    0.7s
+  darrell_schoolcraft__7407__SUNFLOWER - NNG - H reported   1  tp  1  fp   0    3.2s
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx reported  34  tp  4  fp   3    2.5s
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+  darron_c_giron__8011__EMW 0921.xlsx            reported 125  tp  3  fp   2    2.5s
+  fletcher_sturm__10987__1019optsheet.xlsx       reported 111  tp  0  fp  36    0.1s
+  john_forney__15523__s_9-12-01.xlsx             reported   1  tp  1  fp   0    0.1s
+  john_zufferli__16801__marks.xlsx               reported   2  tp  1  fp   0    0.0s
+  juan_hernandez__17720__SCHED2001.xlsx          reported   2  tp  2  fp   0    1.0s
+  kate_symes__18314__EES April Dailies.xlsx      reported 4227  tp  1  fp 4223    1.7s
+  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    reported   8  tp  2  fp   6    5.7s
+  lisa_gang__22348__EES_Schedule.xlsx            reported  12  tp  4  fp   0    4.3s
+  mary_fischer__25634__31Q.xlsx                  reported   7  tp  3  fp   0    1.5s
+  mike_carson__27556__102601 NE & NY Optionsheet reported  16  tp  1  fp  13    0.2s
+  richard_ring__31589__Renewable_Positions_2001_ reported   4  tp  3  fp   0    0.0s
+  robin_rodrigue__33241__Phillip e-mail.xlsx     reported  21  tp  3  fp   0    0.6s
+  scott_neal__38672__6th floorplan 01.30a.xlsx   reported 112  tp  4  fp  94    0.4s
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+  stacey_white__39000__Power CBO 2002 Plan Expen reported  93  tp  2  fp   0    0.8s
+  stacey_white__39165__Power - Non-Terminated MT reported   4  tp  4  fp   0    1.5s
+
+==================================================================
+  ARM: screened
+==================================================================
+  benjamin_rogers__1229__ENRON_$orion_1099.xlsx  reported   5  tp  2  fp   0    0.7s
+  benjamin_rogers__1257__Case 1 Ch 3 version 3.x reported   2  tp  2  fp   0    0.1s
+  chris_germany__1938__Mar2002_EstateGas.xlsx    reported   2  tp  2  fp   0    0.6s
+  chris_germany__2230__2000ces08.xlsx            reported   2  tp  1  fp   0    0.5s
+  darrell_schoolcraft__7407__SUNFLOWER - NNG - H reported   1  tp  1  fp   0    4.2s
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx reported  31  tp  4  fp   0    5.4s
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+  darron_c_giron__8011__EMW 0921.xlsx            reported 123  tp  3  fp   0    4.9s
+  fletcher_sturm__10987__1019optsheet.xlsx       reported  75  tp  0  fp   0    0.3s
+  john_forney__15523__s_9-12-01.xlsx             reported   1  tp  1  fp   0    0.1s
+  john_zufferli__16801__marks.xlsx               reported   2  tp  1  fp   0    0.0s
+  juan_hernandez__17720__SCHED2001.xlsx          reported   2  tp  2  fp   0    2.8s
+  kate_symes__18314__EES April Dailies.xlsx      reported   4  tp  1  fp   0    5.7s
+  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    reported   2  tp  2  fp   0   10.1s
+  lisa_gang__22348__EES_Schedule.xlsx            reported  12  tp  4  fp   0   13.6s
+  mary_fischer__25634__31Q.xlsx                  reported   7  tp  3  fp   0    4.0s
+  mike_carson__27556__102601 NE & NY Optionsheet reported   3  tp  1  fp   0    0.5s
+  richard_ring__31589__Renewable_Positions_2001_ reported   4  tp  3  fp   0    0.2s
+  robin_rodrigue__33241__Phillip e-mail.xlsx     reported  21  tp  3  fp   0    0.7s
+  scott_neal__38672__6th floorplan 01.30a.xlsx   reported  18  tp  4  fp   0    0.8s
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+  stacey_white__39000__Power CBO 2002 Plan Expen reported  93  tp  2  fp   0    2.6s
+  stacey_white__39165__Power - Non-Terminated MT reported   4  tp  4  fp   0    3.9s
+
+==================================================================
+  ARM: full
+==================================================================
+  benjamin_rogers__1229__ENRON_$orion_1099.xlsx  reported   5  tp  2  fp   0    4.3s
+  benjamin_rogers__1257__Case 1 Ch 3 version 3.x reported   2  tp  2  fp   0    0.4s
+  chris_germany__1938__Mar2002_EstateGas.xlsx    reported   2  tp  2  fp   0    1.6s
+  chris_germany__2230__2000ces08.xlsx            reported   2  tp  1  fp   0    1.9s
+  darrell_schoolcraft__7407__SUNFLOWER - NNG - H reported   1  tp  1  fp   0   10.1s
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx reported  31  tp  4  fp   0   84.2s
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+  darron_c_giron__8011__EMW 0921.xlsx            reported 123  tp  3  fp   0   61.9s
+  fletcher_sturm__10987__1019optsheet.xlsx       reported  75  tp  0  fp   0    4.6s
+  john_forney__15523__s_9-12-01.xlsx             reported   1  tp  1  fp   0    0.3s
+  john_zufferli__16801__marks.xlsx               reported   2  tp  1  fp   0    0.2s
+  juan_hernandez__17720__SCHED2001.xlsx          reported   2  tp  2  fp   0   12.4s
+  kate_symes__18314__EES April Dailies.xlsx      reported   4  tp  1  fp   0   13.6s
+  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    reported   2  tp  2  fp   0   33.1s
+  lisa_gang__22348__EES_Schedule.xlsx            reported  12  tp  4  fp   0  144.2s
+  mary_fischer__25634__31Q.xlsx                  reported   7  tp  3  fp   0   22.0s
+  mike_carson__27556__102601 NE & NY Optionsheet reported   3  tp  1  fp   0    1.8s
+  richard_ring__31589__Renewable_Positions_2001_ reported   4  tp  3  fp   0    0.8s
+  robin_rodrigue__33241__Phillip e-mail.xlsx     reported  21  tp  3  fp   0    9.6s
+  scott_neal__38672__6th floorplan 01.30a.xlsx   reported  18  tp  4  fp   0   11.7s
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+  stacey_white__39000__Power CBO 2002 Plan Expen reported  93  tp  2  fp   0   33.0s
+  stacey_white__39165__Power - Non-Terminated MT reported   4  tp  4  fp   0   11.9s
+
+==================================================================
+  COMPARISON
+==================================================================
+| Metric | naive (baseline) | + screen | + proof (shipped) |
+|---|---|---|---|
+| Precision | 0.010 | 1.000 | 1.000 |
+| Recall | 0.868 | 0.868 | 0.868 |
+| F1 | 0.020 | 0.929 | 0.929 |
+| True positives | 46 | 46 | 46 |
+| False positives | 4420 | 0 | 0 |
+| Cells reported to the analyst | 4834 | 414 | 414 |
+| Findings carrying a proof | 0 | 0 | 32 |
+| Recall, *obvious* | 1.000 | 1.000 | 1.000 |
+| Recall, *realistic* | 1.000 | 1.000 | 1.000 |
+| Recall, *silent* | 0.767 | 0.767 | 0.767 |
+
+wrote results/arms.json and results/arms.md

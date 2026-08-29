@@ -53,14 +53,64 @@ demonstrates it.** A claim that cannot be proved is escalated to a human, never 
 3. **Verification** — recompute to prove or disprove each claim. Unsupported claims are dropped.
 4. **Triage** — confirmed / cleared / escalated. **Plumbline never edits your workbook.**
 
-Layers 1 and 2 also run standalone as evaluation baselines, so each layer's contribution is measured
-on identical cases.
+**What is measured, and what is not.** Layers 1, 3 and 4 are measured: `scripts/run_arms.py`
+runs the detectors alone, then with screening, then with proof, on identical cases — see
+*Baseline vs solution* below.
+
+**Layer 2 is not measured, and does not detect anything.** It never decides whether a cell is
+wrong; recomputation has already done that before the model is called. It supplies intent —
+*what was this cell for?* — and an explanation, and every cell reference it returns is checked
+against the graph before display. So the numbers in this README are all from the deterministic
+arm, and none of them depend on a model. Whether Layer 2's explanations are *good* would need a
+separate evaluation with human judgement, and that has not been run. Its guard is exercised on
+real trajectories ([`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md)) rather than only
+unit-tested, which is evidence about the fence, not about the explanations.
 
 ## Improvement Changelog
 
 Every meaningful experiment, its evidence, and the decision it drove — including the ones that were
 removed. Measurements are on **21 real Enron workbooks with 54 seeded errors**, unless a row says
 otherwise.
+
+### Baseline vs solution
+
+The brief's mandatory comparison. Three arms, **identical cases, identical scorer** —
+the only thing that changes is how much of this tool is switched on.
+`python scripts/run_arms.py`
+
+| Metric | naive (baseline) | + screen | + proof (shipped) |
+|---|---|---|---|
+| **Precision** | 0.010 | **1.000** | **1.000** |
+| **Recall** | 0.868 | 0.868 | 0.868 |
+| **F1** | 0.020 | **0.929** | **0.929** |
+| True positives | 46 | 46 | 46 |
+| False positives | **4,420** | **0** | **0** |
+| Cells reported to the analyst | 4,834 | 414 | 414 |
+| Findings carrying a proof | 0 | 0 | **32** |
+
+**The baseline is not a strawman** — it is this tool with the two contributions removed.
+Same detectors, same corpus, same seeds, same exclusion lists, same scorer. It also
+describes what a rule-based auditor actually does: flag structural anomalies and hand
+over the list. It finds *every* error the shipped system finds. It buries them in 4,420
+false ones, which is the documented failure of the commercial tools and the reason an
+analyst cannot use them.
+
+Two things worth reading carefully, because neither is the shape a comparison table
+usually has:
+
+- **The screen does all the F1 work.** 0.020 → 0.929, by asking one question of each
+  candidate: does this typed constant equal what the row's formula would produce? That
+  question costs one extra parse per workbook.
+- **Proof does not improve F1, and is not meant to.** Recall, precision and F1 are
+  identical with it and without it. What changes is that 32 findings arrive carrying a
+  recomputation the analyst can rerun, instead of an assertion they must take on trust.
+  F1 cannot express that difference, which is why proof rate is its own row.
+
+I first scored this arm strictly — an unproved finding not counting at all — and got
+F1 0.753, which would have shown proof *hurting*. That was measuring the proof budget,
+not the proof gate: those findings were never disproved, only never reached. It was also
+not what the product does, since unproved findings are demoted to a *Suspected* section
+rather than discarded. Every arm is now scored the way the product behaves.
 
 ### Headline
 
@@ -127,6 +177,7 @@ mean less than it appears to.
 
 | Stage | What was tried, and why | Evidence | Decision |
 |---|---|---|---|
+| **Baseline** | Detectors only, reporting every anomaly as found — the reasonable basic way to do this, and what a rule-based auditor does | **F1 0.020**, precision 0.010, recall 0.868. Finds all 46 seeded errors and buries them in **4,420 false positives**, 4,834 cells handed to the analyst | **Established the starting point.** Recall was never the problem; usable precision was |
 | PoC | Structural pattern-break detection, no model, to establish a floor before adding anything | Seeded fixture: 1 finding, 0 false positives across 12 formula cells. `C11: 27000 → 30000 (+3000)`, propagating `C13: 45000 → 42000 (−3000)` — both deltas exactly the omitted Rent line | **Kept.** Deterministic detection alone finds a real class of error and proves it. This is the floor any model layer must beat |
 | PoC | Counterfactual recomputation via `Evaluator.set_cell_value`, the obvious API | Returned the **unchanged** value 27000 for the "repaired" cell — it sets `.value` but leaves the formula AST intact | **Removed.** Silently produces fake proofs. For a tool whose product *is* the proof, that is the worst available failure |
 | PoC | Counterfactual by swapping in a new `XLFormula` and calling `build_code()` | `C11 = 0.0` while dependent `C13 = 72000.0` — internally inconsistent, both wrong. The constructor never populates range terms | **Removed.** See [`Docs/DESIGN.md`](Docs/DESIGN.md) §6b |
@@ -136,7 +187,7 @@ mean less than it appears to.
 | Determinism | Static scan for volatile functions (`RAND`, `NOW`, …) | `RAND` in **2.67%** of formula cells (45,550). xlcalculator *supports* it, so it never surfaces as a coverage gap — it just makes two evaluations disagree, and a proof is a comparison of two evaluations | **Both guards kept.** A static scan misses *contamination* (a cell with no `RAND` that depends on one); an empirical two-run check can be fooled by coincidence. Volatile workbooks are refused, not audited |
 | Precision | Dead-cell detector, first version: flag typed constants sitting among formulas | 40 false positives on one workbook. Real sheets have carry-forward rows mixing typed inputs with formulas (`A7=data, B7=30468, C7==+B7`) | **Reworked** |
 | Precision | Screen candidates by batch in-place replacement | Cascaded: repairs fed each other and **all 41 candidates were discarded, including the seeded error** | **Removed.** A screen that can discard a true positive is worse than no screen |
-| Precision | Screen by evaluating each candidate's formula in a far-right scratch column | A1 references are literal text, so a formula means the same thing anywhere on its own sheet. One extra parse for the whole workbook, no original cell touched, no cascade. **TP 2/2, FP 0** (was TP 2, FP 40) | **Kept.** See `SCRATCH_COL` in `audit.py` |
+| **Main contribution** | Screen by evaluating each candidate's formula in a far-right scratch column | A1 references are literal text, so a formula means the same thing anywhere on its own sheet. One extra parse for the whole workbook, no original cell touched, no cascade. **TP 2/2, FP 0** (was TP 2, FP 40) | **Kept.** See `SCRATCH_COL` in `audit.py` |
 | **Ablation** | The dead-cell detector required 3 formula peers in a row, a number chosen by argument. Swept it against 2 | Benchmark says 2 wins outright: recall 0.868 → **0.981**, F1 0.929 → **0.991**, precision unchanged at 1.000. But all 29 extra findings are *pre-existing*, and pre-existing findings are excluded from scoring — so the benchmark shows the benefit and is **structurally blind to the cost**. Reading all 29 by hand: ~3 real, ~10 ordinary data flagged wrongly, ~16 unverifiable zeros | **Shipped the arm with the worse score (3).** An analyst who chases two dead ends stops trusting the third finding, and then recall is worth nothing. Full labelling in [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md); `--min-peers` makes the sweep repeatable |
 | Scale | Prove every finding | One full workbook re-parse per finding. A 10,387-formula workbook ran for minutes at 674 MB and the corpus run could not finish | **Capped**, and the cap is recorded as `proof_truncated` so a truncated audit can never be read as a clean one |
 

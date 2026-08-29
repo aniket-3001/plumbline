@@ -1,0 +1,185 @@
+"""The mandatory baseline-vs-solution comparison, as three arms on identical cases.
+
+    python scripts/run_arms.py --max-proofs 25
+
+The brief requires a simple baseline representing "a reasonable basic way to handle
+the task before your solution", scored on the same cases with the same method, and a
+comparison showing the size of the improvement. These are those arms.
+
+  naive     Detectors only. Every pattern break and every typed constant among
+            formulas is reported, exactly as found. No screening, no proof.
+  screened  Adds the scratch-column screen: a typed constant is only a dead cell if
+            its value equals what the row's formula would produce.
+  full      Adds proof by recomputation: apply the repair and show the numbers move,
+            or perturb an input and show a frozen cell fails to respond. A finding
+            that cannot be demonstrated is demoted to *suspected* and reported in a
+            separate section.
+
+**On fairness.** The temptation with a baseline is to build a strawman, and a
+strawman would make every number here worthless. So the naive arm is not a worse
+tool -- it is *this* tool with the two contributions removed. Same detectors, same
+corpus, same seeds, same exclusion lists, same scorer. The delta between arms is
+therefore attributable to the screen and the proof gate specifically, rather than to
+a comparison rigged at the start.
+
+The naive arm is also a fair description of what a rule-based auditor does: flag
+structural anomalies and hand the analyst a list. That is the "manual process people
+use today" shape from the brief, and the documented failure of the commercial tools.
+
+**`full` is scored the way the product actually behaves**, which is not the way I first
+scored it. The first version required a proof for a finding to count, on the reasoning
+that the product promises recomputation behind everything. That was wrong twice over.
+The product does not discard unproved findings -- it demotes them to a *Suspected*
+section, clearly separated from proved ones, and shows them to a human. And the proof
+budget caps proofs per workbook, so strict scoring measured the budget rather than the
+gate: recall fell 0.868 -> 0.604 and F1 0.929 -> 0.753, almost all of it findings that
+were never *disproved*, only never *reached*.
+
+So proof rate is reported as its own row instead. This makes the honest shape of the
+result visible: **proof does not improve F1, and is not supposed to.** It changes what
+the analyst can trust about each finding, which is a property F1 cannot express. The
+screen is what buys precision; the proof is what makes a finding checkable.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+import warnings
+from pathlib import Path
+
+warnings.filterwarnings("ignore")
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts"))
+
+SEEDED = ROOT / "data" / "seeded"
+RESULTS = ROOT / "results"
+
+ARMS = ("naive", "screened", "full")
+
+
+def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
+    """One arm over every workbook. Only `arm` changes between calls."""
+    from plumbline.audit import (
+        MIN_ROW_PEERS,
+        _formulas_by_sheet,
+        _load,
+        detect_dead_cells,
+        detect_pattern_breaks,
+        prove,
+        screen_dead_cells,
+    )
+    from plumbline.scoring import Scorecard, score
+
+    total, rows = Scorecard(), []
+    started = time.time()
+    print(f"\n{'=' * 66}\n  ARM: {arm}\n{'=' * 66}", flush=True)
+
+    for mpath in manifests:
+        manifest = json.loads(mpath.read_text(encoding="utf-8"))
+        wb = SEEDED / manifest["seeded"]
+        if not wb.exists():
+            continue
+
+        t0 = time.time()
+        model, _ = _load(str(wb))
+        sheets = _formulas_by_sheet(model)
+
+        findings = []
+        dead = []
+        for sheet, formulas in sheets.items():
+            findings.extend(detect_pattern_breaks(sheet, formulas))
+            dead.extend(detect_dead_cells(str(wb), sheet, formulas, min_peers=MIN_ROW_PEERS))
+
+        # The two contributions, added one at a time.
+        findings += dead if arm == "naive" else screen_dead_cells(str(wb), dead)
+        if arm == "full":
+            head = findings[:max_proofs] if max_proofs else findings
+            findings = prove(str(wb), head) + findings[len(head):]
+
+        elapsed = time.time() - t0
+        payload = [
+            {"sheet": f.sheet, "cell": f.cell, "proved": f.proved, "detector": f.detector}
+            for f in findings
+        ]
+        # Every arm is scored identically, matching what the product does: an unproved
+        # finding is still reported, in a separate section, for a human to judge.
+        card = score(payload, manifest, require_proof=False)
+        total = total.merge(card)
+        rows.append({
+            "workbook": wb.name,
+            "seeds": manifest["seed_count"],
+            "reported": len(payload),
+            "seconds": round(elapsed, 2),
+            **card.to_dict(),
+        })
+        print(f"  {wb.name[:46]:46} reported {len(payload):3d}  "
+              f"tp {card.true_positives:2d}  fp {card.false_positives:3d}  {elapsed:5.1f}s",
+              flush=True)
+
+    summary = total.to_dict()
+    summary["arm"] = arm
+    summary["workbooks"] = len(rows)
+    summary["total_seconds"] = round(time.time() - started, 1)
+    summary["reported_total"] = sum(r["reported"] for r in rows)
+    return {"summary": summary, "workbooks": rows}
+
+
+def table(results: dict[str, dict]) -> str:
+    """The comparison the brief asks for: same metric, every arm, same cases."""
+    def g(arm, key):
+        return results[arm]["summary"][key]
+
+    lines = [
+        "| Metric | naive (baseline) | + screen | + proof (shipped) |",
+        "|---|---|---|---|",
+    ]
+    for label, key, fmt in (
+        ("Precision", "precision", "{:.3f}"),
+        ("Recall", "recall", "{:.3f}"),
+        ("F1", "f1", "{:.3f}"),
+        ("True positives", "true_positives", "{}"),
+        ("False positives", "false_positives", "{}"),
+        ("Cells reported to the analyst", "reported_total", "{}"),
+        ("Findings carrying a proof", "proved", "{}"),
+    ):
+        cells = " | ".join(fmt.format(g(a, key)) for a in ARMS)
+        lines.append(f"| {label} | {cells} |")
+    for d in ("obvious", "realistic", "silent"):
+        cells = " | ".join(f"{results[a]['summary']['recall_by_difficulty'][d]:.3f}" for a in ARMS)
+        lines.append(f"| Recall, *{d}* | {cells} |")
+    return "\n".join(lines)
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--max-proofs", type=int, default=25)
+    ap.add_argument("--limit", type=int, default=0)
+    args = ap.parse_args(argv)
+
+    manifests = sorted(SEEDED.glob("*.truth.json"))
+    if not manifests:
+        print("no seeded workbooks -- run scripts/seed_corpus.py first", file=sys.stderr)
+        return 1
+    if args.limit:
+        manifests = manifests[: args.limit]
+
+    results = {a: run_arm(a, manifests, max_proofs=args.max_proofs) for a in ARMS}
+
+    RESULTS.mkdir(exist_ok=True)
+    (RESULTS / "arms.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+    md = table(results)
+    (RESULTS / "arms.md").write_text(md + "\n", encoding="utf-8")
+
+    print(f"\n{'=' * 66}\n  COMPARISON\n{'=' * 66}")
+    print(md)
+    print("\nwrote results/arms.json and results/arms.md")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
