@@ -1,6 +1,6 @@
 # Pipeline trace - chris_germany__1938__Mar2002_EstateGas.xlsx
 
-*2.1s, min_peers=2*
+*2.9s, min_peers=2*
 
 ## 0 readiness
 

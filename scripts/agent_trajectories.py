@@ -82,6 +82,10 @@ def dump(workbook: Path, limit: int) -> int:
                 default=str,
             ),
             encoding="utf-8",
+            # LF explicitly. These are committed evidence, and on Windows the default
+            # translation writes CRLF, so regenerating them produced a diff whose
+            # content was byte-identical. Verification must not dirty the tree.
+            newline="\n",
         )
         print(f"  wrote {stem}.prompt.json  ({finding.sheet}!{finding.cell})")
     print(f"\n{len(proved)} prompt(s) in {OUT.relative_to(ROOT)}")
@@ -151,6 +155,7 @@ def replay() -> int:
                 default=str,
             ),
             encoding="utf-8",
+            newline="\n",
         )
         verdict = "accepted" if interp.ok else f"REJECTED -- {interp.error}"
         rows.append((f"{record['sheet']}!{record['cell']}", verdict))

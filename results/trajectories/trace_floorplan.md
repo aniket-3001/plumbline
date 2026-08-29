@@ -1,6 +1,6 @@
 # Pipeline trace - scott_neal__38672__6th floorplan 01.30a.xlsx
 
-*8.8s, min_peers=2*
+*10.6s, min_peers=2*
 
 ## 0 readiness
 

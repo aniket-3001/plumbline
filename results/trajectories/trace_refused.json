@@ -1,5 +1,5 @@
 {
-  "workbook": "volatile_demo.xlsx",
+  "workbook": "vol.xlsx",
   "steps": [
     {
       "stage": "0 readiness",

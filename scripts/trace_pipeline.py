@@ -232,9 +232,12 @@ def main(argv=None) -> int:
 
     t = trace(args.workbook, max_proofs=args.max_proofs, min_peers=args.min_peers or None)
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(t, indent=2, default=str), encoding="utf-8")
+    # LF explicitly. These are committed evidence, and on Windows the default
+    # translation writes CRLF, so regenerating them produced a diff whose content was
+    # byte-identical. Running the verification must not dirty the working tree.
+    args.out.write_text(json.dumps(t, indent=2, default=str), encoding="utf-8", newline="\n")
     md = args.out.with_suffix(".md")
-    md.write_text(render(t), encoding="utf-8")
+    md.write_text(render(t), encoding="utf-8", newline="\n")
     print(render(t))
     print(f"\nwrote {args.out.name} and {md.name}")
     return 0
