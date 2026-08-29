@@ -57,6 +57,7 @@ class AuditReport:
     dead_screened_out: int = 0
     detected: int = 0        # before any cap
     proof_truncated: bool = False
+    proof_deferred: int = 0  # detected and reported, but not proved: budget ran out
 
     @property
     def proved(self) -> list[Finding]:
@@ -71,6 +72,7 @@ class AuditReport:
             "dead_screened_out": self.dead_screened_out,
             "detected": self.detected,
             "proof_truncated": self.proof_truncated,
+            "proof_deferred": self.proof_deferred,
             "findings": [f.to_dict() for f in self.findings],
             "counts": {
                 "total": len(self.findings),
@@ -461,11 +463,21 @@ def audit(
     report.detected = len(findings)
 
     # Proving costs one full workbook re-parse per finding, so a large sheet with
-    # many candidates can run for many minutes. Capping keeps a batch run bounded;
-    # the cap is recorded so a truncated audit can never be mistaken for a clean one.
+    # many candidates can run for many minutes. The budget therefore caps *proofs*,
+    # never detection: every detected cell is still reported, and the ones past the
+    # budget are carried through explicitly unproved rather than discarded.
+    #
+    # An earlier version sliced `findings` itself. That silently deleted detections,
+    # and on four corpus workbooks the deleted findings included the seeded errors --
+    # so the cap was scored as a detector failure. A budget must never be able to
+    # change what the tool claims to have looked at.
+    to_prove, deferred = findings, []
     if max_proofs and len(findings) > max_proofs:
-        findings = findings[:max_proofs]
+        to_prove, deferred = findings[:max_proofs], findings[max_proofs:]
         report.proof_truncated = True
+        report.proof_deferred = len(deferred)
+        for f in deferred:
+            f.proof = "not attempted: proof budget exhausted"
 
-    report.findings = prove(path, findings)
+    report.findings = prove(path, to_prove) + deferred
     return report

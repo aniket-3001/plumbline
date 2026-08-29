@@ -149,3 +149,86 @@ class TestSeedWorkbook:
         assert [(s["cell"], s["panko_class"]) for s in a["seeds"]] == [
             (s["cell"], s["panko_class"]) for s in b["seeds"]
         ]
+
+
+class TestPreExistingFindings:
+    """The benchmark's own accounting, which is easy to get wrong quietly."""
+
+    @staticmethod
+    def _messy_workbook(path):
+        """A row of `=Bn+1` counters with a typed constant spliced in -- the exact
+        shape of the real hardcoding found across the Enron corpus."""
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        ws["A1"] = 1
+        for col in range(2, 9):
+            ws.cell(row=1, column=col, value=f"={chr(64 + col - 1)}1+1")
+        ws["E1"] = 5          # dead cell: the right value, but typed, not computed
+        ws["A3"] = 10
+        for col in range(2, 9):
+            ws.cell(row=3, column=col, value=f"=SUM($A$3:{chr(64 + col - 1)}3)")
+        ws["F3"] = "=SUM($A$3:D3)"   # pattern break
+        wb.save(path)
+        return path
+
+    def test_finds_dead_cells_not_only_pattern_breaks(self, tmp_path):
+        from plumbline.seeding import pre_existing_findings
+
+        path = self._messy_workbook(tmp_path / "messy.xlsx")
+        found = pre_existing_findings(path)
+        # Both detectors must contribute. Running only the pattern-break detector
+        # made every pre-existing dead cell surface later as a false positive.
+        assert "S!E1" in found, f"dead cell missed: {found}"
+        assert "S!F3" in found, f"pattern break missed: {found}"
+
+    def test_agrees_cell_for_cell_with_what_the_audit_reports(self, tmp_path):
+        from plumbline.audit import audit
+        from plumbline.seeding import pre_existing_findings
+
+        path = self._messy_workbook(tmp_path / "messy2.xlsx")
+        report = audit(path, check_determinism=False)
+        assert set(pre_existing_findings(path)) == {
+            f"{f.sheet}!{f.cell}" for f in report.findings
+        }
+
+    def test_a_clean_workbook_has_nothing_pre_existing(self, tmp_path):
+        from openpyxl import Workbook
+
+        from plumbline.seeding import pre_existing_findings
+
+        wb = Workbook()
+        ws = wb.active
+        ws["A1"] = 5
+        for col in range(2, 8):
+            ws.cell(row=1, column=col, value=f"={chr(64 + col - 1)}1+1")
+        path = tmp_path / "clean.xlsx"
+        wb.save(path)
+        assert pre_existing_findings(path) == []
+
+
+class TestSeedsNeverFlipTheMajority:
+    def test_at_most_one_seed_per_row(self, tmp_path):
+        """Two seeds in one row can make the correct cells the minority, so the
+        benchmark would be scoring the tool for finding the untouched cell."""
+        import random
+
+        from openpyxl import Workbook
+
+        from plumbline.seeding import plan_seeds
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for row in range(1, 6):
+            ws.cell(row=row, column=1, value=row)
+            for col in range(2, 6):
+                ws.cell(row=row, column=col, value=f"=SUM($A${row}:{chr(64 + col - 1)}{row})")
+        path = tmp_path / "rows.xlsx"
+        wb.save(path)
+
+        plan = plan_seeds(path, random.Random(0), max_seeds=8)
+        rows = [(c["sheet"], "".join(ch for ch in c["cell"] if ch.isdigit())) for c in plan]
+        assert len(rows) == len(set(rows)), f"two seeds landed in one row: {plan}"

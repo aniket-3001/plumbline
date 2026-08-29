@@ -243,21 +243,42 @@ def plan_seeds(path: Path, rng: random.Random, max_seeds: int = 3) -> list[dict]
 
     rng.shuffle(candidates)
 
-    # At most one seed per cell, and spread across classes so no single class dominates.
+    # Three constraints, and the third one is not obvious.
+    #
+    # One seed per cell, and a per-class cap so no single Panko class dominates the
+    # benchmark. Then: **at most one seed per row.**
+    #
+    # Detection is majority-vote within a row. Seed two cells of a three-formula row
+    # and the two corrupted cells become the majority, so the one *correct* cell is
+    # now the deviation. That happened on `john_zufferli__16801__marks.xlsx`, where
+    # row 34 held I34/J34/K34 as `=AVERAGE(x10:x32)`; seeding J34 and K34 to `:31`
+    # made the untouched I34 the outlier. The run scored two false negatives and one
+    # false positive, and every one of those three judgements was the benchmark's
+    # fault, not the detector's. A benchmark must not ask a tool to find something
+    # that, by the benchmark's own definition, is no longer there.
     chosen: list[dict] = []
     used_cells: set[tuple[str, str]] = set()
+    used_rows: set[tuple[str, int]] = set()
     per_class: dict[str, int] = defaultdict(int)
     cap = max(1, max_seeds // 2)
     for cand in candidates:
         key = (cand["sheet"], cand["cell"])
-        if key in used_cells or per_class[cand["panko_class"]] >= cap:
+        row_key = (cand["sheet"], _row_of(cand["cell"]))
+        if key in used_cells or row_key in used_rows:
+            continue
+        if per_class[cand["panko_class"]] >= cap:
             continue
         chosen.append(cand)
         used_cells.add(key)
+        used_rows.add(row_key)
         per_class[cand["panko_class"]] += 1
         if len(chosen) >= max_seeds:
             break
     return chosen
+
+
+def _row_of(ref: str) -> int:
+    return int(re.sub(r"[^0-9]", "", ref) or 0)
 
 
 def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
@@ -336,6 +357,51 @@ def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
     return kept
 
 
+def pre_existing_findings(path: Path) -> list[str]:
+    """Cells the *original* workbook already flags, before any seed is injected.
+
+    Scoring excludes these rather than counting them against precision: they are
+    not our errors, we have no ground truth for them, and Enron's spreadsheets are
+    full of them -- 144 across 21 workbooks in the first run.
+
+    This must run **every detector the audit runs**, on the **unseeded** file.
+
+    Getting the first half wrong is expensive and silent. An earlier version ran
+    only the pattern-break detector, so every pre-existing *dead cell* fell through
+    as a false positive: on `scott_neal__38672` six typed constants sitting in
+    `=Z41+1` counter rows -- real hardcoding, present in the file Enron shipped --
+    were charged to Plumbline. Eleven of the twelve false positives in the first
+    run were this one bug.
+
+    Getting the second half wrong would be worse and would not look like a bug at
+    all: run this on the seeded copy and it excludes the seeds themselves, and
+    recall becomes meaningless while every number still looks plausible.
+    """
+    from plumbline.audit import detect_dead_cells, detect_pattern_breaks, screen_dead_cells
+    from poc import load_formulas
+
+    try:
+        sheets = load_formulas(str(path))
+    except Exception:  # noqa: BLE001
+        return []
+
+    refs: list[str] = []
+    dead: list = []
+    for sheet, formulas in sheets.items():
+        try:
+            refs.extend(f"{sheet}!{f.cell}" for f in detect_pattern_breaks(sheet, formulas))
+            dead.extend(detect_dead_cells(str(path), sheet, formulas))
+        except Exception:  # noqa: BLE001
+            continue
+
+    # Screened the same way the audit screens, so the two agree cell for cell.
+    try:
+        refs.extend(f"{f.sheet}!{f.cell}" for f in screen_dead_cells(str(path), dead))
+    except Exception:  # noqa: BLE001
+        pass
+    return sorted(set(refs))
+
+
 def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int = 3) -> dict | None:
     """Seed one workbook and return its ground-truth manifest."""
     from poc import detect_row_pattern_breaks, load_formulas
@@ -354,14 +420,7 @@ def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int 
 
     # What does the untouched workbook already flag? Those are not our seeds, and
     # counting them as false positives would understate precision.
-    try:
-        pre_existing = [
-            f"{sheet}!{f.cell}"
-            for sheet, refs in load_formulas(str(src)).items()
-            for f in detect_row_pattern_breaks(refs)
-        ]
-    except Exception:  # noqa: BLE001
-        pre_existing = []
+    pre_existing = pre_existing_findings(src)
 
     manifest = {
         "workbook": src.name,

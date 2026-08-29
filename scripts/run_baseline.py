@@ -92,13 +92,16 @@ def main() -> int:
                 "seconds": round(elapsed, 2),
                 "detected": report.detected,
                 "proof_truncated": report.proof_truncated,
+                "proof_deferred": report.proof_deferred,
                 **card.to_dict(),
             }
         )
         print(
             f"  {wb.name[:46]:46} seeds {manifest['seed_count']:2d}  "
             f"found {card.true_positives:2d}  fp {card.false_positives:3d}  "
-            f"proved {card.proved:2d}  {elapsed:5.1f}s",
+            f"proved {card.proved:2d}  "
+            f"{('defer ' + str(report.proof_deferred)) if report.proof_deferred else '       '}"
+            f"{elapsed:6.1f}s",
             flush=True,   # long run: progress must be visible while it happens
         )
 
@@ -144,6 +147,13 @@ def main() -> int:
         n = b["found"] + b["missed"]
         if n:
             print(f"    {d:10} {total.recall_for(d):.3f}   ({b['found']}/{n})")
+    deferred = sum(r.get("proof_deferred", 0) for r in rows)
+    capped = sum(1 for r in rows if r.get("proof_truncated"))
+    if deferred:
+        print()
+        print(f"  proof budget        {args.max_proofs} per workbook")
+        print(f"  hit the budget      {capped} workbook(s), {deferred} finding(s) reported")
+        print("                      but not proved. Detection is unaffected.")
     print(f"\n  wall clock          {summary['total_seconds']}s")
     print(f"\nwrote {out.relative_to(ROOT)}")
     return 0
