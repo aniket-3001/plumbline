@@ -6,7 +6,7 @@ Every command below is real and has been run. Every number is from a committed f
 in `results/`. Nothing here needs staging, and if a take goes wrong the commands can
 simply be re-run.
 
-**Before recording:** `PY -m pytest tests/ -q` → `153 passed`, and check
+**Before recording:** `PY -m pytest tests/ -q` → `171 passed`, and check
 `data/seeded/` is populated. Total runtime of everything shown live is ~30 seconds;
 the baseline numbers are read from committed JSON rather than re-run, which is
 stated on screen.
