@@ -149,7 +149,21 @@ def detect_pattern_breaks(sheet: str, formulas: dict[str, str]) -> list[Finding]
     return findings
 
 
-def detect_dead_cells(path: str, sheet: str, formulas: dict[str, str]) -> list[Finding]:
+#: How many formula peers a row needs before a typed constant in it means anything.
+#:
+#: Two peers agreeing is a thinner pattern than five, so the first version required
+#: three. Measured on the corpus, that threshold was the *only* thing standing
+#: between the audit and every remaining miss: all seven were dead cells in rows
+#: holding exactly two formulas, and none of them was a near miss of anything else.
+#: The number is exposed here, and `run_baseline.py --min-peers` sweeps it, because
+#: a precision/recall knob chosen by argument rather than measurement is a guess
+#: wearing a constant's clothes.
+MIN_ROW_PEERS = 2
+
+
+def detect_dead_cells(
+    path: str, sheet: str, formulas: dict[str, str], *, min_peers: int = MIN_ROW_PEERS
+) -> list[Finding]:
     """A typed constant sitting where every neighbour holds a formula."""
     from openpyxl import load_workbook
 
@@ -182,7 +196,7 @@ def detect_dead_cells(path: str, sheet: str, formulas: dict[str, str]) -> list[F
         except ValueError:
             continue
         peers = by_row.get(row, [])
-        if len(peers) < 3:
+        if len(peers) < min_peers:
             continue
         shapes = {normalise(t, row, c) for _, c, t in peers}
         if len(shapes) != 1:
@@ -424,6 +438,7 @@ def audit(
     *,
     check_determinism: bool = True,
     max_proofs: int = 0,
+    min_peers: int = MIN_ROW_PEERS,
 ) -> AuditReport:
     """Full deterministic audit of one workbook."""
     from plumbline.determinism import check, find_volatile
@@ -454,7 +469,7 @@ def audit(
     dead_candidates: list[Finding] = []
     for sheet, formulas in sheets.items():
         findings.extend(detect_pattern_breaks(sheet, formulas))
-        dead_candidates.extend(detect_dead_cells(path, sheet, formulas))
+        dead_candidates.extend(detect_dead_cells(path, sheet, formulas, min_peers=min_peers))
 
     report.dead_candidates = len(dead_candidates)
     screened = screen_dead_cells(path, dead_candidates)

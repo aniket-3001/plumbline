@@ -64,23 +64,64 @@ otherwise.
 
 ### Headline
 
-|  | v1 | v2 | v3 |
-|---|---|---|---|
-| **Precision** | 0.739 | 0.750 | **0.975** |
-| **Recall** | 0.630 | 0.722 | **0.722** |
-| **F1** | 0.680 | 0.736 | **0.830** |
-| Recall, *silent* errors | 0.562 | 0.719 | **0.719** |
-| TP / FP / FN | 34 / 12 / 20 | 39 / 13 / 15 | 39 / 1 / 15 |
+| | v1 | v2 | v3 | **v4** |
+|---|---|---|---|---|
+| **Precision** | 0.739 | 0.750 | 0.975 | **1.000** |
+| **Recall** | 0.630 | 0.722 | 0.722 | **0.868** |
+| **F1** | 0.680 | 0.736 | 0.830 | **0.929** |
+| Recall, *obvious* | 0.500 | 0.500 | 0.500 | **1.000** |
+| Recall, *realistic* | 0.750 | 0.750 | 0.750 | **1.000** |
+| Recall, *silent* | 0.562 | 0.719 | 0.719 | **0.767** |
+| TP / FP / FN | 34/12/20 | 39/13/15 | 39/1/15 | **46/0/7** |
 
-Same workbooks, same 54 errors, one fix isolated per step, so every movement is attributable.
-Raw results: [`v1`](results/baseline_v1_truncating.json),
-[`v2`](results/baseline_v2_budget_fixed.json), [`v3`](results/baseline_v3_accounting_fixed.json).
+21 real Enron workbooks. v1–v3 share one corpus of 54 seeded errors with a single fix
+isolated per step, so every movement is attributable. v4 re-seeds (53 errors) because its
+fix is *in* the seeder, so it is a new benchmark rather than the next rung of that ladder.
 
-**Not one of those three fixes touched a detector.** All three were in the measurement harness. The
-detector scored 0.630 recall in v1 and 0.722 in v3 while its code stayed the same; the difference is
-that the benchmark stopped charging the tool for its own bugs. That is the most useful thing this
-project learned, and it was only visible because the misses were read cell by cell rather than
-summarised.
+Raw results: [`v1`](results/baseline_v1_truncating.json) ·
+[`v2`](results/baseline_v2_budget_fixed.json) ·
+[`v3`](results/baseline_v3_accounting_fixed.json) ·
+[`v4`](results/baseline_v4_seeding_fixed.json)
+
+**Not one of the v1→v3 fixes touched a detector.** All three were in the measurement
+harness. The detector scored 0.630 recall in v1 and 0.722 in v3 while its code stayed
+identical; the difference is that the benchmark stopped charging the tool for its own bugs.
+That is the most useful thing this project learned, and it was only visible because the
+misses were read cell by cell rather than summarised.
+
+### How to read these numbers
+
+**Precision and recall are measured against the seeded errors only.** The audit also
+returns 368 findings that were already in the original Enron files. Those are excluded
+from scoring — not counted as hits, not counted against precision — because nobody knows
+the ground truth for a 25-year-old workbook, and guessing it would be inventing the
+answer key.
+
+So `precision 1.000` means something narrower than it looks: **every finding was either
+an error we planted or a cell that was already anomalous before we touched the file.**
+The detector produced nothing that was neither. It does **not** mean the 368 are all real
+defects. Some clearly are — on `scott_neal__38672`, six typed constants sit inside
+`=Z41+1` counter rows, which is textbook hardcoding in the file Enron shipped — but that
+is a spot check, not a measurement, and it is not claimed as one.
+
+That exclusion rule is also the one place this benchmark could flatter itself, by quietly
+reclassifying a miss as "not our problem". Three things stop it, and all three are
+enforced rather than argued:
+
+- Exclusions are computed on the **unseeded original**, so a seeded error cannot appear
+  in one. A test checks this across all 53 seeds on every run.
+- Exclusions are computed with the **same detectors at the same settings** as the audit.
+  A mismatch in either direction is a scoring bug, and both directions have happened here
+  — see the v2 → v3 row, and `--min-peers` below.
+- Recall did not move when the exclusion list was corrected (0.7222 → 0.7222), which is
+  the control that fix needed.
+
+**Proof rate (0.696) is lower than recall on purpose.** Proving a finding costs one full
+workbook re-parse, so a per-workbook budget applies; findings past it are still reported,
+marked `not attempted: proof budget exhausted`, and counted as unproved. Four workbooks
+hit the budget. A higher proof rate is available by raising `--max-proofs`, and it would
+mean less than it appears to.
+
 
 ### Building the machinery
 
@@ -105,7 +146,7 @@ summarised.
 | **v1 → v2** | The proof cap sliced the findings list, so bounding runtime silently deleted detections | Four workbooks scored **0 true positives** because the deleted findings included the seeded errors — ten of the twenty misses. Recall **0.630 → 0.722**; silent-error recall **0.562 → 0.719** | **Budget now caps proofs only.** Every detected cell is still reported; those past the budget carry `not attempted: proof budget exhausted` and are counted in `proof_deferred` |
 | **v2 → v3** | Pre-existing findings were computed with one detector out of two, so every pre-existing *dead cell* surfaced later as a false positive | On `scott_neal__38672`, six typed constants in `=Z41+1` counter rows — real hardcoding, in the file Enron shipped — were charged to Plumbline. **11 of 13 false positives were this one bug.** Precision **0.750 → 0.975** | **Kept.** `pre_existing_findings` now runs the same detectors and the same screen the audit runs, and a test asserts the two agree cell for cell |
 | v2 → v3 | *Control for the above:* correcting an exclusion list is exactly how a miss gets laundered into "not our problem" | Recall unchanged to four decimals (0.7222 → 0.7222). A test asserts that across all 54 seeds, **none** appears in any exclusion list | **Kept as a standing test**, not a one-off check |
-| Seeding | Seeds could flip a row's majority | Detection is majority-vote within a row. On `john_zufferli__16801` row 34, seeding two of three `=AVERAGE(x10:x32)` cells made the corrupted pair the majority and the untouched `I34` the outlier: two false negatives and one false positive, all three the benchmark's fault | **At most one seed per row.** A benchmark must not ask a tool to find something that, by its own definition, is no longer there |
+| **v3 → v4** | Seeds could flip a row's majority | Detection is majority-vote within a row. On `john_zufferli__16801` row 34, seeding two of three `=AVERAGE(x10:x32)` cells made the corrupted pair the majority and the untouched `I34` the outlier: two false negatives and one false positive, all three the benchmark's fault | **At most one seed per row.** A benchmark must not ask a tool to find something that, by its own definition, is no longer there. Re-seeded: **precision 1.000, recall 0.868, F1 0.929**, and `john_zufferli` goes from 0 found / 1 false positive to 1 found / 0 |
 | Seeding | First seeder only knew how to shorten `SUM` ranges | Found nothing on real workbooks — real Enron formulas are plain references like `=D19` | **Added `_shift_first_reference()`**, the pointing slip |
 | Seeding | Seeds landing on empty cells read `0` and are trivially detectable | Would have inflated every recall figure | **Not hidden — classified.** Every seed is labelled `obvious` / `realistic` / `silent`, and recall is reported per class. A single blended figure lets a detector that only catches loud breakage look identical to one that catches silent corruption |
 

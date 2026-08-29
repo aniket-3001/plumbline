@@ -1,0 +1,31 @@
+  benjamin_rogers__1229__ENRON_$orion_1099.xlsx                3 ->   3  (+0)
+  benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx            0 ->   0  (+0)
+  chris_germany__1938__Mar2002_EstateGas.xlsx                  0 ->   0  (+0)
+  chris_germany__2230__2000ces08.xlsx                          1 ->   1  (+0)
+  darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002   0 ->   0  (+0)
+  darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx              27 ->  27  (+0)
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+WARNING:root:Defined name eff_dt refers to empty cell 'Top Pages'!B5. Is not being loaded.
+WARNING:root:Defined name PW refers to empty cell 'Top Pages'!B4. Is not being loaded.
+WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being loaded.
+  darron_c_giron__8011__EMW 0921.xlsx                        120 -> 120  (+0)
+  fletcher_sturm__10987__1019optsheet.xlsx                    76 ->  76  (+0)
+  john_forney__15523__s_9-12-01.xlsx                           0 ->   0  (+0)
+  john_zufferli__16801__marks.xlsx                             1 ->   1  (+0)
+  juan_hernandez__17720__SCHED2001.xlsx                        0 ->   0  (+0)
+  kate_symes__18314__EES April Dailies.xlsx                    3 ->   3  (+0)
+  lindy_donoho__21972__TW2010ProjCap&Rev.xlsx                  0 ->   0  (+0)
+  lisa_gang__22348__EES_Schedule.xlsx                          8 ->   8  (+0)
+  mary_fischer__25634__31Q.xlsx                                4 ->   4  (+0)
+  mike_carson__27556__102601 NE & NY Optionsheet.xlsx          2 ->   2  (+0)
+  richard_ring__31589__Renewable_Positions_2001_2013.xlsx      2 ->   2  (+0)
+  robin_rodrigue__33241__Phillip e-mail.xlsx                  18 ->  18  (+0)
+  scott_neal__38672__6th floorplan 01.30a.xlsx                14 ->  14  (+0)
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+  stacey_white__39000__Power CBO 2002 Plan Expense.xlsx       91 ->  91  (+0)
+  stacey_white__39165__Power - Non-Terminated MTM.xlsx         0 ->   0  (+0)
+
+  21 manifest(s) refreshed: 370 -> 370 pre-existing findings
+  seeds and seeded workbooks untouched

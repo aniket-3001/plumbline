@@ -25,7 +25,7 @@ SEEDED = ROOT / "data" / "seeded"
 RESULTS = ROOT / "results"
 
 
-def _refresh_pre_existing() -> int:
+def _refresh_pre_existing(min_peers: int) -> int:
     """Recompute `pre_existing_findings` on the originals, leaving the seeds alone.
 
     Pre-existing findings are a property of the *unseeded* workbook, so they can be
@@ -50,7 +50,7 @@ def _refresh_pre_existing() -> int:
             print(f"  [skip] {m['workbook'][:58]:58} original not found")
             continue
         old = m.get("pre_existing_findings", [])
-        new = pre_existing_findings(source)
+        new = pre_existing_findings(source, min_peers=min_peers or None)
         before += len(old)
         after += len(new)
         m["pre_existing_findings"] = new
@@ -70,6 +70,14 @@ def main() -> int:
     ap.add_argument("--seeds-per-workbook", type=int, default=4)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument(
+        "--min-peers",
+        type=int,
+        default=0,
+        help="peer threshold to compute pre-existing findings at; 0 uses the audit's "
+        "default. Must match the threshold the audit will run at, or every extra "
+        "pre-existing cell a more sensitive audit finds is charged to it.",
+    )
+    ap.add_argument(
         "--refresh-pre-existing",
         action="store_true",
         help=(
@@ -84,7 +92,7 @@ def main() -> int:
     from plumbline.seeding import seed_workbook
 
     if args.refresh_pre_existing:
-        return _refresh_pre_existing()
+        return _refresh_pre_existing(args.min_peers)
 
     books = sorted(p for p in EVAL.glob("*.xlsx"))
     if not books:

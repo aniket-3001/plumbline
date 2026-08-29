@@ -39,9 +39,18 @@ def main() -> int:
         help="cap proofs per workbook; 0 for no cap. Proving re-parses the workbook "
         "once per finding, so a 10,000-formula sheet can otherwise run for many minutes.",
     )
+    ap.add_argument(
+        "--min-peers",
+        type=int,
+        default=0,
+        help="how many formula peers a row needs before a typed constant in it counts "
+        "as a dead cell. 0 uses audit.MIN_ROW_PEERS. Sweep it to see the "
+        "precision/recall trade rather than arguing about it.",
+    )
+    ap.add_argument("--out", default="baseline.json", help="filename under results/")
     args = ap.parse_args()
 
-    from plumbline.audit import audit
+    from plumbline.audit import MIN_ROW_PEERS, audit
     from plumbline.scoring import Scorecard, score
 
     manifests = sorted(SEEDED.glob("*.truth.json"))
@@ -67,7 +76,8 @@ def main() -> int:
         t0 = time.time()
         # Determinism was already established during screening; skip the re-check
         # so the timing reflects the audit itself.
-        report = audit(wb, check_determinism=False, max_proofs=args.max_proofs)
+        report = audit(wb, check_determinism=False, max_proofs=args.max_proofs,
+                       min_peers=args.min_peers or MIN_ROW_PEERS)
         elapsed = time.time() - t0
 
         if report.skipped:
@@ -120,7 +130,7 @@ def main() -> int:
     }
 
     RESULTS.mkdir(exist_ok=True)
-    out = RESULTS / ("baseline_strict.json" if args.strict else "baseline.json")
+    out = RESULTS / ("baseline_strict.json" if args.strict else args.out)
     out.write_text(
         json.dumps({"summary": summary, "workbooks": rows, "skipped": skipped}, indent=2),
         encoding="utf-8",
@@ -140,6 +150,8 @@ def main() -> int:
     print(f"  recall              {total.recall:.3f}")
     print(f"  F1                  {total.f1:.3f}")
     print(f"  proof rate          {total.proof_rate:.3f}")
+    print()
+    print(f"  min row peers       {args.min_peers or MIN_ROW_PEERS}")
     print()
     print("  recall by difficulty:")
     for d in ("obvious", "realistic", "silent"):

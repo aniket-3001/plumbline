@@ -232,3 +232,59 @@ class TestSeedsNeverFlipTheMajority:
         plan = plan_seeds(path, random.Random(0), max_seeds=8)
         rows = [(c["sheet"], "".join(ch for ch in c["cell"] if ch.isdigit())) for c in plan]
         assert len(rows) == len(set(rows)), f"two seeds landed in one row: {plan}"
+
+
+class TestExclusionsTrackDetectorSettings:
+    """The exclusion list must be computed at the same sensitivity as the audit.
+
+    Raise the audit's sensitivity without raising the exclusion list's, and every
+    extra pre-existing cell the audit now correctly finds is charged to it as a
+    false positive -- so a detector improvement reads as a precision collapse.
+    """
+
+    @staticmethod
+    def _two_peer_row(path):
+        """A row with exactly two formula peers and a typed constant between them.
+        Visible at min_peers=2, invisible at min_peers=3."""
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        # Detection is row-wise, so the peers must sit in the same row as the cell.
+        for col, value in (("B", 5), ("C", 10), ("D", 15)):
+            ws[f"{col}1"] = value
+        ws["B2"] = "=B1*2"
+        ws["C2"] = 20          # dead cell: equals C1*2, but typed, not computed
+        ws["D2"] = "=D1*2"
+        wb.save(path)
+        return path
+
+    def test_a_lower_threshold_sees_more(self, tmp_path):
+        from plumbline.seeding import pre_existing_findings
+
+        path = self._two_peer_row(tmp_path / "two_peers.xlsx")
+        assert "S!C2" in pre_existing_findings(path, min_peers=2)
+        assert "S!C2" not in pre_existing_findings(path, min_peers=3)
+
+    def test_matched_settings_agree_with_the_audit(self, tmp_path):
+        from plumbline.audit import audit
+        from plumbline.seeding import pre_existing_findings
+
+        path = self._two_peer_row(tmp_path / "matched.xlsx")
+        for peers in (2, 3):
+            report = audit(path, check_determinism=False, min_peers=peers)
+            assert set(pre_existing_findings(path, min_peers=peers)) == {
+                f"{f.sheet}!{f.cell}" for f in report.findings
+            }, f"disagreement at min_peers={peers}"
+
+    def test_mismatched_settings_are_what_produce_phantom_false_positives(self, tmp_path):
+        """Documents the failure mode directly: the audit finds a cell the
+        exclusion list, computed at a stricter threshold, does not carry."""
+        from plumbline.audit import audit
+        from plumbline.seeding import pre_existing_findings
+
+        path = self._two_peer_row(tmp_path / "mismatched.xlsx")
+        found = {f"{f.sheet}!{f.cell}" for f in audit(path, check_determinism=False, min_peers=2).findings}
+        stale = set(pre_existing_findings(path, min_peers=3))
+        assert found - stale == {"S!C2"}

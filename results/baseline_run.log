@@ -97,3 +97,67 @@ WARNING:root:Defined name UID refers to empty cell 'Top Pages'!B3. Is not being 
   juan_hernandez__17720__SCHED2001.xlsx          seeds  2  found  2  fp   0  proved  0           11.9s
   kate_symes__18314__EES April Dailies.xlsx      seeds  3  found  1  fp   0  proved  1           19.7s
   lindy_donoho__21972__TW2010ProjCap&Rev.xlsx    seeds  2  found  2  fp   0  proved  2           25.9s
+  lisa_gang__22348__EES_Schedule.xlsx            seeds  4  found  4  fp   0  proved  4          153.3s
+  mary_fischer__25634__31Q.xlsx                  seeds  3  found  3  fp   0  proved  0           11.8s
+  mike_carson__27556__102601 NE & NY Optionsheet seeds  1  found  1  fp   0  proved  0            1.9s
+  richard_ring__31589__Renewable_Positions_2001_ seeds  3  found  3  fp   0  proved  3            0.7s
+  robin_rodrigue__33241__Phillip e-mail.xlsx     seeds  3  found  3  fp   0  proved  3           20.7s
+  scott_neal__38672__6th floorplan 01.30a.xlsx   seeds  4  found  4  fp   0  proved  4           12.1s
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+WARNING:root:Defined name SAPFuncF4Help refers to empty cell Main.SAPF4Help(). Is not being loaded.
+  stacey_white__39000__Power CBO 2002 Plan Expen seeds  2  found  2  fp   0  proved  0  defer 68  32.8s
+  stacey_white__39165__Power - Non-Terminated MT seeds  4  found  4  fp   0  proved  4           12.6s
+
+==================================================================
+  ARM: deterministic audit
+==================================================================
+  workbooks           21  (0 skipped)
+  seeded errors       53
+  found               46
+  missed              7
+  false positives     0
+  pre-existing hits   368  (excluded from scoring)
+
+  precision           1.000
+  recall              0.868
+  F1                  0.929
+  proof rate          0.696
+
+  recall by difficulty:
+    obvious    1.000   (1/1)
+    realistic  1.000   (22/22)
+    silent     0.767   (23/30)
+
+  proof budget        25 per workbook
+  hit the budget      4 workbook(s), 222 finding(s) reported
+                      but not proved. Detection is unaffected.
+
+  wall clock          478.8s
+
+wrote results\baseline.json

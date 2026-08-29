@@ -1,18 +1,18 @@
 {
   "summary": {
-    "true_positives": 22,
+    "true_positives": 8,
     "false_positives": 0,
-    "false_negatives": 7,
-    "pre_existing_hits": 230,
-    "proved": 14,
+    "false_negatives": 3,
+    "pre_existing_hits": 4,
+    "proved": 7,
     "precision": 1.0,
-    "recall": 0.7586,
-    "f1": 0.8627,
-    "proof_rate": 0.6364,
+    "recall": 0.7273,
+    "f1": 0.8421,
+    "proof_rate": 0.875,
     "recall_by_difficulty": {
       "obvious": 0.0,
       "realistic": 1.0,
-      "silent": 0.6111
+      "silent": 0.5714
     },
     "by_difficulty": {
       "obvious": {
@@ -20,11 +20,11 @@
         "missed": 0
       },
       "silent": {
-        "found": 11,
-        "missed": 7
+        "found": 4,
+        "missed": 3
       },
       "realistic": {
-        "found": 11,
+        "found": 4,
         "missed": 0
       }
     }
@@ -36,7 +36,7 @@
       "seeds": 2,
       "findings": 5,
       "proved": 2,
-      "seconds": 3.64,
+      "seconds": 2.96,
       "detected": 5,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -74,7 +74,7 @@
       "seeds": 4,
       "findings": 2,
       "proved": 2,
-      "seconds": 0.62,
+      "seconds": 0.36,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -112,7 +112,7 @@
       "seeds": 2,
       "findings": 2,
       "proved": 2,
-      "seconds": 2.42,
+      "seconds": 2.0,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -150,7 +150,7 @@
       "seeds": 2,
       "findings": 2,
       "proved": 0,
-      "seconds": 2.29,
+      "seconds": 2.16,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -188,7 +188,7 @@
       "seeds": 1,
       "findings": 1,
       "proved": 1,
-      "seconds": 9.11,
+      "seconds": 7.81,
       "detected": 1,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -212,310 +212,6 @@
         },
         "realistic": {
           "found": 0,
-          "missed": 0
-        },
-        "silent": {
-          "found": 1,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
-      "formula_cells": 6549,
-      "seeds": 4,
-      "findings": 31,
-      "proved": 2,
-      "seconds": 89.01,
-      "detected": 31,
-      "proof_truncated": true,
-      "proof_deferred": 6,
-      "true_positives": 4,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 27,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 0.5,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 1.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 2,
-          "missed": 0
-        },
-        "silent": {
-          "found": 2,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
-      "formula_cells": 1744,
-      "seeds": 3,
-      "findings": 123,
-      "proved": 0,
-      "seconds": 63.08,
-      "detected": 123,
-      "proof_truncated": true,
-      "proof_deferred": 98,
-      "true_positives": 3,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 120,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 0.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 1.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 1,
-          "missed": 0
-        },
-        "silent": {
-          "found": 2,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
-      "formula_cells": 447,
-      "seeds": 2,
-      "findings": 75,
-      "proved": 0,
-      "seconds": 4.7,
-      "detected": 75,
-      "proof_truncated": true,
-      "proof_deferred": 50,
-      "true_positives": 0,
-      "false_positives": 0,
-      "false_negatives": 2,
-      "pre_existing_hits": 75,
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1": 0.0,
-      "proof_rate": 0.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 0.0,
-        "silent": 0.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 0,
-          "missed": 0
-        },
-        "silent": {
-          "found": 0,
-          "missed": 2
-        }
-      }
-    },
-    {
-      "workbook": "john_forney__15523__s_9-12-01.xlsx",
-      "formula_cells": 48,
-      "seeds": 1,
-      "findings": 1,
-      "proved": 1,
-      "seconds": 0.3,
-      "detected": 1,
-      "proof_truncated": false,
-      "proof_deferred": 0,
-      "true_positives": 1,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 1.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 0.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 1,
-          "missed": 0
-        },
-        "silent": {
-          "found": 0,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "john_zufferli__16801__marks.xlsx",
-      "formula_cells": 39,
-      "seeds": 1,
-      "findings": 2,
-      "proved": 1,
-      "seconds": 0.18,
-      "detected": 2,
-      "proof_truncated": false,
-      "proof_deferred": 0,
-      "true_positives": 1,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 1,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 1.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 0.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 1,
-          "missed": 0
-        },
-        "silent": {
-          "found": 0,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
-      "formula_cells": 844,
-      "seeds": 2,
-      "findings": 2,
-      "proved": 0,
-      "seconds": 11.88,
-      "detected": 2,
-      "proof_truncated": false,
-      "proof_deferred": 0,
-      "true_positives": 2,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 0.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 0.0,
-        "silent": 1.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 0,
-          "missed": 0
-        },
-        "silent": {
-          "found": 2,
-          "missed": 0
-        }
-      }
-    },
-    {
-      "workbook": "kate_symes__18314__EES April Dailies.xlsx",
-      "formula_cells": 1670,
-      "seeds": 3,
-      "findings": 4,
-      "proved": 1,
-      "seconds": 19.66,
-      "detected": 4,
-      "proof_truncated": false,
-      "proof_deferred": 0,
-      "true_positives": 1,
-      "false_positives": 0,
-      "false_negatives": 2,
-      "pre_existing_hits": 3,
-      "precision": 1.0,
-      "recall": 0.3333,
-      "f1": 0.5,
-      "proof_rate": 1.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 0.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 1,
-          "missed": 0
-        },
-        "silent": {
-          "found": 0,
-          "missed": 2
-        }
-      }
-    },
-    {
-      "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
-      "formula_cells": 10386,
-      "seeds": 2,
-      "findings": 2,
-      "proved": 2,
-      "seconds": 25.89,
-      "detected": 2,
-      "proof_truncated": false,
-      "proof_deferred": 0,
-      "true_positives": 2,
-      "false_positives": 0,
-      "false_negatives": 0,
-      "pre_existing_hits": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 1.0,
-      "recall_by_difficulty": {
-        "obvious": 0.0,
-        "realistic": 1.0,
-        "silent": 1.0
-      },
-      "by_difficulty": {
-        "obvious": {
-          "found": 0,
-          "missed": 0
-        },
-        "realistic": {
-          "found": 1,
           "missed": 0
         },
         "silent": {

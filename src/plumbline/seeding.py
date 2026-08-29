@@ -357,14 +357,19 @@ def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
     return kept
 
 
-def pre_existing_findings(path: Path) -> list[str]:
+def pre_existing_findings(path: Path, *, min_peers: int | None = None) -> list[str]:
     """Cells the *original* workbook already flags, before any seed is injected.
 
     Scoring excludes these rather than counting them against precision: they are
     not our errors, we have no ground truth for them, and Enron's spreadsheets are
     full of them -- 144 across 21 workbooks in the first run.
 
-    This must run **every detector the audit runs**, on the **unseeded** file.
+    This must run **every detector the audit runs**, on the **unseeded** file, and
+    **at the same settings**. All three halves have bitten. `min_peers` is passed
+    through for the third: raise the audit's sensitivity without raising the
+    exclusion list's, and every extra pre-existing cell the audit now finds is
+    charged to it as a false positive, so a detector improvement reads as a
+    precision collapse.
 
     Getting the first half wrong is expensive and silent. An earlier version ran
     only the pattern-break detector, so every pre-existing *dead cell* fell through
@@ -377,8 +382,15 @@ def pre_existing_findings(path: Path) -> list[str]:
     all: run this on the seeded copy and it excludes the seeds themselves, and
     recall becomes meaningless while every number still looks plausible.
     """
-    from plumbline.audit import detect_dead_cells, detect_pattern_breaks, screen_dead_cells
+    from plumbline.audit import (
+        MIN_ROW_PEERS,
+        detect_dead_cells,
+        detect_pattern_breaks,
+        screen_dead_cells,
+    )
     from poc import load_formulas
+
+    min_peers = MIN_ROW_PEERS if min_peers is None else min_peers
 
     try:
         sheets = load_formulas(str(path))
@@ -390,7 +402,7 @@ def pre_existing_findings(path: Path) -> list[str]:
     for sheet, formulas in sheets.items():
         try:
             refs.extend(f"{sheet}!{f.cell}" for f in detect_pattern_breaks(sheet, formulas))
-            dead.extend(detect_dead_cells(str(path), sheet, formulas))
+            dead.extend(detect_dead_cells(str(path), sheet, formulas, min_peers=min_peers))
         except Exception:  # noqa: BLE001
             continue
 
