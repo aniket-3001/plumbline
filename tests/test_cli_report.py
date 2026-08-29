@@ -179,3 +179,39 @@ class TestBadInputIsExplainedNotDumped:
     def test_a_missing_file_still_exits_2(self, tmp_path, capsys):
         assert main(["audit", str(tmp_path / "absent.xlsx")]) == 2
         assert "no such file" in capsys.readouterr().err
+
+
+class TestConsoleOutputIsAsciiEverywhere:
+    """Not just the report -- every script that prints progress to a terminal.
+
+    `report.py` and `cli.py` were guarded, and four scripts in the documented
+    pipeline still printed a literal ellipsis. On a legacy Windows code page that
+    is either mojibake or a UnicodeEncodeError mid-run, and these are commands the
+    reproduction guide tells a reader to type.
+    """
+
+    def test_no_script_emits_non_ascii_source_literals(self):
+        import re
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parents[1]
+        offenders = []
+        for path in sorted((root / "scripts").glob("*.py")):
+            for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if re.search(r"[^\x00-\x7F]", line) and "print" in line:
+                    offenders.append(f"{path.name}:{n}: {line.strip()[:70]}")
+        assert not offenders, "non-ASCII in console output:\n" + "\n".join(offenders)
+
+    def test_src_console_paths_are_ascii(self):
+        """`report.render_markdown` may use typography -- it writes to a file with a
+        declared encoding. Anything printed to a terminal may not."""
+        import re
+        from pathlib import Path
+
+        cli = (Path(__file__).resolve().parents[1] / "src" / "plumbline" / "cli.py")
+        offenders = [
+            f"cli.py:{n}"
+            for n, line in enumerate(cli.read_text(encoding="utf-8").splitlines(), 1)
+            if re.search(r"[^\x00-\x7F]", line)
+        ]
+        assert not offenders, f"non-ASCII in cli.py: {offenders}"

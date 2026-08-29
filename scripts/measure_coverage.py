@@ -186,7 +186,7 @@ def main() -> int:
 
     if args.parse_sample:
         sample = rng.sample(paths, min(args.parse_sample, len(paths)))
-        print(f"\ncompile-testing {len(sample)} workbooks with xlcalculator …")
+        print(f"\ncompile-testing {len(sample)} workbooks with xlcalculator ...")
         pc = parse_check(sample)
         print(f"  parsed {pc['parsed']}/{pc['sampled']}")
         if pc["failures"]:

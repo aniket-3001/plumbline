@@ -71,7 +71,7 @@ def download(url: str, dest: Path, total: int) -> None:
             got += len(chunk)
             pct = int(got * 100 / total)
             if pct != last_pct:
-                print(f"\r  downloading … {pct:3d}%  ({got / 1e6:.0f}/{total / 1e6:.0f} MB)",
+                print(f"\r  downloading ... {pct:3d}%  ({got / 1e6:.0f}/{total / 1e6:.0f} MB)",
                       end="", flush=True)
                 last_pct = pct
     print()
@@ -81,7 +81,7 @@ def extract(archive: Path, dest: Path) -> None:
     import py7zr
 
     dest.mkdir(parents=True, exist_ok=True)
-    print(f"  extracting to {dest.relative_to(ROOT)} … (this takes a few minutes)")
+    print(f"  extracting to {dest.relative_to(ROOT)} ... (this takes a few minutes)")
     with py7zr.SevenZipFile(archive, mode="r") as z:
         z.extractall(path=dest)
 

@@ -186,7 +186,7 @@ def main() -> int:
         else:
             rejected[reason] += 1
         if scanned % 25 == 0:
-            print(f"  … {scanned} screened, {len(accepted)} accepted", flush=True)
+            print(f"  ... {scanned} screened, {len(accepted)} accepted", flush=True)
 
     funnel = {
         "scanned": scanned,
