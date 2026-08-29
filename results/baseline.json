@@ -1,0 +1,816 @@
+{
+  "summary": {
+    "true_positives": 34,
+    "false_positives": 12,
+    "false_negatives": 20,
+    "pre_existing_hits": 144,
+    "proved": 27,
+    "precision": 0.7391,
+    "recall": 0.6296,
+    "f1": 0.68,
+    "proof_rate": 0.7941,
+    "recall_by_difficulty": {
+      "obvious": 0.5,
+      "realistic": 0.75,
+      "silent": 0.5625
+    },
+    "by_difficulty": {
+      "obvious": {
+        "found": 1,
+        "missed": 1
+      },
+      "silent": {
+        "found": 18,
+        "missed": 14
+      },
+      "realistic": {
+        "found": 15,
+        "missed": 5
+      }
+    },
+    "workbooks": 21,
+    "skipped": 0,
+    "strict": false,
+    "total_seconds": 344.7
+  },
+  "workbooks": [
+    {
+      "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+      "formula_cells": 609,
+      "seeds": 2,
+      "findings": 5,
+      "proved": 2,
+      "seconds": 2.45,
+      "detected": 5,
+      "proof_truncated": false,
+      "true_positives": 2,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 3,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+      "formula_cells": 73,
+      "seeds": 4,
+      "findings": 1,
+      "proved": 1,
+      "seconds": 0.17,
+      "detected": 1,
+      "proof_truncated": false,
+      "true_positives": 1,
+      "false_positives": 0,
+      "false_negatives": 3,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1": 0.4,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.5,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 1
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+      "formula_cells": 1396,
+      "seeds": 2,
+      "findings": 2,
+      "proved": 2,
+      "seconds": 1.59,
+      "detected": 2,
+      "proof_truncated": false,
+      "true_positives": 2,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "chris_germany__2230__2000ces08.xlsx",
+      "formula_cells": 708,
+      "seeds": 3,
+      "findings": 2,
+      "proved": 0,
+      "seconds": 1.63,
+      "detected": 2,
+      "proof_truncated": false,
+      "true_positives": 1,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "pre_existing_hits": 1,
+      "precision": 1.0,
+      "recall": 0.3333,
+      "f1": 0.5,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 1
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 1
+        }
+      }
+    },
+    {
+      "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+      "formula_cells": 3195,
+      "seeds": 1,
+      "findings": 1,
+      "proved": 1,
+      "seconds": 6.45,
+      "detected": 1,
+      "proof_truncated": false,
+      "true_positives": 1,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+      "formula_cells": 6550,
+      "seeds": 3,
+      "findings": 25,
+      "proved": 0,
+      "seconds": 60.9,
+      "detected": 28,
+      "proof_truncated": true,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 3,
+      "pre_existing_hits": 25,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 2
+        },
+        "silent": {
+          "found": 0,
+          "missed": 1
+        }
+      }
+    },
+    {
+      "workbook": "darron_c_giron__8011__EMW 0921.xlsx",
+      "formula_cells": 1744,
+      "seeds": 2,
+      "findings": 25,
+      "proved": 0,
+      "seconds": 44.13,
+      "detected": 122,
+      "proof_truncated": true,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "pre_existing_hits": 25,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
+      "formula_cells": 447,
+      "seeds": 2,
+      "findings": 25,
+      "proved": 0,
+      "seconds": 3.31,
+      "detected": 75,
+      "proof_truncated": true,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "pre_existing_hits": 25,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "john_forney__15523__s_9-12-01.xlsx",
+      "formula_cells": 47,
+      "seeds": 2,
+      "findings": 2,
+      "proved": 2,
+      "seconds": 0.46,
+      "detected": 2,
+      "proof_truncated": false,
+      "true_positives": 2,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "john_zufferli__16801__marks.xlsx",
+      "formula_cells": 39,
+      "seeds": 2,
+      "findings": 2,
+      "proved": 0,
+      "seconds": 0.14,
+      "detected": 2,
+      "proof_truncated": false,
+      "true_positives": 0,
+      "false_positives": 1,
+      "false_negatives": 2,
+      "pre_existing_hits": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 2
+        },
+        "silent": {
+          "found": 0,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+      "formula_cells": 844,
+      "seeds": 2,
+      "findings": 2,
+      "proved": 0,
+      "seconds": 8.13,
+      "detected": 2,
+      "proof_truncated": false,
+      "true_positives": 2,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+      "formula_cells": 1670,
+      "seeds": 3,
+      "findings": 4,
+      "proved": 1,
+      "seconds": 13.39,
+      "detected": 4,
+      "proof_truncated": false,
+      "true_positives": 1,
+      "false_positives": 3,
+      "false_negatives": 2,
+      "pre_existing_hits": 0,
+      "precision": 0.25,
+      "recall": 0.3333,
+      "f1": 0.2857,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+      "formula_cells": 10385,
+      "seeds": 3,
+      "findings": 3,
+      "proved": 3,
+      "seconds": 27.56,
+      "detected": 3,
+      "proof_truncated": false,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
+      "formula_cells": 3686,
+      "seeds": 4,
+      "findings": 11,
+      "proved": 3,
+      "seconds": 101.68,
+      "detected": 11,
+      "proof_truncated": false,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 1,
+      "pre_existing_hits": 8,
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.5
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 2,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 1
+        }
+      }
+    },
+    {
+      "workbook": "mary_fischer__25634__31Q.xlsx",
+      "formula_cells": 781,
+      "seeds": 3,
+      "findings": 7,
+      "proved": 0,
+      "seconds": 15.51,
+      "detected": 7,
+      "proof_truncated": false,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 4,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 2,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+      "formula_cells": 116,
+      "seeds": 1,
+      "findings": 3,
+      "proved": 0,
+      "seconds": 1.2,
+      "detected": 3,
+      "proof_truncated": false,
+      "true_positives": 1,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "pre_existing_hits": 1,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6667,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 1.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 1,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+      "formula_cells": 108,
+      "seeds": 3,
+      "findings": 3,
+      "proved": 2,
+      "seconds": 0.37,
+      "detected": 3,
+      "proof_truncated": false,
+      "true_positives": 2,
+      "false_positives": 1,
+      "false_negatives": 1,
+      "pre_existing_hits": 0,
+      "precision": 0.6667,
+      "recall": 0.6667,
+      "f1": 0.6667,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 0.5
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 1,
+          "missed": 1
+        }
+      }
+    },
+    {
+      "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+      "formula_cells": 961,
+      "seeds": 3,
+      "findings": 21,
+      "proved": 3,
+      "seconds": 6.91,
+      "detected": 21,
+      "proof_truncated": false,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 18,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+      "formula_cells": 400,
+      "seeds": 4,
+      "findings": 18,
+      "proved": 4,
+      "seconds": 8.13,
+      "detected": 18,
+      "proof_truncated": false,
+      "true_positives": 4,
+      "false_positives": 6,
+      "false_negatives": 0,
+      "pre_existing_hits": 8,
+      "precision": 0.4,
+      "recall": 1.0,
+      "f1": 0.5714,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 2,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    },
+    {
+      "workbook": "stacey_white__39000__Power CBO 2002 Plan Expense.xlsx",
+      "formula_cells": 1992,
+      "seeds": 2,
+      "findings": 25,
+      "proved": 0,
+      "seconds": 23.23,
+      "detected": 93,
+      "proof_truncated": true,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "pre_existing_hits": 25,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "proof_rate": 0.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 0.0,
+        "silent": 0.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 0,
+          "missed": 0
+        },
+        "silent": {
+          "found": 0,
+          "missed": 2
+        }
+      }
+    },
+    {
+      "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+      "formula_cells": 1472,
+      "seeds": 3,
+      "findings": 3,
+      "proved": 3,
+      "seconds": 17.18,
+      "detected": 3,
+      "proof_truncated": false,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "pre_existing_hits": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "proof_rate": 1.0,
+      "recall_by_difficulty": {
+        "obvious": 0.0,
+        "realistic": 1.0,
+        "silent": 1.0
+      },
+      "by_difficulty": {
+        "obvious": {
+          "found": 0,
+          "missed": 0
+        },
+        "realistic": {
+          "found": 1,
+          "missed": 0
+        },
+        "silent": {
+          "found": 2,
+          "missed": 0
+        }
+      }
+    }
+  ],
+  "skipped": []
+}

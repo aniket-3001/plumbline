@@ -55,6 +55,8 @@ class AuditReport:
     skipped: str | None = None
     dead_candidates: int = 0
     dead_screened_out: int = 0
+    detected: int = 0        # before any cap
+    proof_truncated: bool = False
 
     @property
     def proved(self) -> list[Finding]:
@@ -67,6 +69,8 @@ class AuditReport:
             "skipped": self.skipped,
             "dead_candidates": self.dead_candidates,
             "dead_screened_out": self.dead_screened_out,
+            "detected": self.detected,
+            "proof_truncated": self.proof_truncated,
             "findings": [f.to_dict() for f in self.findings],
             "counts": {
                 "total": len(self.findings),
@@ -413,7 +417,12 @@ def prove(path: str, findings: list[Finding], watch_limit: int = 250) -> list[Fi
     return findings
 
 
-def audit(path: str | Path, *, check_determinism: bool = True) -> AuditReport:
+def audit(
+    path: str | Path,
+    *,
+    check_determinism: bool = True,
+    max_proofs: int = 0,
+) -> AuditReport:
     """Full deterministic audit of one workbook."""
     from plumbline.determinism import check, find_volatile
 
@@ -449,6 +458,14 @@ def audit(path: str | Path, *, check_determinism: bool = True) -> AuditReport:
     screened = screen_dead_cells(path, dead_candidates)
     report.dead_screened_out = len(dead_candidates) - len(screened)
     findings.extend(screened)
+    report.detected = len(findings)
+
+    # Proving costs one full workbook re-parse per finding, so a large sheet with
+    # many candidates can run for many minutes. Capping keeps a batch run bounded;
+    # the cap is recorded so a truncated audit can never be mistaken for a clean one.
+    if max_proofs and len(findings) > max_proofs:
+        findings = findings[:max_proofs]
+        report.proof_truncated = True
 
     report.findings = prove(path, findings)
     return report

@@ -32,6 +32,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true", help="unproved findings do not count")
     ap.add_argument("--limit", type=int, default=0, help="only run N workbooks")
+    ap.add_argument(
+        "--max-proofs",
+        type=int,
+        default=40,
+        help="cap proofs per workbook; 0 for no cap. Proving re-parses the workbook "
+        "once per finding, so a 10,000-formula sheet can otherwise run for many minutes.",
+    )
     args = ap.parse_args()
 
     from plumbline.audit import audit
@@ -60,7 +67,7 @@ def main() -> int:
         t0 = time.time()
         # Determinism was already established during screening; skip the re-check
         # so the timing reflects the audit itself.
-        report = audit(wb, check_determinism=False)
+        report = audit(wb, check_determinism=False, max_proofs=args.max_proofs)
         elapsed = time.time() - t0
 
         if report.skipped:
@@ -83,6 +90,8 @@ def main() -> int:
                 "findings": len(report.findings),
                 "proved": len(report.proved),
                 "seconds": round(elapsed, 2),
+                "detected": report.detected,
+                "proof_truncated": report.proof_truncated,
                 **card.to_dict(),
             }
         )
@@ -91,6 +100,12 @@ def main() -> int:
             f"found {card.true_positives:2d}  fp {card.false_positives:3d}  "
             f"proved {card.proved:2d}  {elapsed:5.1f}s",
             flush=True,   # long run: progress must be visible while it happens
+        )
+
+        RESULTS.mkdir(exist_ok=True)
+        (RESULTS / "baseline_partial.json").write_text(
+            json.dumps({"summary": total.to_dict(), "workbooks": rows}, indent=2),
+            encoding="utf-8",
         )
 
     summary = total.to_dict()
