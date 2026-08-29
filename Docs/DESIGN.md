@@ -266,9 +266,10 @@ knowable. Out of scope; report as unauditable.
 
 ## 6d. What the first real evaluation actually taught (2026-08-29)
 
-Four baseline runs over 21 real seeded Enron workbooks. The numbers moved from
-precision 0.739 / recall 0.630 to precision 1.000 / recall 0.868, and **the
-detectors' code was identical for the first three of those steps.**
+Five baseline runs over 21 real seeded Enron workbooks. The numbers moved from
+precision 0.739 / recall 0.630 to precision 1.000 / recall 0.924, and **the
+detectors' code was identical for the first three of those steps.** Only v5, the
+last of them, changed a detector at all.
 
 That is the finding, and it is uncomfortable enough to be worth stating plainly:
 for most of this project, the thing being measured was the measurement harness.
@@ -306,7 +307,7 @@ occasional deep dive.
 
 ### The exclusion rule is load-bearing, and therefore dangerous
 
-368 of the audit's findings are pre-existing anomalies in Enron's own files. They
+362 of the audit's findings are pre-existing anomalies in Enron's own files. They
 are excluded from scoring because there is no ground truth for a 25-year-old
 workbook and inventing one would be worse than not scoring them.
 
@@ -325,7 +326,7 @@ rather than argued in a doc:
 
 `precision 1.000` therefore means something narrower than it looks: every finding
 was either a planted error or a cell already anomalous before we touched the file.
-It does not mean the 368 are all genuine defects. Some plainly are — six typed
+It does not mean the 362 are all genuine defects. Some plainly are — six typed
 constants inside `=Z41+1` counter rows on `scott_neal__38672` — but that is a spot
 check and is not reported as a measurement.
 

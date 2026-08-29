@@ -153,14 +153,14 @@ misses were read cell by cell rather than summarised.
 ### How to read these numbers
 
 **Precision and recall are measured against the seeded errors only.** The audit also
-returns 368 findings that were already in the original Enron files. Those are excluded
+returns 362 findings that were already in the original Enron files. Those are excluded
 from scoring — not counted as hits, not counted against precision — because nobody knows
 the ground truth for a 25-year-old workbook, and guessing it would be inventing the
 answer key.
 
 So `precision 1.000` means something narrower than it looks: **every finding was either
 an error we planted or a cell that was already anomalous before we touched the file.**
-The detector produced nothing that was neither. It does **not** mean the 368 are all real
+The detector produced nothing that was neither. It does **not** mean the 362 are all real
 defects. Some clearly are — on `scott_neal__38672`, six typed constants sit inside
 `=Z41+1` counter rows, which is textbook hardcoding in the file Enron shipped — but that
 is a spot check, not a measurement, and it is not claimed as one.
@@ -188,7 +188,7 @@ mean less than it appears to.
 
 | Stage | What was tried, and why | Evidence | Decision |
 |---|---|---|---|
-| **Baseline** | Detectors only, reporting every anomaly as found — the reasonable basic way to do this, and what a rule-based auditor does | **F1 0.020**, precision 0.010, recall 0.868. Finds all 46 seeded errors and buries them in **4,420 false positives**, 4,834 cells handed to the analyst | **Established the starting point.** Recall was never the problem; usable precision was |
+| **Baseline** | Detectors only, reporting every anomaly as found — the reasonable basic way to do this, and what a rule-based auditor does | **F1 0.022**, precision 0.011, recall 1.000. Finds all 53 seeded errors and buries them in **4,607 false positives**, 5,057 cells handed to the analyst | **Established the starting point.** Recall was never the problem; usable precision was |
 | PoC | Structural pattern-break detection, no model, to establish a floor before adding anything | Seeded fixture: 1 finding, 0 false positives across 12 formula cells. `C11: 27000 → 30000 (+3000)`, propagating `C13: 45000 → 42000 (−3000)` — both deltas exactly the omitted Rent line | **Kept.** Deterministic detection alone finds a real class of error and proves it. This is the floor any model layer must beat |
 | PoC | Counterfactual recomputation via `Evaluator.set_cell_value`, the obvious API | Returned the **unchanged** value 27000 for the "repaired" cell — it sets `.value` but leaves the formula AST intact | **Removed.** Silently produces fake proofs. For a tool whose product *is* the proof, that is the worst available failure |
 | PoC | Counterfactual by swapping in a new `XLFormula` and calling `build_code()` | `C11 = 0.0` while dependent `C13 = 72000.0` — internally inconsistent, both wrong. The constructor never populates range terms | **Removed.** See [`Docs/DESIGN.md`](Docs/DESIGN.md) §6b |
@@ -300,7 +300,7 @@ Three narrower limits, all measured rather than estimated:
 - **Volatile workbooks are refused, not audited.** `RAND` appears in 2.67% of formula
   cells. A proof is a comparison of two evaluations, and with `RAND` in the dependency
   cone the two differ for reasons that have nothing to do with the finding.
-- **The recall figure is against seeded errors, not all errors.** 368 findings in the
+- **The recall figure is against seeded errors, not all errors.** 362 findings in the
   corpus were already in Enron's files and are excluded from scoring, because no ground
   truth exists for them. See *How to read these numbers* above.
 

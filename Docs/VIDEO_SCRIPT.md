@@ -6,7 +6,7 @@ Every command below is real and has been run. Every number is from a committed f
 in `results/`. Nothing here needs staging, and if a take goes wrong the commands can
 simply be re-run.
 
-**Before recording:** `PY -m pytest tests/ -q` → `146 passed`, and check
+**Before recording:** `PY -m pytest tests/ -q` → `153 passed`, and check
 `data/seeded/` is populated. Total runtime of everything shown live is ~30 seconds;
 the baseline numbers are read from committed JSON rather than re-run, which is
 stated on screen.
@@ -88,15 +88,15 @@ confirm each finding. Plumbline never edits your workbook.
 
 *On screen: the README headline table.*
 
-| | v1 | v2 | v3 | **v4** |
-|---|---|---|---|---|
-| Precision | 0.739 | 0.750 | 0.975 | **1.000** |
-| Recall | 0.630 | 0.722 | 0.722 | **0.868** |
-| F1 | 0.680 | 0.736 | 0.830 | **0.929** |
-| Recall, *silent* | 0.562 | 0.719 | 0.719 | **0.767** |
+| | v1 | v2 | v3 | v4 | **v5** |
+|---|---|---|---|---|---|
+| Precision | 0.739 | 0.750 | 0.975 | 1.000 | **1.000** |
+| Recall | 0.630 | 0.722 | 0.722 | 0.868 | **0.924** |
+| F1 | 0.680 | 0.736 | 0.830 | 0.929 | **0.961** |
+| Recall, *silent* | 0.562 | 0.719 | 0.719 | 0.767 | **0.867** |
 
 > Twenty-one real Enron workbooks, fifty-three seeded errors from Panko's taxonomy.
-> F1 from 0.68 to 0.93.
+> F1 from 0.68 to 0.96.
 >
 > Recall is split by difficulty on purpose. **Silent** errors are the ones that are
 > correct today and diverge once an input moves — the class a human auditor cannot
@@ -104,7 +104,7 @@ confirm each finding. Plumbline never edits your workbook.
 >
 > And one caveat that belongs on screen next to the number: precision of 1.000 means
 > every finding was either an error we planted or a cell that was *already* anomalous
-> in Enron's file. Three hundred and sixty-eight of those are excluded from scoring,
+> in Enron's file. Three hundred and sixty-two of those are excluded from scoring,
 > because nobody knows the ground truth for a twenty-five-year-old workbook and
 > guessing it would be inventing the answer key.
 
