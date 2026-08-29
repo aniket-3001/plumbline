@@ -27,7 +27,11 @@
         "found": 29,
         "missed": 1
       }
-    }
+    },
+    "workbooks": 21,
+    "skipped": 0,
+    "strict": false,
+    "total_seconds": 405.1
   },
   "workbooks": [
     {
@@ -828,5 +832,6 @@
         }
       }
     }
-  ]
+  ],
+  "skipped": []
 }

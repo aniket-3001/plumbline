@@ -151,14 +151,16 @@ def detect_pattern_breaks(sheet: str, formulas: dict[str, str]) -> list[Finding]
 
 #: How many formula peers a row needs before a typed constant in it means anything.
 #:
-#: Two peers agreeing is a thinner pattern than five, so the first version required
-#: three. Measured on the corpus, that threshold was the *only* thing standing
-#: between the audit and every remaining miss: all seven were dead cells in rows
-#: holding exactly two formulas, and none of them was a near miss of anything else.
-#: The number is exposed here, and `run_baseline.py --min-peers` sweeps it, because
-#: a precision/recall knob chosen by argument rather than measurement is a guess
-#: wearing a constant's clothes.
-MIN_ROW_PEERS = 2
+#: Measured, not argued -- see `Docs/MIN_PEERS_ABLATION.md`. Lowering this to 2
+#: takes recall from 0.868 to 0.981 at unchanged precision, and that reading is
+#: wrong: the 29 extra findings are all *pre-existing*, and pre-existing findings
+#: are excluded from scoring, so the benchmark shows the benefit and is structurally
+#: blind to the cost. Reading all 29 by hand, roughly ten are ordinary data flagged
+#: wrongly and sixteen are unverifiable zeros.
+#:
+#: So the arm with the worse benchmark score ships. An analyst who chases two dead
+#: ends stops trusting the third finding, and then recall is worth nothing.
+MIN_ROW_PEERS = 3
 
 
 def detect_dead_cells(
