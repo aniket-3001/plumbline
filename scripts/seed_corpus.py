@@ -25,7 +25,7 @@ SEEDED = ROOT / "data" / "seeded"
 RESULTS = ROOT / "results"
 
 
-def _refresh_pre_existing(min_peers: int) -> int:
+def _refresh_pre_existing(min_peers: int, no_contiguous: bool = False) -> int:
     """Recompute `pre_existing_findings` on the originals, leaving the seeds alone.
 
     Pre-existing findings are a property of the *unseeded* workbook, so they can be
@@ -50,7 +50,8 @@ def _refresh_pre_existing(min_peers: int) -> int:
             print(f"  [skip] {m['workbook'][:58]:58} original not found")
             continue
         old = m.get("pre_existing_findings", [])
-        new = pre_existing_findings(source, min_peers=min_peers or None)
+        new = pre_existing_findings(source, min_peers=min_peers or None,
+                                    contiguous=not no_contiguous)
         before += len(old)
         after += len(new)
         m["pre_existing_findings"] = new
@@ -78,6 +79,12 @@ def main() -> int:
         "pre-existing cell a more sensitive audit finds is charged to it.",
     )
     ap.add_argument(
+        "--no-contiguous",
+        action="store_true",
+        help="compute pre-existing findings without the contiguity requirement; must "
+        "match the arm being scored.",
+    )
+    ap.add_argument(
         "--refresh-pre-existing",
         action="store_true",
         help=(
@@ -92,7 +99,7 @@ def main() -> int:
     from plumbline.seeding import seed_workbook
 
     if args.refresh_pre_existing:
-        return _refresh_pre_existing(args.min_peers)
+        return _refresh_pre_existing(args.min_peers, args.no_contiguous)
 
     books = sorted(p for p in EVAL.glob("*.xlsx"))
     if not books:

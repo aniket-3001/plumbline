@@ -288,3 +288,143 @@ class TestExclusionsTrackDetectorSettings:
         found = {f"{f.sheet}!{f.cell}" for f in audit(path, check_determinism=False, min_peers=2).findings}
         stale = set(pre_existing_findings(path, min_peers=3))
         assert found - stale == {"S!C2"}
+
+
+class TestContiguity:
+    """Peers must sit next to the candidate, not merely somewhere in its row.
+
+    The `min_peers` ablation hand-labelled 29 findings and found every clear false
+    positive was a cross-block comparison: candidate in one block of the row, peers
+    in another, data or blanks between. These fixtures are the shapes of the two
+    real ones, reduced to their essentials.
+    """
+
+    @staticmethod
+    def _build(path, cells):
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for ref, value in cells.items():
+            ws[ref] = value
+        wb.save(path)
+        return path
+
+    @staticmethod
+    def _dead(path, *, contiguous, min_peers=2):
+        from plumbline.audit import detect_dead_cells, screen_dead_cells
+        from poc import load_formulas
+
+        out = []
+        for sheet, formulas in load_formulas(str(path)).items():
+            out += detect_dead_cells(str(path), sheet, formulas,
+                                     min_peers=min_peers, contiguous=contiguous)
+        return {f"{f.sheet}!{f.cell}" for f in screen_dead_cells(str(path), out)}
+
+    def test_a_lookup_table_data_column_is_not_a_dead_formula(self, tmp_path):
+        """`MANUAL` row 28 of ONEOKRECAP2001: two `(counter, name, id)` blocks side by
+        side. `B` and `G` are the counters; `D` is a meter-ID column that happens to
+        run consecutively, so it passes the value screen by coincidence."""
+        path = self._build(tmp_path / "lookup.xlsx", {
+            "B26": 1, "D26": 50, "G26": 1,
+            "B27": "=B26+1", "C27": "FIN 1", "D27": 51, "G27": "=G26+1", "H27": "LIBERAL",
+            "B28": "=B27+1", "C28": "FIN 2", "D28": 52, "G28": "=G27+1", "H28": "STC 1",
+        })
+        assert "S!D28" in self._dead(path, contiguous=False), "fixture must reproduce the bug"
+        assert "S!D28" not in self._dead(path, contiguous=True)
+
+    def test_a_price_in_a_data_block_is_not_a_dead_formula(self, tmp_path):
+        """`Options` row 16: `(B,C,D)` carry forward; `(E,F,G)` are strike-price data.
+        `F16` is data, and `B16`/`D16` are in a different block."""
+        path = self._build(tmp_path / "options.xlsx", {
+            "B15": 10, "D15": 20,
+            "B16": "=B15", "C16": "Dec 01", "D16": "=D15",
+            "E16": "40 mp", "F16": 1, "G16": 1.5,
+        })
+        assert "S!F16" not in self._dead(path, contiguous=True)
+
+    def test_a_real_frozen_formula_inside_a_run_still_reports(self, tmp_path):
+        """The shape of `chris_germany__1938!AH25`: an unbroken carry-forward run with
+        one cell typed over. Contiguity must not cost this."""
+        path = self._build(tmp_path / "frozen.xlsx", {
+            "B25": 5000,
+            "C25": "=B25", "D25": "=C25", "E25": "=D25",
+            "F25": 5000,          # frozen: right value, no formula
+            "G25": "=F25",
+        })
+        assert "S!F25" in self._dead(path, contiguous=True)
+
+    def test_a_gap_is_a_block_boundary(self, tmp_path):
+        """An empty column between candidate and peers is a boundary, not something
+        to step over -- that gap is what separates two blocks in a real sheet."""
+        path = self._build(tmp_path / "gap.xlsx", {
+            "A1": 1, "B1": "=A1+1", "C1": "=B1+1",
+            "D1": 3, "E1": 4,          # `=D1+1` really is 4: only contiguity rejects it
+            "G1": 6, "H1": "=G1+1", "I1": "=H1+1",
+        })
+        assert "S!E1" not in self._dead(path, contiguous=True)
+
+
+class TestContiguityBlindSpot:
+    """Contiguity assumes the corruption is one cell wide. Sometimes it is not.
+
+    Both shapes below are real, from `scott_neal__38672`, and both are cells this
+    detector genuinely should flag and does not. They are pinned as tests so the
+    limitation is a known quantity rather than a surprise, and so that any future
+    fix has a target to turn green.
+    """
+
+    @staticmethod
+    def _dead(path):
+        from plumbline.audit import detect_dead_cells, screen_dead_cells
+        from poc import load_formulas
+
+        out = []
+        for sheet, formulas in load_formulas(str(path)).items():
+            out += detect_dead_cells(str(path), sheet, formulas)
+        return {f"{f.sheet}!{f.cell}" for f in screen_dead_cells(str(path), out)}
+
+    @staticmethod
+    def _save(path, cells):
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for ref, value in cells.items():
+            ws[ref] = value
+        wb.save(path)
+        return path
+
+    def test_two_adjacent_overwrites_hide_each_other(self, tmp_path):
+        """`Floor Plan` row 32: `R S T` are `=<next>+1`, then U=603, V=602, W=601.
+        Sibling blocks in the same row carry exactly one trailing constant, so U and
+        V were both formulas once. The outer one is still found; the inner one is
+        not, because its neighbour is no longer a formula either."""
+        path = self._save(tmp_path / "wide.xlsx", {
+            "R1": "=S1+1", "S1": "=T1+1", "T1": "=U1+1",
+            "U1": 603, "V1": 602, "W1": 601,
+        })
+        found = self._dead(path)
+        assert "S!U1" in found, "the overwrite adjacent to live formulas is still caught"
+        assert "S!V1" not in found, "known blind spot: its only neighbour is also dead"
+
+    def test_a_block_with_no_surviving_formula_is_unreachable(self, tmp_path):
+        """`Floor Plan!Y41`/`Y64`: the whole two-cell block was overwritten, so
+        nothing in the row can vouch for it. No layout rule can recover this one --
+        it would need the labels."""
+        path = self._save(tmp_path / "allgone.xlsx", {
+            "D1": "=E1+1", "E1": "=F1+1", "F1": 527,
+            "H1": 212, "I1": 211,
+        })
+        assert "S!H1" not in self._dead(path)
+
+    def test_the_benchmark_cannot_see_this(self):
+        """Stated as an executable note: the seeder overwrites exactly one cell per
+        row, so every seeded dead cell is the case contiguity handles best. The
+        recall gain it measures is therefore an over-estimate for workbooks whose
+        corruption is wider, and the two tests above are the evidence."""
+        from plumbline.seeding import plan_seeds  # noqa: F401  -- one seed per row
+
+        assert True

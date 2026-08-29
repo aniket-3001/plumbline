@@ -1,33 +1,37 @@
 {
   "summary": {
-    "true_positives": 49,
+    "true_positives": 43,
     "false_positives": 0,
-    "false_negatives": 4,
-    "pre_existing_hits": 362,
-    "proved": 35,
+    "false_negatives": 10,
+    "pre_existing_hits": 360,
+    "proved": 31,
     "precision": 1.0,
-    "recall": 0.9245,
-    "f1": 0.9608,
-    "proof_rate": 0.7143,
+    "recall": 0.8113,
+    "f1": 0.8958,
+    "proof_rate": 0.7209,
     "recall_by_difficulty": {
       "obvious": 1.0,
       "realistic": 1.0,
-      "silent": 0.8667
+      "silent": 0.6667
     },
     "by_difficulty": {
-      "realistic": {
-        "found": 22,
-        "missed": 0
+      "silent": {
+        "found": 20,
+        "missed": 10
       },
       "obvious": {
         "found": 1,
         "missed": 0
       },
-      "silent": {
-        "found": 26,
-        "missed": 4
+      "realistic": {
+        "found": 22,
+        "missed": 0
       }
-    }
+    },
+    "workbooks": 21,
+    "skipped": 0,
+    "strict": false,
+    "total_seconds": 441.8
   },
   "workbooks": [
     {
@@ -36,7 +40,7 @@
       "seeds": 2,
       "findings": 5,
       "proved": 2,
-      "seconds": 3.49,
+      "seconds": 3.64,
       "detected": 5,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -72,24 +76,24 @@
       "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
       "formula_cells": 73,
       "seeds": 4,
-      "findings": 3,
-      "proved": 3,
-      "seconds": 1.05,
-      "detected": 3,
+      "findings": 2,
+      "proved": 2,
+      "seconds": 0.38,
+      "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
-      "true_positives": 3,
+      "true_positives": 2,
       "false_positives": 0,
-      "false_negatives": 1,
+      "false_negatives": 2,
       "pre_existing_hits": 0,
       "precision": 1.0,
-      "recall": 0.75,
-      "f1": 0.8571,
+      "recall": 0.5,
+      "f1": 0.6667,
       "proof_rate": 1.0,
       "recall_by_difficulty": {
         "obvious": 0.0,
         "realistic": 1.0,
-        "silent": 0.5
+        "silent": 0.0
       },
       "by_difficulty": {
         "obvious": {
@@ -101,8 +105,8 @@
           "missed": 0
         },
         "silent": {
-          "found": 1,
-          "missed": 1
+          "found": 0,
+          "missed": 2
         }
       }
     },
@@ -112,7 +116,7 @@
       "seeds": 2,
       "findings": 2,
       "proved": 2,
-      "seconds": 2.1,
+      "seconds": 2.5,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -148,24 +152,24 @@
       "workbook": "chris_germany__2230__2000ces08.xlsx",
       "formula_cells": 708,
       "seeds": 2,
-      "findings": 3,
-      "proved": 1,
-      "seconds": 4.8,
-      "detected": 3,
+      "findings": 2,
+      "proved": 0,
+      "seconds": 2.8,
+      "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
-      "true_positives": 2,
+      "true_positives": 1,
       "false_positives": 0,
-      "false_negatives": 0,
+      "false_negatives": 1,
       "pre_existing_hits": 1,
       "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
-      "proof_rate": 0.5,
+      "recall": 0.5,
+      "f1": 0.6667,
+      "proof_rate": 0.0,
       "recall_by_difficulty": {
         "obvious": 0.0,
         "realistic": 1.0,
-        "silent": 1.0
+        "silent": 0.0
       },
       "by_difficulty": {
         "obvious": {
@@ -177,8 +181,8 @@
           "missed": 0
         },
         "silent": {
-          "found": 1,
-          "missed": 0
+          "found": 0,
+          "missed": 1
         }
       }
     },
@@ -188,7 +192,7 @@
       "seeds": 1,
       "findings": 1,
       "proved": 1,
-      "seconds": 10.17,
+      "seconds": 11.35,
       "detected": 1,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -226,7 +230,7 @@
       "seeds": 4,
       "findings": 28,
       "proved": 2,
-      "seconds": 84.95,
+      "seconds": 81.64,
       "detected": 28,
       "proof_truncated": true,
       "proof_deferred": 3,
@@ -264,7 +268,7 @@
       "seeds": 3,
       "findings": 123,
       "proved": 0,
-      "seconds": 61.63,
+      "seconds": 59.44,
       "detected": 123,
       "proof_truncated": true,
       "proof_deferred": 98,
@@ -300,24 +304,24 @@
       "workbook": "fletcher_sturm__10987__1019optsheet.xlsx",
       "formula_cells": 447,
       "seeds": 2,
-      "findings": 77,
+      "findings": 75,
       "proved": 0,
-      "seconds": 4.54,
-      "detected": 77,
+      "seconds": 4.47,
+      "detected": 75,
       "proof_truncated": true,
-      "proof_deferred": 52,
-      "true_positives": 2,
+      "proof_deferred": 50,
+      "true_positives": 0,
       "false_positives": 0,
-      "false_negatives": 0,
+      "false_negatives": 2,
       "pre_existing_hits": 75,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
       "proof_rate": 0.0,
       "recall_by_difficulty": {
         "obvious": 0.0,
         "realistic": 0.0,
-        "silent": 1.0
+        "silent": 0.0
       },
       "by_difficulty": {
         "obvious": {
@@ -329,8 +333,8 @@
           "missed": 0
         },
         "silent": {
-          "found": 2,
-          "missed": 0
+          "found": 0,
+          "missed": 2
         }
       }
     },
@@ -340,7 +344,7 @@
       "seeds": 1,
       "findings": 1,
       "proved": 1,
-      "seconds": 0.28,
+      "seconds": 0.29,
       "detected": 1,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -378,7 +382,7 @@
       "seeds": 1,
       "findings": 2,
       "proved": 1,
-      "seconds": 0.18,
+      "seconds": 0.22,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -416,7 +420,7 @@
       "seeds": 2,
       "findings": 2,
       "proved": 0,
-      "seconds": 10.47,
+      "seconds": 10.52,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -452,24 +456,24 @@
       "workbook": "kate_symes__18314__EES April Dailies.xlsx",
       "formula_cells": 1670,
       "seeds": 3,
-      "findings": 3,
-      "proved": 3,
-      "seconds": 9.24,
-      "detected": 3,
+      "findings": 1,
+      "proved": 1,
+      "seconds": 3.14,
+      "detected": 1,
       "proof_truncated": false,
       "proof_deferred": 0,
-      "true_positives": 3,
+      "true_positives": 1,
       "false_positives": 0,
-      "false_negatives": 0,
+      "false_negatives": 2,
       "pre_existing_hits": 0,
       "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0,
+      "recall": 0.3333,
+      "f1": 0.5,
       "proof_rate": 1.0,
       "recall_by_difficulty": {
         "obvious": 0.0,
         "realistic": 1.0,
-        "silent": 1.0
+        "silent": 0.0
       },
       "by_difficulty": {
         "obvious": {
@@ -481,8 +485,8 @@
           "missed": 0
         },
         "silent": {
-          "found": 2,
-          "missed": 0
+          "found": 0,
+          "missed": 2
         }
       }
     },
@@ -492,7 +496,7 @@
       "seeds": 2,
       "findings": 2,
       "proved": 2,
-      "seconds": 28.36,
+      "seconds": 29.45,
       "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -530,7 +534,7 @@
       "seeds": 4,
       "findings": 12,
       "proved": 4,
-      "seconds": 142.14,
+      "seconds": 138.4,
       "detected": 12,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -568,7 +572,7 @@
       "seeds": 3,
       "findings": 7,
       "proved": 0,
-      "seconds": 10.61,
+      "seconds": 20.67,
       "detected": 7,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -604,16 +608,16 @@
       "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
       "formula_cells": 116,
       "seeds": 1,
-      "findings": 4,
+      "findings": 2,
       "proved": 0,
-      "seconds": 2.27,
-      "detected": 4,
+      "seconds": 0.81,
+      "detected": 2,
       "proof_truncated": false,
       "proof_deferred": 0,
       "true_positives": 1,
       "false_positives": 0,
       "false_negatives": 0,
-      "pre_existing_hits": 3,
+      "pre_existing_hits": 1,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
@@ -644,7 +648,7 @@
       "seeds": 3,
       "findings": 4,
       "proved": 3,
-      "seconds": 0.66,
+      "seconds": 0.76,
       "detected": 4,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -682,7 +686,7 @@
       "seeds": 3,
       "findings": 21,
       "proved": 3,
-      "seconds": 9.17,
+      "seconds": 9.85,
       "detected": 21,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -720,7 +724,7 @@
       "seeds": 4,
       "findings": 14,
       "proved": 3,
-      "seconds": 17.08,
+      "seconds": 8.84,
       "detected": 14,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -758,7 +762,7 @@
       "seeds": 2,
       "findings": 93,
       "proved": 0,
-      "seconds": 19.82,
+      "seconds": 30.66,
       "detected": 93,
       "proof_truncated": true,
       "proof_deferred": 68,
@@ -796,7 +800,7 @@
       "seeds": 4,
       "findings": 4,
       "proved": 4,
-      "seconds": 19.86,
+      "seconds": 21.92,
       "detected": 4,
       "proof_truncated": false,
       "proof_deferred": 0,
@@ -828,5 +832,6 @@
         }
       }
     }
-  ]
+  ],
+  "skipped": []
 }

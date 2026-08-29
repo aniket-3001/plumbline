@@ -158,13 +158,76 @@ def detect_pattern_breaks(sheet: str, formulas: dict[str, str]) -> list[Finding]
 #: blind to the cost. Reading all 29 by hand, roughly ten are ordinary data flagged
 #: wrongly and sixteen are unverifiable zeros.
 #:
-#: So the arm with the worse benchmark score ships. An analyst who chases two dead
-#: ends stops trusting the third finding, and then recall is worth nothing.
-MIN_ROW_PEERS = 3
+#: Lowering this to 2 was measured as a clear win *only once `_peers_in_block` existed*.
+#: Without it, 2 took recall 0.868 -> 0.981 while quietly adding 29 unverified
+#: pre-existing findings, roughly ten of which were hand-labelled as ordinary data.
+#: With it, 2 gives recall 0.924 and the unverified population goes *down*, 368 -> 362.
+#:
+#:      no contiguity, 3   recall 0.868  F1 0.929  pre-existing 368   <- was shipped
+#:      no contiguity, 2   recall 0.981  F1 0.991  pre-existing 397
+#:      contiguity,    3   recall 0.811  F1 0.896  pre-existing 360
+#:      contiguity,    2   recall 0.924  F1 0.961  pre-existing 362   <- ships
+#:
+#: Precision is 1.000 in all four, so the threshold was never the precision knob it
+#: looked like; block membership was. See `Docs/MIN_PEERS_ABLATION.md`.
+MIN_ROW_PEERS = 2
+
+
+def _peers_in_block(col: int, cols: list[int]) -> list[int]:
+    """The peer columns that belong to the same block of the row as `col`.
+
+    "Block" means a run of cells laid out on one regular stride. Financial sheets
+    lay out either densely (`C D E F`) or on a spacer rhythm (`C _ E _ G`), and both
+    are one coherent block; what separates two blocks is a change of rhythm or a
+    stretch of unrelated content.
+
+    So a peer counts when the candidate is **on the block's stride and inside its
+    span**. Two failures drove that wording, and both were real sheets:
+
+      Report!Y50   C E G I K M O Q S U W _ AA -- peers every second column, so
+                   strict adjacency saw Y50's blank neighbours as a boundary and
+                   threw away a seeded error. Stride 2 accepts it.
+      MANUAL!D28   B _ _ _ _ G -- two counter columns with a name and an id
+                   between. D is inside the span but off the stride of 5, so it is
+                   still correctly rejected as the data column it is.
+      Options!F16  B _ D -- stride 2, and F continues that rhythm, so this returns
+                   two peers and the block rule does *not* reject it. Only
+                   `min_peers = 3` does. Recorded here because it is the honest
+                   limit of the idea: a data column that happens to sit on the same
+                   rhythm as a nearby formula block is indistinguishable by layout
+                   alone, and would need the labels to settle.
+
+    A candidate whose block contains no other formula at all is unreachable this
+    way, by construction. `Floor Plan!Y41` is the case: its block is `X41 Y41 Z41`
+    with plain numbers either side, so nothing in the row can vouch for it.
+    """
+    if not cols:
+        return []
+    ordered = sorted(set(cols) | {col})
+    i = ordered.index(col)
+
+    # The stride is the rhythm the neighbours actually keep. With one neighbour there
+    # is no rhythm to read, so fall back to the distance to it.
+    gaps = [b - a for a, b in zip(ordered, ordered[1:])]
+    stride = min(gaps) if gaps else 1
+
+    block = [col]
+    for direction in (-1, 1):
+        j, expected = i + direction, col + direction * stride
+        while 0 <= j < len(ordered) and ordered[j] == expected:
+            block.append(ordered[j])
+            j += direction
+            expected += direction * stride
+    return [c for c in block if c != col]
 
 
 def detect_dead_cells(
-    path: str, sheet: str, formulas: dict[str, str], *, min_peers: int = MIN_ROW_PEERS
+    path: str,
+    sheet: str,
+    formulas: dict[str, str],
+    *,
+    min_peers: int = MIN_ROW_PEERS,
+    contiguous: bool = True,
 ) -> list[Finding]:
     """A typed constant sitting where every neighbour holds a formula."""
     from openpyxl import load_workbook
@@ -203,6 +266,13 @@ def detect_dead_cells(
         shapes = {normalise(t, row, c) for _, c, t in peers}
         if len(shapes) != 1:
             continue  # peers disagree among themselves; no clean expectation
+
+        if contiguous:
+            near = set(_peers_in_block(col, [c for _, c, _ in peers]))
+            if len(near) < min_peers:
+                continue  # peers exist, but in another block of this row
+            peers = [(r, c, t) for r, c, t in peers if c in near]
+
         twin_ref, twin_col, twin_text = min(peers, key=lambda m: abs(m[1] - col))
         twin_row, _ = split_ref(twin_ref)
         expected = rebase(twin_text, twin_row, twin_col, row, col)
@@ -217,6 +287,9 @@ def detect_dead_cells(
                 actual=str(value),
                 expected=expected,
                 reason=(
+                    f"{len(peers)} adjacent cells in row {row} share one formula shape; "
+                    f"{ref} sits among them as a typed constant."
+                    if contiguous else
                     f"all {len(peers)} other cells in row {row} share one formula shape; "
                     f"{ref} is a typed constant."
                 ),
@@ -441,6 +514,7 @@ def audit(
     check_determinism: bool = True,
     max_proofs: int = 0,
     min_peers: int = MIN_ROW_PEERS,
+    contiguous: bool = True,
 ) -> AuditReport:
     """Full deterministic audit of one workbook."""
     from plumbline.determinism import check, find_volatile
@@ -471,7 +545,10 @@ def audit(
     dead_candidates: list[Finding] = []
     for sheet, formulas in sheets.items():
         findings.extend(detect_pattern_breaks(sheet, formulas))
-        dead_candidates.extend(detect_dead_cells(path, sheet, formulas, min_peers=min_peers))
+        dead_candidates.extend(
+            detect_dead_cells(path, sheet, formulas, min_peers=min_peers,
+                              contiguous=contiguous)
+        )
 
     report.dead_candidates = len(dead_candidates)
     screened = screen_dead_cells(path, dead_candidates)

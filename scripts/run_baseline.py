@@ -47,6 +47,12 @@ def main() -> int:
         "as a dead cell. 0 uses audit.MIN_ROW_PEERS. Sweep it to see the "
         "precision/recall trade rather than arguing about it.",
     )
+    ap.add_argument(
+        "--no-contiguous",
+        action="store_true",
+        help="drop the requirement that a dead cell's peers sit next to it. Scores the "
+        "pre-contiguity detector; the exclusion list must be refreshed to match.",
+    )
     ap.add_argument("--out", default="baseline.json", help="filename under results/")
     args = ap.parse_args()
 
@@ -77,7 +83,8 @@ def main() -> int:
         # Determinism was already established during screening; skip the re-check
         # so the timing reflects the audit itself.
         report = audit(wb, check_determinism=False, max_proofs=args.max_proofs,
-                       min_peers=args.min_peers or MIN_ROW_PEERS)
+                       min_peers=args.min_peers or MIN_ROW_PEERS,
+                       contiguous=not args.no_contiguous)
         elapsed = time.time() - t0
 
         if report.skipped:

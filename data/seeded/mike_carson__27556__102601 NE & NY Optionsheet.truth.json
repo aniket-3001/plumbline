@@ -5,7 +5,8 @@
   "seed_count": 1,
   "pre_existing_findings": [
     "Options!C34",
-    "Options!F21"
+    "Options!D19",
+    "Options!F16"
   ],
   "seeds": [
     {

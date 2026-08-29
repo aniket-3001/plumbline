@@ -114,24 +114,26 @@ rather than discarded. Every arm is now scored the way the product behaves.
 
 ### Headline
 
-| | v1 | v2 | v3 | **v4** |
-|---|---|---|---|---|
-| **Precision** | 0.739 | 0.750 | 0.975 | **1.000** |
-| **Recall** | 0.630 | 0.722 | 0.722 | **0.868** |
-| **F1** | 0.680 | 0.736 | 0.830 | **0.929** |
-| Recall, *obvious* | 0.500 | 0.500 | 0.500 | **1.000** |
-| Recall, *realistic* | 0.750 | 0.750 | 0.750 | **1.000** |
-| Recall, *silent* | 0.562 | 0.719 | 0.719 | **0.767** |
-| TP / FP / FN | 34/12/20 | 39/13/15 | 39/1/15 | **46/0/7** |
+| | v1 | v2 | v3 | v4 | **v5** |
+|---|---|---|---|---|---|
+| **Precision** | 0.739 | 0.750 | 0.975 | 1.000 | **1.000** |
+| **Recall** | 0.630 | 0.722 | 0.722 | 0.868 | **0.924** |
+| **F1** | 0.680 | 0.736 | 0.830 | 0.929 | **0.961** |
+| Recall, *obvious* | 0.500 | 0.500 | 0.500 | 1.000 | **1.000** |
+| Recall, *realistic* | 0.750 | 0.750 | 0.750 | 1.000 | **1.000** |
+| Recall, *silent* | 0.562 | 0.719 | 0.719 | 0.767 | **0.867** |
+| TP / FP / FN | 34/12/20 | 39/13/15 | 39/1/15 | 46/0/7 | **49/0/4** |
 
 21 real Enron workbooks. v1–v3 share one corpus of 54 seeded errors with a single fix
 isolated per step, so every movement is attributable. v4 re-seeds (53 errors) because its
-fix is *in* the seeder, so it is a new benchmark rather than the next rung of that ladder.
+fix is *in* the seeder, so it is a new benchmark rather than the next rung of that ladder;
+v5 is the first change to a **detector** rather than to the harness, and shares v4's corpus.
 
 Raw results: [`v1`](results/baseline_v1_truncating.json) ·
 [`v2`](results/baseline_v2_budget_fixed.json) ·
 [`v3`](results/baseline_v3_accounting_fixed.json) ·
-[`v4`](results/baseline_v4_seeding_fixed.json)
+[`v4`](results/baseline_v4_seeding_fixed.json) ·
+[`v5`](results/baseline_v5_contiguity.json)
 
 **Not one of the v1→v3 fixes touched a detector.** All three were in the measurement
 harness. The detector scored 0.630 recall in v1 and 0.722 in v3 while its code stayed
@@ -188,7 +190,8 @@ mean less than it appears to.
 | Precision | Dead-cell detector, first version: flag typed constants sitting among formulas | 40 false positives on one workbook. Real sheets have carry-forward rows mixing typed inputs with formulas (`A7=data, B7=30468, C7==+B7`) | **Reworked** |
 | Precision | Screen candidates by batch in-place replacement | Cascaded: repairs fed each other and **all 41 candidates were discarded, including the seeded error** | **Removed.** A screen that can discard a true positive is worse than no screen |
 | **Main contribution** | Screen by evaluating each candidate's formula in a far-right scratch column | A1 references are literal text, so a formula means the same thing anywhere on its own sheet. One extra parse for the whole workbook, no original cell touched, no cascade. **TP 2/2, FP 0** (was TP 2, FP 40) | **Kept.** See `SCRATCH_COL` in `audit.py` |
-| **Ablation** | The dead-cell detector required 3 formula peers in a row, a number chosen by argument. Swept it against 2 | Benchmark says 2 wins outright: recall 0.868 → **0.981**, F1 0.929 → **0.991**, precision unchanged at 1.000. But all 29 extra findings are *pre-existing*, and pre-existing findings are excluded from scoring — so the benchmark shows the benefit and is **structurally blind to the cost**. Reading all 29 by hand: ~3 real, ~10 ordinary data flagged wrongly, ~16 unverifiable zeros | **Shipped the arm with the worse score (3).** An analyst who chases two dead ends stops trusting the third finding, and then recall is worth nothing. Full labelling in [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md); `--min-peers` makes the sweep repeatable |
+| **Ablation** | The dead-cell detector required 3 formula peers in a row, a number chosen by argument. Swept it against 2 | Benchmark says 2 wins outright: recall 0.868 → **0.981**, F1 0.929 → **0.991**, precision unchanged at 1.000. But all 29 extra findings are *pre-existing*, and pre-existing findings are excluded from scoring — so the benchmark shows the benefit and is **structurally blind to the cost**. Reading all 29 by hand: ~3 real, ~10 ordinary data flagged wrongly, ~16 unverifiable zeros | **Shipped the arm with the worse score**, and read the 29 by hand instead of accepting the number. That labelling is what identified cross-block comparison as the real signal — which the next row acts on, and which then made `2` safe after all. `--min-peers` makes the sweep repeatable |
+| **v4 → v5** | The hand-labelling said peer count was a *proxy*: every clear false positive was a **cross-block** comparison, candidate in one block of the row and its "peers" in another. Built `_peers_in_block` — a block is a run on one regular stride, so `C D E F` and `C _ E _ G` are each one block | With block membership enforced, `min_peers = 2` becomes safe: recall **0.868 → 0.924**, silent recall **0.767 → 0.867**, and the unverified pre-existing population goes **down**, 368 → 362. Precision is 1.000 in all four arms, so the threshold was never the precision knob it looked like | **Kept — the first change to a detector rather than the harness.** Blind spot pinned as tests: contiguity assumes corruption is one cell wide, and the seeder only ever injects one error per row, so the benchmark cannot see that limit. Both failing shapes are documented in [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md) |
 | Scale | Prove every finding | One full workbook re-parse per finding. A 10,387-formula workbook ran for minutes at 674 MB and the corpus run could not finish | **Capped**, and the cap is recorded as `proof_truncated` so a truncated audit can never be read as a clean one |
 
 ### Fixing the measurement
@@ -228,7 +231,7 @@ Full clean-machine guide: [`Docs/REPRODUCTION.md`](Docs/REPRODUCTION.md).
 
 ```bash
 python -m venv .venv && .venv/Scripts/python.exe -m pip install -e ".[dev]"
-.venv/Scripts/python.exe -m pytest tests/ -q          # 146 passed, ~5s, no data needed
+.venv/Scripts/python.exe -m pytest tests/ -q          # 153 passed, ~8s, no data needed
 .venv/Scripts/python.exe scripts/fetch_corpus.py      # 993 MB, resumable
 .venv/Scripts/python.exe scripts/build_eval_corpus.py --scan 900 --target 40
 .venv/Scripts/python.exe scripts/seed_corpus.py --seeds-per-workbook 4 --seed 42

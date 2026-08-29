@@ -3,11 +3,7 @@
   "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\kate_symes__18314__EES April Dailies.xlsx",
   "seeded": "kate_symes__18314__EES April Dailies.xlsx",
   "seed_count": 3,
-  "pre_existing_findings": [
-    "4-11!H9",
-    "4-12!H9",
-    "4-15!H8"
-  ],
+  "pre_existing_findings": [],
   "seeds": [
     {
       "seed_id": "kate_symes__18314__EES April Dailies-0",

@@ -357,7 +357,9 @@ def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
     return kept
 
 
-def pre_existing_findings(path: Path, *, min_peers: int | None = None) -> list[str]:
+def pre_existing_findings(
+    path: Path, *, min_peers: int | None = None, contiguous: bool = True
+) -> list[str]:
     """Cells the *original* workbook already flags, before any seed is injected.
 
     Scoring excludes these rather than counting them against precision: they are
@@ -402,7 +404,8 @@ def pre_existing_findings(path: Path, *, min_peers: int | None = None) -> list[s
     for sheet, formulas in sheets.items():
         try:
             refs.extend(f"{sheet}!{f.cell}" for f in detect_pattern_breaks(sheet, formulas))
-            dead.extend(detect_dead_cells(str(path), sheet, formulas, min_peers=min_peers))
+            dead.extend(detect_dead_cells(str(path), sheet, formulas, min_peers=min_peers,
+                                          contiguous=contiguous))
         except Exception:  # noqa: BLE001
             continue
 
