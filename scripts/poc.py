@@ -239,5 +239,20 @@ def main(path: str) -> int:
 
 
 if __name__ == "__main__":
+    # A stack trace is a fine answer for a library and a poor one for a demo script:
+    # a reader who typos a path, or points this at a .xls, should get one line rather
+    # than openpyxl internals.
     target = sys.argv[1] if len(sys.argv) > 1 else "tests/fixtures/quarterly_pl.xlsx"
-    raise SystemExit(main(target))
+    if not Path(target).exists():
+        print("no such file: " + target, file=sys.stderr)
+        raise SystemExit(2)
+    try:
+        raise SystemExit(main(target))
+    except SystemExit:
+        raise
+    except Exception as exc:  # noqa: BLE001 -- one line, not a traceback
+        print("could not read " + target + ": " + type(exc).__name__ + ": " + str(exc),
+              file=sys.stderr)
+        print("Plumbline reads .xlsx workbooks; older .xls files must be converted first.",
+              file=sys.stderr)
+        raise SystemExit(2) from None

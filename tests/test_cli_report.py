@@ -134,3 +134,48 @@ class TestCli:
 
     def test_missing_file_exits_2(self, capsys):
         assert main(["audit", "does_not_exist.xlsx"]) == 2
+
+
+class TestBadInputIsExplainedNotDumped:
+    """A traceback tells the reader the tool is broken. It usually isn't.
+
+    Every one of these produced a raw `InvalidFileException` stack dump before,
+    and `check` printed its readiness banner first -- so the failure looked like it
+    happened *during* the audit rather than before it started.
+    """
+
+    def test_a_non_spreadsheet_is_refused_by_name(self, tmp_path, capsys):
+        path = tmp_path / "notes.md"
+        path.write_text("# not a workbook", encoding="utf-8")
+        for command in ("audit", "check"):
+            assert main([command, str(path)]) == 2
+            err = capsys.readouterr().err
+            assert "notes.md is not a spreadsheet" in err
+            assert "Traceback" not in err
+
+    def test_a_legacy_xls_says_how_to_fix_it(self, tmp_path, capsys):
+        """The Enron corpus ships 58 of these, so a reader will hit it."""
+        path = tmp_path / "old.xls"
+        path.write_bytes(b"\xd0\xcf\x11\xe0")      # OLE2 magic, a real .xls header
+        assert main(["audit", str(path)]) == 2
+        err = capsys.readouterr().err
+        assert "legacy .xls" in err
+        assert "save as .xlsx" in err
+
+    def test_a_corrupt_xlsx_is_reported_in_one_line(self, tmp_path, capsys):
+        path = tmp_path / "broken.xlsx"
+        path.write_bytes(b"this is not a zip archive")
+        assert main(["audit", str(path)]) == 2
+        err = capsys.readouterr().err
+        assert "could not open broken.xlsx" in err
+        assert len(err.strip().splitlines()) == 1, "one line, not a traceback"
+
+    def test_check_says_nothing_before_it_knows_it_can_read_the_file(self, tmp_path, capsys):
+        path = tmp_path / "notes.md"
+        path.write_text("x", encoding="utf-8")
+        main(["check", str(path)])
+        assert "Plumbline readiness" not in capsys.readouterr().out
+
+    def test_a_missing_file_still_exits_2(self, tmp_path, capsys):
+        assert main(["audit", str(tmp_path / "absent.xlsx")]) == 2
+        assert "no such file" in capsys.readouterr().err

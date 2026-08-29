@@ -49,7 +49,7 @@ Throughout this guide `PY` means the interpreter inside the venv —
 PY -m pytest tests/ -q
 ```
 
-Expected: `153 passed`. If this fails, stop — nothing downstream will be meaningful.
+Expected: `158 passed`. If this fails, stop — nothing downstream will be meaningful.
 
 Then check that the commands in this guide actually run, which the unit tests do not
 cover:
@@ -58,7 +58,7 @@ cover:
 PY scripts/smoke.py --quick
 ```
 
-Expected: `all 6 documented commands work.` Drop `--quick` after §4 to include the
+Expected: `all 15 documented commands work.` Drop `--quick` after §4 to include the
 three that need the seeded corpus, including the exact shot the video script puts on
 screen. This exists because `pip install -e .` had never once been run here — the
 tests pass without it, so `plumbline audit` was documented for weeks while not

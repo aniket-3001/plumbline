@@ -223,6 +223,13 @@ def main(argv=None) -> int:
     ap.add_argument("--min-peers", type=int, default=0)
     args = ap.parse_args(argv)
 
+    from plumbline.cli import _unreadable
+
+    problem = _unreadable(args.workbook)
+    if problem:
+        print(problem, file=sys.stderr)
+        return 2
+
     t = trace(args.workbook, max_proofs=args.max_proofs, min_peers=args.min_peers or None)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(t, indent=2, default=str), encoding="utf-8")

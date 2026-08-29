@@ -104,6 +104,20 @@ def checks(quick: bool) -> list[Check]:
             ["scripts/agent_trajectories.py", "replay"],
             must_contain=["accepted", "rejected by guard 1", "AJ40"],
         ),
+        # `make_fixture.py --help` once silently rewrote both committed fixtures,
+        # so the no-argument path is checked rather than assumed.
+        Check(
+            "make_fixture.py refuses without --write", "scripts/make_fixture.py",
+            ["scripts/make_fixture.py"],
+            expect_exit=2,
+            must_contain=["refusing to overwrite"],
+        ),
+        Check(
+            "make_fixture_hard.py refuses without --write", "scripts/make_fixture_hard.py",
+            ["scripts/make_fixture_hard.py"],
+            expect_exit=2,
+            must_contain=["refusing to overwrite"],
+        ),
     ]
     if quick:
         return out
@@ -136,6 +150,43 @@ def checks(quick: bool) -> list[Check]:
     return out
 
 
+def error_checks() -> list[Check]:
+    """Bad input must be explained, never dumped as a traceback.
+
+    Every entry point here used to end in an openpyxl stack trace, which tells the
+    reader the tool is broken when in fact their input is. `check` was worse: it
+    printed its readiness banner first, so the crash looked like it happened during
+    the audit rather than before it began.
+    """
+    cli = ["-m", "plumbline.cli"]
+    return [
+        Check("audit rejects a non-spreadsheet", "cli._unreadable",
+              [*cli, "audit", "README.md"], expect_exit=2,
+              must_contain=["is not a spreadsheet"], must_not=["Traceback"]),
+        Check("check rejects a non-spreadsheet", "cli._unreadable",
+              [*cli, "check", "README.md"], expect_exit=2,
+              must_contain=["is not a spreadsheet"],
+              must_not=["Traceback", "Plumbline readiness"]),
+        Check("audit rejects a missing file", "cli._unreadable",
+              [*cli, "audit", "definitely_absent.xlsx"], expect_exit=2,
+              must_contain=["no such file"], must_not=["Traceback"]),
+        Check("poc.py rejects a missing file", "scripts/poc.py",
+              ["scripts/poc.py", "definitely_absent.xlsx"], expect_exit=2,
+              must_contain=["no such file"], must_not=["Traceback"]),
+        Check("sensitivity_probe.py explains a bad file type", "scripts/sensitivity_probe.py",
+              ["scripts/sensitivity_probe.py", "README.md"], expect_exit=2,
+              must_contain=["could not read"], must_not=["Traceback"]),
+        Check("trace_pipeline.py rejects a non-spreadsheet", "scripts/trace_pipeline.py",
+              ["scripts/trace_pipeline.py", "README.md"], expect_exit=2,
+              must_contain=["is not a spreadsheet"], must_not=["Traceback"]),
+        Check("agent_trajectories dump does not call a missing file clean",
+              "scripts/agent_trajectories.py",
+              ["scripts/agent_trajectories.py", "dump", "definitely_absent.xlsx"],
+              expect_exit=2,
+              must_contain=["no such file"], must_not=["nothing proved"]),
+    ]
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--quick", action="store_true",
@@ -146,7 +197,7 @@ def main(argv=None) -> int:
         print(f"note: {DEMO} not present, running --quick set only\n")
         args.quick = True
 
-    todo = checks(args.quick)
+    todo = checks(args.quick) + error_checks()
     print(f"running {len(todo)} documented commands with {PY.name}\n")
 
     failures = []

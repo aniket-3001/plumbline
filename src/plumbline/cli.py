@@ -15,12 +15,40 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 
 
+SUPPORTED = (".xlsx", ".xlsm", ".xltx", ".xltm")
+
+
+def _unreadable(path: Path) -> str | None:
+    """Why this file cannot be opened, in one line, or None if it can be.
+
+    Checked before anything is printed. The alternative is what this used to do:
+    print a readiness banner, then die inside openpyxl with a traceback -- which
+    tells the reader the tool is broken rather than that their input is.
+    """
+    if not path.exists():
+        return "no such file: " + str(path)
+    if path.suffix.lower() not in SUPPORTED:
+        if path.suffix.lower() == ".xls":
+            return (path.name + " is a legacy .xls file. Plumbline reads .xlsx; open it "
+                    "in Excel or LibreOffice and save as .xlsx first.")
+        return (path.name + " is not a spreadsheet Plumbline can read (expected one of "
+                + ", ".join(SUPPORTED) + ").")
+    try:
+        from openpyxl import load_workbook
+
+        load_workbook(path, read_only=True).close()
+    except Exception as exc:  # noqa: BLE001 -- report it, do not raise it
+        return "could not open " + path.name + ": " + type(exc).__name__ + ": " + str(exc)
+    return None
+
+
 def _audit(path: Path, report_path: Path | None, as_json: bool, skip_checks: bool) -> int:
     from plumbline.audit import audit
     from plumbline.report import render_markdown, render_terminal
 
-    if not path.exists():
-        print(f"no such file: {path}", file=sys.stderr)
+    problem = _unreadable(path)
+    if problem:
+        print(problem, file=sys.stderr)
         return 2
 
     result = audit(path, check_determinism=not skip_checks)
@@ -42,8 +70,9 @@ def _check(path: Path) -> int:
     """Report whether a workbook can be audited, and why not if it cannot."""
     from plumbline.determinism import check, find_volatile
 
-    if not path.exists():
-        print(f"no such file: {path}", file=sys.stderr)
+    problem = _unreadable(path)
+    if problem:
+        print(problem, file=sys.stderr)
         return 2
 
     print(f"Plumbline readiness - {path.name}\n")

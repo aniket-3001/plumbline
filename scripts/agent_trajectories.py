@@ -46,6 +46,15 @@ OUT = ROOT / "results" / "trajectories"
 def dump(workbook: Path, limit: int) -> int:
     from plumbline.agent import SYSTEM_PROMPT, _render_user_prompt, build_context
     from plumbline.audit import audit
+    from plumbline.cli import _unreadable
+
+    # Without this, an unreadable path reports "nothing proved", which is true but
+    # deeply misleading: it reads as "this workbook is clean" rather than "this file
+    # could not be opened".
+    problem = _unreadable(workbook)
+    if problem:
+        print(problem, file=sys.stderr)
+        return 2
 
     report = audit(workbook, check_determinism=False, max_proofs=25)
     proved = report.proved[:limit]

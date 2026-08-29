@@ -114,6 +114,22 @@ def build() -> tuple[Path, Path]:
 
 
 if __name__ == "__main__":
+    import argparse
+    import sys
+
+    # These scripts overwrite committed test fixtures, so they must never run as a
+    # side effect of someone poking at them -- `make_fixture.py --help` silently
+    # rewrote both fixtures once. Regenerating is now something you ask for.
+    ap = argparse.ArgumentParser(
+        description="Regenerate a committed test fixture. Overwrites files under "
+                    "tests/fixtures/; pass --write to confirm."
+    )
+    ap.add_argument("--write", action="store_true", help="actually overwrite the fixture")
+    args = ap.parse_args()
+    if not args.write:
+        print("refusing to overwrite committed fixtures without --write", file=sys.stderr)
+        raise SystemExit(2)
+
     xlsx, manifest = build()
     print(f"wrote {xlsx}")
     print(f"wrote {manifest}")
