@@ -8,7 +8,7 @@
   "after_validation": {
     "intent": "AH25 should carry forward the prior period's value for Anadarko Energy Services Company by referencing AG25 (=+AG25), continuing the chained roll-forward seen across AD25 through AI25.",
     "deliberate": null,
-    "explanation": "The row propagates a single value left-to-right via a chain of simple references (AD25=+AC25, AE25=+AD25, AF25=+AE25, AG25=+AF25, AI25=+AH25), so AH25 is the only break in that chain and is hard-coded at 5000. Because the hard-coded number happens to match the current upstream value, the break is invisible until AG25 changes \u2014 the recomputation shows AH25 stays at 5000 while the formula would give 6000 \u2014 and there is no label or adjacent note indicating an intentional override, so the motive is unclear.",
+    "explanation": "The row propagates a single value left-to-right via a chain of simple references (AD25=+AC25, AE25=+AD25, AF25=+AE25, AG25=+AF25, AI25=+AH25), so AH25 is the only break in that chain and is hard-coded at 5000. Because the hard-coded number happens to match the current upstream value, the break is invisible until AG25 changes - the recomputation shows AH25 stays at 5000 while the formula would give 6000 - and there is no label or adjacent note indicating an intentional override, so the motive is unclear.",
     "cells_referenced": [
       "AH25",
       "AG25",

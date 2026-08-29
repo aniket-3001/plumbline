@@ -115,24 +115,25 @@ spot disclosed only in a README is not disclosed to the person reading the audit
 
 ### How these were produced, exactly
 
-The machine this was built on has no `ANTHROPIC_API_KEY`. Rather than ship a model
-layer that had only ever run against a stub, the step was split:
-
 ```bash
-PY scripts/agent_trajectories.py dump data/seeded/chris_germany__1938__Mar2002_EstateGas.xlsx
-PY scripts/agent_trajectories.py replay
+PY scripts/agent_trajectories.py dump <workbook.xlsx> --live   # needs a key
+PY scripts/agent_trajectories.py replay                        # offline, always
 ```
 
 `dump` writes the byte-exact system and user prompts, built by `agent.build_context`
 and `agent._render_user_prompt` — the same two functions the live path calls. Nothing
 about the prompt is reconstructed or idealised.
 
-**The replies in `01` and `02` were written by Claude Opus 5 reading those exact
-prompts in a Claude Code session, not returned by the Anthropic API.** That is the
-honest description and it is the one that matters: the prompt is real, the workbook is
-real, the reasoning is a real model's, and the delivery channel was a chat session
-instead of an HTTP request. With a key set, the identical prompts go through
-`agent.anthropic_client()`.
+**Replies `01` and `02` are real Anthropic API responses**, `claude-opus-5` with
+adaptive thinking at `medium` effort, recorded verbatim from `--live`. An earlier
+version of this file described them as written by Claude Opus 5 in a Claude Code
+session, because the machine had no key at the time; a key later became available
+and they were regenerated through the API. The prompts did not change.
+
+`replay` is the half that matters for reproducibility, and it needs **no key and no
+network**: it feeds each recorded reply back through `agent.interpret`, so the JSON
+parsing, the ASCII folding, and the hallucination guard all execute for real. Anyone
+can re-run the verdicts offline and get the same answers.
 
 `replay` feeds each recorded reply back through `agent.interpret` with a client that
 returns the recorded text. JSON parsing, truncation, and the hallucination guard all
@@ -159,7 +160,11 @@ audit tool is a liability unless fenced:
 |---|---|---|---|
 | 01 | `Sheet1!U8` | pointing slip in a carry-forward chain | accepted |
 | 02 | `Sheet1!AH25` | frozen formula, deliberateness unclear | accepted |
-| 03 | `Sheet1!AH25` | **adversarial**, hand-written | **rejected** |
+| 03 | `Sheet1!AH25` | **adversarial**, hand-written to fail | **rejected** |
+
+01 and 02 are live API replies; 03 is hand-written and labelled as such in its own
+file, because a guard has to be shown firing on something and the model did not
+oblige by hallucinating.
 
 **01 — the model adds what recomputation cannot.** The deterministic arm proves `U8`
 should read `=+T8` and does not: `10000 → 2.1562`. It cannot say *why that shape*. The

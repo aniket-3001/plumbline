@@ -15,7 +15,14 @@ is stated up front rather than discovered halfway through.
 | **Disk** | ~3.5 GB — 1 GB archive + 1.9 GB extracted corpus + working files |
 | **Network** | One ~993 MB download from figshare. Everything after that runs offline |
 | **Time** | ~15 min download, ~5 min extract, ~20 min full evaluation |
-| **Cost** | **$0.** The deterministic arm uses no model API at all |
+| **Cost** | **$0** for everything in this guide. The deterministic arm is the product and uses no model API at all |
+
+The two model arms are **optional and are not needed to reproduce any headline
+number**. They need `ANTHROPIC_API_KEY` and they spend real money:
+`agent_trajectories.py dump --live` is a few cents; `run_llm_baseline.py` is a few
+dollars and defaults to a `--max-usd 2.00` ceiling. `agent_trajectories.py replay`
+re-validates the committed live replies offline, for free, and is part of the smoke
+test.
 | **OS** | Developed on Windows 11. No OS-specific code; Linux and macOS should work |
 
 **Verified from a clean clone**, not just asserted: `git clone` into an empty directory,

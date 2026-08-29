@@ -57,14 +57,18 @@ demonstrates it.** A claim that cannot be proved is escalated to a human, never 
 runs the detectors alone, then with screening, then with proof, on identical cases — see
 *Baseline vs solution* below.
 
-**Layer 2 is not measured, and does not detect anything.** It never decides whether a cell is
+**Layer 2 is fenced, not load-bearing.** It never decides whether a cell is
 wrong; recomputation has already done that before the model is called. It supplies intent —
 *what was this cell for?* — and an explanation, and every cell reference it returns is checked
-against the graph before display. So the numbers in this README are all from the deterministic
-arm, and none of them depend on a model. Whether Layer 2's explanations are *good* would need a
-separate evaluation with human judgement, and that has not been run. Its guard is exercised on
-real trajectories ([`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md)) rather than only
-unit-tested, which is evidence about the fence, not about the explanations.
+against the graph before display. So every headline number in this README comes from
+the deterministic arm and none of them depend on a model.
+
+What *is* measured about models is the harder question: whether one is needed for detection at
+all. It is not — see *Does the structural machinery earn its place?* below, where a direct prompt
+to the same model finds 29% of silent errors against recomputation's 82%. Layer 2's guard is
+exercised on real API responses ([`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md))
+rather than only unit-tested. Whether its *explanations* are good would need human judgement, and
+that has not been run.
 
 ## Improvement Changelog
 
@@ -150,6 +154,40 @@ identical; the difference is that the benchmark stopped charging the tool for it
 That is the most useful thing this project learned, and it was only visible because the
 misses were read cell by cell rather than summarised.
 
+### Does the structural machinery earn its place?
+
+The deterministic numbers cannot answer that. This can: the brief's other named
+baseline shape, **one direct prompt with basic instructions**, given the same
+workbooks and scored the same way. `python scripts/run_llm_baseline.py`
+
+| Metric | deterministic | direct-prompt LLM |
+|---|---|---|
+| Precision | 1.000 | 1.000 |
+| Recall | **0.889** | 0.519 |
+| F1 | **0.941** | 0.683 |
+| Recall, *realistic* | 1.000 | 0.900 |
+| **Recall, *silent*** | **0.824** | **0.294** |
+
+Both arms are perfectly precise. The model simply misses more — and it misses
+*exactly* where this project claims to matter. **Silent** errors are correct today
+and wrong once an input moves; a direct prompt finds 29% of them, recomputation
+finds 82%. That is not a prompting failure. Nothing in the formula text says whether
+a typed constant is data or a frozen formula, so no amount of reading can settle it.
+Only changing an input and watching the cell fail to respond can.
+
+**This run is partial and the table above says so honestly.** It covers **12 of 21
+workbooks**, stopping when the API account ran out of credit ~$4.85 in, so the
+deterministic column is recomputed on those same 12 rather than quoted from the
+full-corpus run. Comparing it against the headline 0.924 would be comparing
+different corpora. Raw per-workbook data, marked `"complete": false`, is in
+[`results/llm_baseline.json`](results/llm_baseline.json).
+
+Not a strawman: same model (`claude-opus-5`), same effort, formulas in reading order
+with row labels — what a human auditor would have. And it gets **its own exclusion
+list**, computed by running it over the untouched originals too; without that, the 79
+pre-existing Enron oddities it correctly spotted would have been charged against it
+as false positives, which is the identical bug that cost the deterministic arm 11.
+
 ### How to read these numbers
 
 **Precision and recall are measured against the seeded errors only.** The audit also
@@ -220,7 +258,8 @@ mean less than it appears to.
 |---|---|---|---|
 | Layer 2 | Hallucination guard: reject any cell reference not in the context | Replaying a **real** trajectory, the guard rejected a **correct** answer. It enumerated peer addresses and refs from the cell's own two formulas, but never looked inside the peer formulas it had printed — so citing `P8`, shown in the prompt as `Q8: =+P8`, counted as a hallucination | **Fixed.** `_known_cells` now parses the rendered prompt, so the guard and the system prompt mean the same thing by "the context". A guard that punishes correct reasoning gets switched off, and then it protects nothing |
 | Layer 2 | Column label = the first string found in the column | Financial models label columns with computed dates. Row 3 of `chris_germany__1938` is `=+T3+1` across the sheet, so the model was told `Column label: =+T3+1` — not a label, and not what anyone sees on screen | **Fixed.** Formula text is never passed through as a label; the prompt says `(none found)` instead. Old workbooks often carry no cached values, and "no label" is the honest answer |
-| Layer 2 | Evaluate the model layer against a stub | A model layer exercised only against a stub is not evidence of anything | **Split into `dump` / `replay`.** Real prompts, real replies, real guard — see [`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md), which states plainly that replies 01 and 02 came from Claude Opus 5 in a Claude Code session rather than the API, because this machine has no key |
+| Layer 2 | Evaluate the model layer against a stub | A model layer exercised only against a stub is not evidence of anything | **Split into `dump` / `replay`.** Real prompts, real replies, real guard — see [`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md). Trajectories 01 and 02 are live `claude-opus-5` responses; `replay` re-validates them offline with no key |
+| Layer 2 | First live call against the real API | The reply contained `→` and `—`. Printing either to a Windows console on a legacy code page raises `UnicodeEncodeError`, so an audit that had already produced valid deterministic findings would crash while displaying them | **Model output is folded to ASCII at the boundary.** It is untrusted text, and this was not hypothetical — it happened on call one |
 
 
 ## Documentation
