@@ -1,0 +1,11 @@
+{
+ "intent": "Total the Anadarko position by pulling the reconciled balance from the Summary tab.",
+ "deliberate": true,
+ "explanation": "AH25 was hardcoded deliberately to agree with the reconciled figure carried on Summary!B12, and AJ40 shows the same override applied a second time later in the row.",
+ "cells_referenced": [
+  "AH25",
+  "AG25",
+  "AJ40",
+  "Summary!B12"
+ ]
+}

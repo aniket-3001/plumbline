@@ -124,6 +124,7 @@ def replay() -> int:
                 {
                     "workbook": record["workbook"],
                     "cell": f"{record['sheet']}!{record['cell']}",
+                    "note": record.get("note", ""),
                     "detector": record["detector"],
                     "deterministic_proof": record["proof"],
                     "model_reply_raw": reply,

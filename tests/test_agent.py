@@ -133,3 +133,139 @@ class TestPromptContract:
 
 def test_interpretation_serialises():
     assert Interpretation(intent="i").to_dict()["intent"] == "i"
+
+
+class TestLabelExtraction:
+    """A label is what a reader sees, never the formula text behind it."""
+
+    @staticmethod
+    def _finding(sheet="S", cell="C5"):
+        return type(
+            "F", (), {
+                "sheet": sheet, "cell": cell,
+                "actual": "=B4", "expected": "=B5",
+                "proof": "C5: 1 -> 2 (+1)",
+            },
+        )()
+
+    def test_a_computed_header_is_not_passed_through_as_a_formula(self, tmp_path):
+        """Financial models label columns with computed dates. Reading the first
+        string in the column returns `=B1+1`, which is not a label, is not what
+        anyone sees on screen, and invites the model to reason about a header that
+        does not exist."""
+        from openpyxl import Workbook
+
+        from plumbline.agent import build_context
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        ws["A1"] = "start"
+        ws["B1"] = 1
+        ws["C1"] = "=B1+1"          # computed header, no cached value
+        ws["A5"] = "Revenue"
+        ws["B5"] = 10
+        ws["C5"] = "=B4"
+        path = tmp_path / "computed_header.xlsx"
+        wb.save(path)
+
+        ctx = build_context(str(path), self._finding())
+        assert ctx["column_label"] != "=B1+1"
+        assert ctx["column_label"] is None or not str(ctx["column_label"]).startswith("=")
+
+    def test_a_real_text_header_is_still_found(self, tmp_path):
+        from openpyxl import Workbook
+
+        from plumbline.agent import build_context
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        ws["C1"] = "Q3 2002"
+        ws["A5"] = "Revenue"
+        ws["B5"] = 10
+        ws["C5"] = "=B4"
+        path = tmp_path / "text_header.xlsx"
+        wb.save(path)
+
+        ctx = build_context(str(path), self._finding())
+        assert ctx["column_label"] == "Q3 2002"
+        assert ctx["row_label"] == "Revenue"
+
+    def test_the_prompt_says_none_found_rather_than_inventing_one(self, tmp_path):
+        from openpyxl import Workbook
+
+        from plumbline.agent import _render_user_prompt, build_context
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        ws["B5"] = 10
+        ws["C5"] = "=B4"
+        path = tmp_path / "no_labels.xlsx"
+        wb.save(path)
+
+        prompt = _render_user_prompt(build_context(str(path), self._finding()))
+        assert "(none found)" in prompt
+
+
+class TestGuardScope:
+    """The guard's idea of "the context" must match the model's: the rendered prompt.
+
+    Found by replaying a real trajectory, not by reasoning about it. On
+    `chris_germany__1938!U8` the prompt lists the peer `Q8: =+P8`; a correct answer
+    cited P8 and the guard rejected it as a hallucination. A guard that punishes
+    correct reasoning gets switched off, and then it protects nothing.
+    """
+
+    @staticmethod
+    def _ctx():
+        return {
+            "sheet": "Sheet1", "cell": "U8",
+            "row_label": "Fixed", "column_label": None,
+            "actual_formula": "=+T7", "expected_formula": "=+T8",
+            "row_peers": [
+                {"cell": "Q8", "formula": "=+P8", "value": 1},
+                {"cell": "T8", "formula": "=+S8", "value": 2},
+            ],
+            "precedents": [{"cell": "T8", "formula": "=+S8", "value": 2}],
+            "proof": "U8: 10000 -> 2.1562 (-9997.8438)",
+        }
+
+    def test_a_cell_named_inside_a_shown_peer_formula_is_known(self):
+        from plumbline.agent import _known_cells
+
+        known = _known_cells(self._ctx())
+        assert "P8" in known, "P8 is printed in the prompt as `Q8: =+P8`"
+        assert {"U8", "T7", "T8", "S8", "Q8"} <= known
+
+    def test_a_cell_never_shown_is_still_rejected(self):
+        from plumbline.agent import _known_cells
+
+        assert "AJ40" not in _known_cells(self._ctx())
+
+    def test_a_cross_sheet_reference_is_still_rejected(self):
+        import json
+
+        from plumbline.agent import interpret
+
+        reply = json.dumps({
+            "intent": "x", "deliberate": True, "explanation": "y",
+            "cells_referenced": ["U8", "Summary!B12"],
+        })
+        finding = type("F", (), {
+            "sheet": "Sheet1", "cell": "U8", "actual": "=+T7",
+            "expected": "=+T8", "proof": "U8: 1 -> 2 (+1)",
+        })()
+
+        import plumbline.agent as agent
+
+        original = agent.build_context
+        agent.build_context = lambda *a, **k: self._ctx()
+        try:
+            interp = interpret("ignored.xlsx", finding, lambda s, u: reply)
+        finally:
+            agent.build_context = original
+
+        assert interp.ok is False
+        assert "SUMMARY!B12" in interp.rejected_cells

@@ -1,0 +1,23 @@
+{
+  "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "cell": "Sheet1!AH25",
+  "note": "ADVERSARIAL, NOT A MODEL REPLY. Same prompt as 02, paired with a hand-written reply that cites AJ40 and Summary!B12 -- neither is in the context. Present so the hallucination guard is demonstrated firing on real workbook data rather than only asserted in a unit test.",
+  "detector": "dead_cell",
+  "deterministic_proof": "set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response); as formula -> 6000 (responds)",
+  "model_reply_raw": "{\n \"intent\": \"Total the Anadarko position by pulling the reconciled balance from the Summary tab.\",\n \"deliberate\": true,\n \"explanation\": \"AH25 was hardcoded deliberately to agree with the reconciled figure carried on Summary!B12, and AJ40 shows the same override applied a second time later in the row.\",\n \"cells_referenced\": [\n  \"AH25\",\n  \"AG25\",\n  \"AJ40\",\n  \"Summary!B12\"\n ]\n}",
+  "after_validation": {
+    "intent": "Total the Anadarko position by pulling the reconciled balance from the Summary tab.",
+    "deliberate": true,
+    "explanation": "AH25 was hardcoded deliberately to agree with the reconciled figure carried on Summary!B12, and AJ40 shows the same override applied a second time later in the row.",
+    "cells_referenced": [
+      "AH25",
+      "AG25"
+    ],
+    "rejected_cells": [
+      "AJ40",
+      "SUMMARY!B12"
+    ],
+    "ok": false,
+    "error": "referenced cells absent from the context: AJ40, SUMMARY!B12"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "cell": "Sheet1!AH25",
+  "note": "",
+  "detector": "dead_cell",
+  "deterministic_proof": "set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response); as formula -> 6000 (responds)",
+  "model_reply_raw": "{\n \"intent\": \"Carry the Anadarko Energy Services Company position forward from AG25, as every other cell in row 25 carries the value from the column to its left.\",\n \"deliberate\": null,\n \"explanation\": \"AH25 holds the typed number 5000 where AD25 through AG25 and AI25 all hold a carry-forward formula, and 5000 is exactly what AG25 reports today, so the number is correct as of this file and nothing on the sheet looks wrong. The labels give no reason for this one column to be entered by hand rather than computed, so whether it was a deliberate override or a formula typed over cannot be told from the sheet; what is certain from the recomputation is that it no longer tracks AG25, which moved to 6000 while AH25 stayed at 5000.\",\n \"cells_referenced\": [\n  \"AH25\",\n  \"AG25\",\n  \"AD25\",\n  \"AE25\",\n  \"AF25\",\n  \"AI25\"\n ]\n}",
+  "after_validation": {
+    "intent": "Carry the Anadarko Energy Services Company position forward from AG25, as every other cell in row 25 carries the value from the column to its left.",
+    "deliberate": null,
+    "explanation": "AH25 holds the typed number 5000 where AD25 through AG25 and AI25 all hold a carry-forward formula, and 5000 is exactly what AG25 reports today, so the number is correct as of this file and nothing on the sheet looks wrong. The labels give no reason for this one column to be entered by hand rather than computed, so whether it was a deliberate override or a formula typed over cannot be told from the sheet; what is certain from the recomputation is that it no longer tracks AG25, which moved to 6000 while AH25 stayed at 5000.",
+    "cells_referenced": [
+      "AH25",
+      "AG25",
+      "AD25",
+      "AE25",
+      "AF25",
+      "AI25"
+    ],
+    "rejected_cells": [],
+    "ok": true,
+    "error": ""
+  }
+}

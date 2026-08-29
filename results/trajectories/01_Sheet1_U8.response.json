@@ -1,0 +1,4 @@
+{"intent": "Carry the 'Fixed' figure forward one column, taking the value from T8 exactly as every other cell in row 8 takes the value from the column to its left.",
+ "deliberate": false,
+ "explanation": "Row 8 is a single unbroken carry-forward chain: Q8 reads P8, R8 reads Q8, S8 reads R8, T8 reads S8, and V8 through Y8 continue the same shape, so U8 is the only cell in the chain that does not read its own row. It reads T7 instead of T8, one row above the chain, which is the signature of a formula dragged or pasted from the row above rather than a deliberate exception, and the recomputation confirms the consequence is not cosmetic: U8 currently reports 10,000 where the chain gives 2.16.",
+ "cells_referenced": ["U8", "T8", "T7", "P8", "Q8", "R8", "S8", "V8", "W8", "X8", "Y8"]}

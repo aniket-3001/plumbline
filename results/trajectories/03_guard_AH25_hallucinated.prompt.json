@@ -1,0 +1,53 @@
+{
+  "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "sheet": "Sheet1",
+  "cell": "AH25",
+  "detector": "dead_cell",
+  "proof": "set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response); as formula -> 6000 (responds)",
+  "system": "You are assisting a spreadsheet audit. A deterministic engine has already found that one cell breaks the formula pattern of its row and has PROVED, by recomputing the workbook, that correcting it changes the numbers.\n\nYour only job is to explain what the cell was *meant* to do, using the row and column labels around it, and to say whether the deviation looks deliberate.\n\nYou are NOT deciding whether this is an error. That is already established. Do not overturn it, and do not hedge about whether recomputation is reliable.\n\nRules:\n- Refer only to cell addresses that appear in the context you are given. Never invent a cell reference.\n- If the labels do not tell you what the cell was for, say so plainly. \"The labels do not indicate the intent\" is a correct and useful answer.\n- Judge deliberateness from evidence: a row labelled differently, a note in an adjacent cell, a consistent exception elsewhere. Absent evidence, say it is unclear.\n\nReply as JSON only:\n{\"intent\": \"<what this cell should compute, in one sentence>\",\n \"deliberate\": true | false | null,\n \"explanation\": \"<two sentences a financial analyst would find useful>\",\n \"cells_referenced\": [\"<every cell address you mentioned>\"]}",
+  "user": "Sheet: Sheet1\nCell under review: AH25\nRow label: Anadarko Energy Services Company\nColumn label: (none found)\n\nThis cell currently contains: 5000\nEvery other cell in its row is shaped like: =+AG25\n\nRecomputation proof: set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response); as formula -> 6000 (responds)\n\nNeighbouring cells in the same row:\n  AD25: =+AC25\n  AE25: =+AD25\n  AF25: =+AE25\n  AG25: =+AF25\n  AI25: =+AH25\n\nCells the expected formula would read:\n  AG25: =+AF25",
+  "context": {
+    "sheet": "Sheet1",
+    "cell": "AH25",
+    "row_label": "Anadarko Energy Services Company",
+    "column_label": null,
+    "actual_formula": "5000",
+    "expected_formula": "=+AG25",
+    "row_peers": [
+      {
+        "cell": "AD25",
+        "formula": "=+AC25",
+        "value": null
+      },
+      {
+        "cell": "AE25",
+        "formula": "=+AD25",
+        "value": null
+      },
+      {
+        "cell": "AF25",
+        "formula": "=+AE25",
+        "value": null
+      },
+      {
+        "cell": "AG25",
+        "formula": "=+AF25",
+        "value": null
+      },
+      {
+        "cell": "AI25",
+        "formula": "=+AH25",
+        "value": null
+      }
+    ],
+    "precedents": [
+      {
+        "cell": "AG25",
+        "formula": "=+AF25",
+        "value": null
+      }
+    ],
+    "proof": "set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response); as formula -> 6000 (responds)"
+  },
+  "note": "ADVERSARIAL, NOT A MODEL REPLY. Same prompt as 02, paired with a hand-written reply that cites AJ40 and Summary!B12 -- neither is in the context. Present so the hallucination guard is demonstrated firing on real workbook data rather than only asserted in a unit test."
+}

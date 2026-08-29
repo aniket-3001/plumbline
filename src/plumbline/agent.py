@@ -98,7 +98,7 @@ class Interpretation:
         }
 
 
-def build_context(path: str, finding, *, radius: int = 4) -> dict:
+def build_context(path: str, finding, *, radius: int = 4, evaluate=None) -> dict:
     """The minimal subgraph a model needs, and nothing more.
 
     Whole sheets neither fit a context window nor help: extra rows invite the model
@@ -132,16 +132,40 @@ def build_context(path: str, finding, *, radius: int = 4) -> dict:
             "value": vs.cell(row=r, column=c).value,
         }
 
-    # Labels: the leftmost text in this row, and the topmost text in this column.
+    def label_at(r: int, c: int) -> str | None:
+        """A label is what a *reader* sees in that cell, never the formula text.
+
+        Financial models label columns with computed dates -- row 3 of
+        `chris_germany__1938` is `=+T3+1` repeated across the sheet. Taking the
+        first string found returns "=+T3+1" as the column label, which is not a
+        label, is not what anyone sees on screen, and invites the model to reason
+        about a header that does not exist. Twenty-five-year-old workbooks also
+        frequently carry no cached values, so the displayed text is simply not
+        recoverable from the file; when that happens the honest answer is that
+        there is no label, and the caller keeps looking further out.
+        """
+        raw = ws.cell(row=r, column=c).value
+        if raw is None:
+            return None
+        if isinstance(raw, str) and raw.startswith("="):
+            shown = vs.cell(row=r, column=c).value
+            if shown is None:                      # no cached value: unrecoverable
+                return None
+            if evaluate is not None:
+                try:
+                    shown = evaluate(f"{finding.sheet}!{get_column_letter(c)}{r}")
+                except Exception:  # noqa: BLE001
+                    pass
+            return str(shown)
+        return raw if isinstance(raw, str) else None
+
+    # Labels: the leftmost text in this row (models put row headers in column A or
+    # near it), and the topmost text in this column.
     row_label = next(
-        (ws.cell(row=row, column=c).value for c in range(1, col)
-         if isinstance(ws.cell(row=row, column=c).value, str)),
-        None,
+        (lbl for c in range(1, col) if (lbl := label_at(row, c))), None
     )
     col_label = next(
-        (ws.cell(row=r, column=col).value for r in range(1, row)
-         if isinstance(ws.cell(row=r, column=col).value, str)),
-        None,
+        (lbl for r in range(1, row) if (lbl := label_at(r, col))), None
     )
 
     peers = [d for c in range(max(1, col - radius), col + radius + 1)
@@ -193,13 +217,26 @@ def _render_user_prompt(ctx: dict) -> str:
 
 
 def _known_cells(ctx: dict) -> set[str]:
-    known = {ctx["cell"]}
-    known |= {p["cell"] for p in ctx["row_peers"]}
-    known |= {p["cell"] for p in ctx["precedents"]}
-    for formula in (ctx["actual_formula"], ctx["expected_formula"]):
-        if isinstance(formula, str):
-            known |= {f"{c}{r}" for c, r in CELL_RE.findall(formula)}
-    return known
+    """Every cell address the model was actually shown.
+
+    The system prompt says "refer only to cell addresses that appear in the context
+    you are given", so the guard has to mean the same thing by "the context" that
+    the model does: the rendered prompt, in full.
+
+    An earlier version enumerated only the peer and precedent *addresses* plus the
+    references inside the cell's own two formulas. That rejected a correct answer.
+    On `chris_germany__1938!U8` the prompt lists the peer `Q8: =+P8`, so P8 is on
+    the model's screen; citing it is reasoning from the evidence, not inventing it,
+    and the guard called it a hallucination. A guard that punishes correct reasoning
+    gets switched off, and then it protects nothing.
+
+    Parsing the rendered prompt keeps the two definitions from drifting apart again:
+    there is now one place a cell can become known, and it is the same text the
+    model reads. Cross-sheet references stay rejected -- `Summary!B12` does not
+    match a bare address in the prompt -- which is the case that matters, since a
+    fabricated reference to another tab is the one an analyst cannot cheaply check.
+    """
+    return {f"{c}{r}" for c, r in CELL_RE.findall(_render_user_prompt(ctx))}
 
 
 def interpret(path: str, finding, client: Client) -> Interpretation:
