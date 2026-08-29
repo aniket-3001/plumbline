@@ -25,13 +25,66 @@ SEEDED = ROOT / "data" / "seeded"
 RESULTS = ROOT / "results"
 
 
+def _refresh_pre_existing() -> int:
+    """Recompute `pre_existing_findings` on the originals, leaving the seeds alone.
+
+    Pre-existing findings are a property of the *unseeded* workbook, so they can be
+    recomputed whenever the detectors change without disturbing the ground truth.
+    Doing it in place is what makes a detector change measurable in isolation: the
+    same errors, in the same files, scored against corrected bookkeeping.
+    """
+    from plumbline.seeding import pre_existing_findings
+
+    manifests = sorted(SEEDED.glob("*.truth.json"))
+    if not manifests:
+        print("no manifests in data/seeded -- run without --refresh-pre-existing", file=sys.stderr)
+        return 1
+
+    before = after = 0
+    for mf in manifests:
+        m = json.loads(mf.read_text(encoding="utf-8"))
+        source = Path(m["source"])
+        if not source.exists():                     # corpus moved; fall back by name
+            source = EVAL / Path(m["workbook"]).name
+        if not source.exists():
+            print(f"  [skip] {m['workbook'][:58]:58} original not found")
+            continue
+        old = m.get("pre_existing_findings", [])
+        new = pre_existing_findings(source)
+        before += len(old)
+        after += len(new)
+        m["pre_existing_findings"] = new
+        mf.write_text(json.dumps(m, indent=2, default=str), encoding="utf-8")
+        delta = len(new) - len(old)
+        print(f"  {m['workbook'][:58]:58} {len(old):3d} -> {len(new):3d}  ({delta:+d})")
+
+    print()
+    print(f"  {len(manifests)} manifest(s) refreshed: "
+          f"{before} -> {after} pre-existing findings")
+    print("  seeds and seeded workbooks untouched")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--seeds-per-workbook", type=int, default=4)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument(
+        "--refresh-pre-existing",
+        action="store_true",
+        help=(
+            "recompute each manifest's pre-existing findings in place and stop. "
+            "Leaves the seeded workbooks and the seeds themselves untouched, so a "
+            "detector change can be re-scored against the same errors instead of a "
+            "differently-seeded corpus."
+        ),
+    )
     args = ap.parse_args()
 
     from plumbline.seeding import seed_workbook
+
+    if args.refresh_pre_existing:
+        return _refresh_pre_existing()
 
     books = sorted(p for p in EVAL.glob("*.xlsx"))
     if not books:

@@ -92,3 +92,51 @@ class TestScorecardMath:
         assert merged.true_positives == 2
         assert merged.by_difficulty["realistic"]["found"] == 1
         assert merged.by_difficulty["silent"]["found"] == 1
+
+
+class TestPreExistingCannotLaunderARecallFailure:
+    """The exclusion rule is load-bearing, so its abuse case gets a test.
+
+    Pre-existing findings are excluded from scoring. That is correct -- they are
+    not our errors and we have no ground truth for them -- but it means the
+    exclusion list is the one place where a miss could be quietly reclassified as
+    "not our problem" and recall would rise for no reason.
+
+    Two things prevent it. Pre-existing findings are computed on the *unseeded*
+    original, and seeds are only ever placed on cells the original agreed on. This
+    asserts the consequence directly rather than trusting the argument.
+    """
+
+    def test_a_seeded_cell_is_never_excluded(self):
+        import glob
+        import json
+
+        manifests = sorted(glob.glob("data/seeded/*.truth.json"))
+        if not manifests:
+            import pytest
+
+            pytest.skip("no seeded corpus; run scripts/seed_corpus.py")
+
+        laundered = []
+        for path in manifests:
+            m = json.loads(open(path, encoding="utf-8").read())
+            pre = set(m["pre_existing_findings"])
+            laundered += [
+                f"{m['workbook']} {s['sheet']}!{s['cell']}"
+                for s in m["seeds"]
+                if f"{s['sheet']}!{s['cell']}" in pre
+            ]
+        assert not laundered, f"seeds excluded as pre-existing: {laundered}"
+
+    def test_scoring_counts_an_excluded_cell_separately_not_as_a_hit(self):
+        from plumbline.scoring import score
+
+        manifest = {
+            "seeds": [{"sheet": "S", "cell": "B2", "difficulty": "realistic"}],
+            "pre_existing_findings": ["S!C3"],
+        }
+        card = score([{"sheet": "S", "cell": "C3", "proved": True}], manifest)
+        assert card.pre_existing_hits == 1
+        assert card.true_positives == 0      # not credited
+        assert card.false_positives == 0     # not penalised
+        assert card.false_negatives == 1     # the real seed is still a miss
