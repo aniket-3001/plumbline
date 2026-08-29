@@ -1,0 +1,44 @@
+{
+  "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "seeded": "chris_germany__1938__Mar2002_EstateGas.xlsx",
+  "seed_count": 2,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "chris_germany__1938__Mar2002_EstateGas-0",
+      "panko_class": "mechanical",
+      "sheet": "Sheet1",
+      "cell": "U8",
+      "original_formula": "=+T8",
+      "seeded_formula": "=+T7",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 2.1562,
+      "seeded_value": 10000,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "chris_germany__1938__Mar2002_EstateGas-2",
+      "panko_class": "hardcoding",
+      "sheet": "Sheet1",
+      "cell": "AH25",
+      "original_formula": "=+AG25",
+      "seeded_formula": 5000,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 5000,
+      "seeded_value": 5000,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

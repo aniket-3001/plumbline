@@ -1,0 +1,78 @@
+{
+  "workbook": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+  "seeded": "stacey_white__39165__Power - Non-Terminated MTM.xlsx",
+  "seed_count": 4,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-0",
+      "panko_class": "hardcoding",
+      "sheet": "mtm by region thru 02-10",
+      "cell": "X22",
+      "original_formula": "=SUM(X3:X21)",
+      "seeded_formula": 4668792.88,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 4668792.88,
+      "seeded_value": 4668792.88,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-1",
+      "panko_class": "logic",
+      "sheet": "mtm by ctpty thru 02-10",
+      "cell": "HH134",
+      "original_formula": "=SUM(HH33:HH133)",
+      "seeded_formula": "=AVERAGE(HH33:HH133)",
+      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 462435,
+      "seeded_value": 4578.564356435643,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-2",
+      "panko_class": "mechanical",
+      "sheet": "mtm by region thru 02-10",
+      "cell": "DL48",
+      "original_formula": "=SUM(DL24:DL47)",
+      "seeded_formula": "=SUM(DL24:DL46)",
+      "description": "Range end pulled in by one row, dropping the last line.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 5195227.6000000015,
+      "seeded_value": 5069747.700000001,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "stacey_white__39165__Power - Non-Terminated MTM-3",
+      "panko_class": "mechanical",
+      "sheet": "mtm by region thru 02-10",
+      "cell": "FH49",
+      "original_formula": "=+FH22+FH48",
+      "seeded_formula": "=+FH21+FH48",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 160912.97000000006,
+      "seeded_value": 52269.730000000054,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

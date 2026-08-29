@@ -1,0 +1,46 @@
+{
+  "workbook": "chris_germany__2230__2000ces08.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\chris_germany__2230__2000ces08.xlsx",
+  "seeded": "chris_germany__2230__2000ces08.xlsx",
+  "seed_count": 2,
+  "pre_existing_findings": [
+    "Pricing!I23"
+  ],
+  "seeds": [
+    {
+      "seed_id": "chris_germany__2230__2000ces08-0",
+      "panko_class": "hardcoding",
+      "sheet": "Pricing",
+      "cell": "G54",
+      "original_formula": "=SUM(G52,G47:G48,G53)",
+      "seeded_formula": 4.7356,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 4.7356,
+      "seeded_value": 4.7356,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "chris_germany__2230__2000ces08-1",
+      "panko_class": "mechanical",
+      "sheet": "Pricing",
+      "cell": "E52",
+      "original_formula": "=ROUND(+E47/(1-E51)+(E49+E50),4)-E47",
+      "seeded_formula": "=ROUND(+E46/(1-E51)+(E49+E50),4)-E47",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 0.14810000000000034,
+      "seeded_value": "#VALUE!",
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

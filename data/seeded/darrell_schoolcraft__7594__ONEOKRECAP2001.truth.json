@@ -1,0 +1,107 @@
+{
+  "workbook": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+  "seeded": "darrell_schoolcraft__7594__ONEOKRECAP2001.xlsx",
+  "seed_count": 4,
+  "pre_existing_findings": [
+    "AUGUST 01!V38",
+    "AUGUST 01!V39",
+    "Apr01!V38",
+    "Apr01!V39",
+    "Dec 01!Y38",
+    "Dec 01!Y39",
+    "Jan 2002!Y38",
+    "Jan 2002!Y39",
+    "Jan.2002!Y38",
+    "Jan.2002!Y39",
+    "July 01!V38",
+    "July 01!V39",
+    "June 01!V38",
+    "June 01!V39",
+    "MANUAL!S6",
+    "MANUAL!Y20",
+    "MANUAL!Y7",
+    "Mar01!V38",
+    "Mar01!V39",
+    "May 01!V38",
+    "May 01!V39",
+    "NOV 01!V38",
+    "NOV 01!V39",
+    "OCT 01!V39",
+    "OCT 01!V40",
+    "SEPT 01 !V38",
+    "SEPT 01 !V39"
+  ],
+  "seeds": [
+    {
+      "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-0",
+      "panko_class": "mechanical",
+      "sheet": "Jan01",
+      "cell": "D38",
+      "original_formula": "=SUM(D6:D36)+D37",
+      "seeded_formula": "=SUM(D6:D35)+D37",
+      "description": "Range end pulled in by one row, dropping the last line.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": -3574,
+      "seeded_value": -11887,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-1",
+      "panko_class": "hardcoding",
+      "sheet": "Feb01",
+      "cell": "F38",
+      "original_formula": "=SUM(F6:F36)+F37",
+      "seeded_formula": -10531,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": -10531,
+      "seeded_value": -10531,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-2",
+      "panko_class": "mechanical",
+      "sheet": "Feb01",
+      "cell": "C39",
+      "original_formula": "=C5+C38",
+      "seeded_formula": "=C4+C38",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": -1518868,
+      "seeded_value": -38339,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "darrell_schoolcraft__7594__ONEOKRECAP2001-3",
+      "panko_class": "hardcoding",
+      "sheet": "Jan01",
+      "cell": "J39",
+      "original_formula": "=J5+J38",
+      "seeded_formula": -7025,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": -7025,
+      "seeded_value": -7025,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

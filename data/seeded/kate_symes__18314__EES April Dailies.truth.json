@@ -1,0 +1,66 @@
+{
+  "workbook": "kate_symes__18314__EES April Dailies.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\kate_symes__18314__EES April Dailies.xlsx",
+  "seeded": "kate_symes__18314__EES April Dailies.xlsx",
+  "seed_count": 3,
+  "pre_existing_findings": [
+    "4-11!H9",
+    "4-12!H9",
+    "4-15!H8"
+  ],
+  "seeds": [
+    {
+      "seed_id": "kate_symes__18314__EES April Dailies-0",
+      "panko_class": "hardcoding",
+      "sheet": "4-2",
+      "cell": "T17",
+      "original_formula": "=P17+Q17+R17+S17",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "kate_symes__18314__EES April Dailies-2",
+      "panko_class": "mechanical",
+      "sheet": "4-5",
+      "cell": "E32",
+      "original_formula": "=SUM(E8:E31)",
+      "seeded_formula": "=SUM(E8:E30)",
+      "description": "Range end pulled in by one row, dropping the last line.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": -1276.9,
+      "seeded_value": -1227.2,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "kate_symes__18314__EES April Dailies-3",
+      "panko_class": "hardcoding",
+      "sheet": "4-10",
+      "cell": "T30",
+      "original_formula": "=P30+Q30+R30+S30",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

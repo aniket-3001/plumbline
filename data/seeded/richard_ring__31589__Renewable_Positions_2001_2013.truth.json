@@ -1,0 +1,65 @@
+{
+  "workbook": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+  "seeded": "richard_ring__31589__Renewable_Positions_2001_2013.xlsx",
+  "seed_count": 3,
+  "pre_existing_findings": [
+    "Sheet1!B20",
+    "Sheet1!B22"
+  ],
+  "seeds": [
+    {
+      "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-0",
+      "panko_class": "mechanical",
+      "sheet": "Sheet1",
+      "cell": "F22",
+      "original_formula": "=-(F20*F21)",
+      "seeded_formula": "=-(F19*F21)",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": -137751,
+      "seeded_value": -0.0185,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-2",
+      "panko_class": "hardcoding",
+      "sheet": "Sheet1",
+      "cell": "K20",
+      "original_formula": "=K17*K18*K19",
+      "seeded_formula": 7358400,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 7358400,
+      "seeded_value": 7358400,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "richard_ring__31589__Renewable_Positions_2001_2013-3",
+      "panko_class": "hardcoding",
+      "sheet": "Sheet1",
+      "cell": "H14",
+      "original_formula": "=H6*0.3",
+      "seeded_formula": -893.3789516345666,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": -893.3789516345666,
+      "seeded_value": -893.3789516345666,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

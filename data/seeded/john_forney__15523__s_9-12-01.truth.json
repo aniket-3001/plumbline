@@ -1,0 +1,26 @@
+{
+  "workbook": "john_forney__15523__s_9-12-01.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\john_forney__15523__s_9-12-01.xlsx",
+  "seeded": "john_forney__15523__s_9-12-01.xlsx",
+  "seed_count": 1,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "john_forney__15523__s_9-12-01-1",
+      "panko_class": "mechanical",
+      "sheet": "Sheet1",
+      "cell": "O2",
+      "original_formula": "=O5-O6-O7",
+      "seeded_formula": "=O4-O6-O7",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 360,
+      "seeded_value": 163,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

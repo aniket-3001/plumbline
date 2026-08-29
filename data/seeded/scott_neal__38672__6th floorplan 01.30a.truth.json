@@ -1,0 +1,94 @@
+{
+  "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\scott_neal__38672__6th floorplan 01.30a.xlsx",
+  "seeded": "scott_neal__38672__6th floorplan 01.30a.xlsx",
+  "seed_count": 4,
+  "pre_existing_findings": [
+    "Floor Plan!C76",
+    "Floor Plan!H38",
+    "Floor Plan!I14",
+    "Floor Plan!I21",
+    "Floor Plan!I26",
+    "Floor Plan!I40",
+    "Floor Plan!J78",
+    "Floor Plan!K52",
+    "Floor Plan!R85",
+    "Floor Plan!U32",
+    "Floor Plan!V32",
+    "Floor Plan!Y64",
+    "Floor Plan!Y65",
+    "Sheet1!K7"
+  ],
+  "seeds": [
+    {
+      "seed_id": "scott_neal__38672__6th floorplan 01.30a-0",
+      "panko_class": "hardcoding",
+      "sheet": "Floor Plan",
+      "cell": "Y41",
+      "original_formula": "=Z41+1",
+      "seeded_formula": 229,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 229,
+      "seeded_value": 229,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "scott_neal__38672__6th floorplan 01.30a-1",
+      "panko_class": "mechanical",
+      "sheet": "Gen Invets",
+      "cell": "I23",
+      "original_formula": "=J23+1",
+      "seeded_formula": "=J22+1",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 149,
+      "seeded_value": 1,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "scott_neal__38672__6th floorplan 01.30a-2",
+      "panko_class": "hardcoding",
+      "sheet": "Floor Plan",
+      "cell": "AB91",
+      "original_formula": "=AC91+1",
+      "seeded_formula": 142,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 142,
+      "seeded_value": 142,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "scott_neal__38672__6th floorplan 01.30a-3",
+      "panko_class": "mechanical",
+      "sheet": "Floor Plan",
+      "cell": "AA84",
+      "original_formula": "=AB84+1",
+      "seeded_formula": "=AB83+1",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 160,
+      "seeded_value": 1,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

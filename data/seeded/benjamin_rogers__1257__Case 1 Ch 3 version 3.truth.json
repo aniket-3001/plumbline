@@ -1,0 +1,79 @@
+{
+  "workbook": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+  "seeded": "benjamin_rogers__1257__Case 1 Ch 3 version 3.xlsx",
+  "seed_count": 4,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-0",
+      "panko_class": "mechanical",
+      "sheet": "Balance Sheet",
+      "cell": "E24",
+      "original_formula": "=+E22+E20",
+      "seeded_formula": "=+E21+E20",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 2733760,
+      "seeded_value": 1733760,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-1",
+      "panko_class": "hardcoding",
+      "sheet": "Balance Sheet",
+      "cell": "E30",
+      "original_formula": "=E28+E24",
+      "seeded_formula": 2866592,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 2866592,
+      "seeded_value": 2866592,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-2",
+      "panko_class": "hardcoding",
+      "sheet": "Balance Sheet",
+      "cell": "E12",
+      "original_formula": "=SUM(E10:E11)",
+      "seeded_formula": 939790,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 939790,
+      "seeded_value": 939790,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "benjamin_rogers__1257__Case 1 Ch 3 version 3-3",
+      "panko_class": "mechanical",
+      "sheet": "Balance Sheet",
+      "cell": "G8",
+      "original_formula": "=SUM(G3:G6)",
+      "seeded_formula": "=SUM(G3:G5)",
+      "description": "Range end pulled in by one row, dropping the last line.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 1124000,
+      "seeded_value": 408800,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

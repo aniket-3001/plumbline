@@ -1,0 +1,27 @@
+{
+  "workbook": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+  "seeded": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002.xlsx",
+  "seed_count": 1,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "darrell_schoolcraft__7407__SUNFLOWER - NNG - HOURLY - 2002-3",
+      "panko_class": "hardcoding",
+      "sheet": "14",
+      "cell": "G31",
+      "original_formula": "=SUM(G7:G30)",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

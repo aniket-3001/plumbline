@@ -6,6 +6,12 @@ data/seeded/
 *.xls
 !tests/fixtures/*.xlsx
 
+# ...but DO commit the ground-truth manifests. They are 88 KB of JSON and they are
+# the answer key: with them, a reader can check our scoring against the exact seeds
+# we scored, without first rebuilding a 1.9 GB corpus. The seeded workbooks
+# themselves stay out -- they are regenerable from the corpus with `--seed 42`.
+!data/seeded/*.truth.json
+
 # Results are regenerated, but keep the committed evaluation snapshots
 results/scratch/
 

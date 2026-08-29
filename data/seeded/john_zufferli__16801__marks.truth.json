@@ -1,0 +1,28 @@
+{
+  "workbook": "john_zufferli__16801__marks.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\john_zufferli__16801__marks.xlsx",
+  "seeded": "john_zufferli__16801__marks.xlsx",
+  "seed_count": 1,
+  "pre_existing_findings": [
+    "Sheet1!K32"
+  ],
+  "seeds": [
+    {
+      "seed_id": "john_zufferli__16801__marks-0",
+      "panko_class": "mechanical",
+      "sheet": "Sheet1",
+      "cell": "K34",
+      "original_formula": "=AVERAGE(K10:K32)",
+      "seeded_formula": "=AVERAGE(K10:K31)",
+      "description": "Range end pulled in by one row, dropping the last line.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 20.880434782608695,
+      "seeded_value": 19.90909090909091,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

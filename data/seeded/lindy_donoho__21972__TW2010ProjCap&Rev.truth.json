@@ -1,0 +1,44 @@
+{
+  "workbook": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+  "seeded": "lindy_donoho__21972__TW2010ProjCap&Rev.xlsx",
+  "seed_count": 2,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "lindy_donoho__21972__TW2010ProjCap&Rev-0",
+      "panko_class": "hardcoding",
+      "sheet": "Summary Ctrc's & Resubscription",
+      "cell": "I25",
+      "original_formula": "=I8+I13+I18+I23",
+      "seeded_formula": 13343910,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 13343910,
+      "seeded_value": 13343910,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "lindy_donoho__21972__TW2010ProjCap&Rev-1",
+      "panko_class": "mechanical",
+      "sheet": "Summary Ctrc's & Resubscription",
+      "cell": "G32",
+      "original_formula": "=G30*G31*365",
+      "seeded_formula": "=G29*G31*365",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 88692526.395,
+      "seeded_value": 113283225,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    }
+  ]
+}

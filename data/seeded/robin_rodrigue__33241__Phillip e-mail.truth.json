@@ -1,0 +1,81 @@
+{
+  "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\robin_rodrigue__33241__Phillip e-mail.xlsx",
+  "seeded": "robin_rodrigue__33241__Phillip e-mail.xlsx",
+  "seed_count": 3,
+  "pre_existing_findings": [
+    "Report!AG21",
+    "Report!AG26",
+    "Report!AG69",
+    "Report!AG70",
+    "Report!AG71",
+    "Report!AG72",
+    "Report!AG75",
+    "Report!AG77",
+    "Report!AG78",
+    "Report!AG79",
+    "Report!AG80",
+    "Report!AG81",
+    "Report!AG82",
+    "Report!AG83",
+    "Report!AG84",
+    "Report!AG85",
+    "Report!AG87",
+    "Report!AG88"
+  ],
+  "seeds": [
+    {
+      "seed_id": "robin_rodrigue__33241__Phillip e-mail-0",
+      "panko_class": "hardcoding",
+      "sheet": "Report",
+      "cell": "L67",
+      "original_formula": "=SUM(M69:M71)-M63+M66",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "robin_rodrigue__33241__Phillip e-mail-1",
+      "panko_class": "logic",
+      "sheet": "Report",
+      "cell": "AE86",
+      "original_formula": "=SUM(AE77:AE85)",
+      "seeded_formula": "=AVERAGE(AE77:AE85)",
+      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": -20375,
+      "seeded_value": -2263.8888888888887,
+      "value_changed": true,
+      "difficulty": "realistic",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "robin_rodrigue__33241__Phillip e-mail-3",
+      "panko_class": "hardcoding",
+      "sheet": "Report",
+      "cell": "Y50",
+      "original_formula": "=SUM(Y41:Y49)",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

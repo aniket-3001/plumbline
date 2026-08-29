@@ -1,0 +1,29 @@
+{
+  "workbook": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+  "seeded": "mike_carson__27556__102601 NE & NY Optionsheet.xlsx",
+  "seed_count": 1,
+  "pre_existing_findings": [
+    "Options!C34",
+    "Options!F21"
+  ],
+  "seeds": [
+    {
+      "seed_id": "mike_carson__27556__102601 NE & NY Optionsheet-1",
+      "panko_class": "mechanical",
+      "sheet": "Options",
+      "cell": "C44",
+      "original_formula": "=C43",
+      "seeded_formula": "=C42",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": null,
+      "seeded_value": 0,
+      "value_changed": true,
+      "difficulty": "obvious",
+      "propagates_to": []
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "workbook": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+  "seeded": "benjamin_rogers__1229__ENRON_$orion_1099.xlsx",
+  "seed_count": 2,
+  "pre_existing_findings": [
+    "Cost Basis!H46",
+    "Cost Basis!H51",
+    "Variable O&M!D31"
+  ],
+  "seeds": [
+    {
+      "seed_id": "benjamin_rogers__1229__ENRON_$orion_1099-1",
+      "panko_class": "hardcoding",
+      "sheet": "Variable O&M",
+      "cell": "R26",
+      "original_formula": "=R23*R24",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "benjamin_rogers__1229__ENRON_$orion_1099-2",
+      "panko_class": "hardcoding",
+      "sheet": "Variable O&M",
+      "cell": "O14",
+      "original_formula": "=O11*O12",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 0,
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}

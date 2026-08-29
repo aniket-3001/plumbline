@@ -1,0 +1,45 @@
+{
+  "workbook": "juan_hernandez__17720__SCHED2001.xlsx",
+  "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\juan_hernandez__17720__SCHED2001.xlsx",
+  "seeded": "juan_hernandez__17720__SCHED2001.xlsx",
+  "seed_count": 2,
+  "pre_existing_findings": [],
+  "seeds": [
+    {
+      "seed_id": "juan_hernandez__17720__SCHED2001-2",
+      "panko_class": "hardcoding",
+      "sheet": "AUG'01",
+      "cell": "D36",
+      "original_formula": "=COUNTIF(D1:D35,\"N\")",
+      "seeded_formula": 2,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 2,
+      "seeded_value": 2,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "juan_hernandez__17720__SCHED2001-3",
+      "panko_class": "hardcoding",
+      "sheet": "SEPT'01",
+      "cell": "Q38",
+      "original_formula": "=COUNTIF(Q1:Q36,\"D\")",
+      "seeded_formula": 3,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": 3,
+      "seeded_value": 3,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    }
+  ]
+}
