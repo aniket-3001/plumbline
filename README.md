@@ -56,44 +56,6 @@ demonstrates it.** A claim that cannot be proved is escalated to a human, never 
 Layers 1 and 2 also run standalone as evaluation baselines, so each layer's contribution is measured
 on identical cases.
 
-## Hot take
-
-**Most agent evaluations are measuring their own harness, and the number moves when you
-fix the harness, so it looks like progress.**
-
-This project's F1 went from 0.680 to 0.830 across three improvements. The detectors' code
-was byte-identical throughout. Every point came from fixing the benchmark:
-
-- a runtime cap that sliced the findings list instead of the proof queue, so bounding cost
-  silently deleted detections — 10 of 20 misses, four workbooks scoring zero
-- an answer key built by different code than the answer, so pre-existing dead cells in
-  Enron's own files were charged as false positives — 11 of 13 of them
-- a seeder that could put two errors in a three-formula row, making the *correct* cell the
-  outlier — the benchmark scoring the tool for not finding something it had deleted
-
-None of that was visible in the summary. `recall 0.630` is a perfectly plausible number
-for a hard problem. It was visible in about fifteen minutes of dumping every individual
-miss with its row context and reading them.
-
-The uncomfortable part is the shape they share. Each bug was a **second implementation of
-something that already existed once** — the cap re-derived "the findings", the exclusion
-list re-derived "what the detectors find", the seeder re-derived "what a row's majority
-is". Every eval harness is full of these, because a harness is by definition a
-reimplementation of the system's own semantics for scoring purposes. They drift silently,
-and the drift is always charged to the model.
-
-So the claim: when an agent benchmark reports a number, the prior should be that some of
-it is harness. **A benchmark result is not evidence until someone has read the individual
-failures.** Not sampled them — read them. If a project cannot show you what its misses
-actually looked like, it does not yet know what it measured.
-
-The defence is not vigilance. It is collapsing the second implementation into the first —
-here, one `pre_existing_findings` that calls the audit's own detectors at the audit's own
-settings, with a test asserting the two agree cell for cell — and where the copy cannot be
-removed, a test that asserts the two agree. Three such tests exist now, and each one was
-written *after* the bug it would have caught.
-
-
 ## Improvement Changelog
 
 Every meaningful experiment, its evidence, and the decision it drove — including the ones that were
@@ -234,6 +196,79 @@ evaluation of commercial audit tools · Schmitz & Jannach's prior error-finding 
 **Added here:** the structural detector suite, the minimal-subgraph context extractor, the
 recomputation-backed verification gate, the triage and escalation policy, the Panko-grounded seeding
 harness, and the evaluation harness with its ablation.
+
+## The main failure mode
+
+**Plumbline checks whether a model is internally consistent. It cannot tell you whether
+the model is right.**
+
+Everything here rests on one assumption: that cells doing the same job should have the
+same formula shape, so a cell that breaks its row's pattern is worth looking at. That
+assumption holds well on real spreadsheets, and it is also the ceiling. A model where
+every formula in a row is legitimately different gives Plumbline nothing to compare
+against — and the audit will report *no problems proved*, which reads like a clean bill
+of health and is not one. Every report states this in a "What this audit did not check"
+section for exactly that reason.
+
+The sharper version: **a model can be perfectly consistent and completely wrong.** If the
+discount rate is 4% and should be 11%, every formula referencing it is uniform, no pattern
+breaks, nothing to prove, silence. That error is worth more than every error Plumbline
+finds, and Plumbline is structurally incapable of seeing it. Judging whether the business
+logic is correct is a job for the analyst, and the tool is built to support that judgement
+rather than replace it — it never edits a workbook, and every report says a qualified
+reviewer must confirm each finding before any change is made.
+
+Three narrower limits, all measured rather than estimated:
+
+- **~7% of formula cells use a function the engine does not implement** (93.0% coverage
+  measured across 1,500 workbooks; ~98.9% after the four functions added here). `OFFSET`
+  and `INDIRECT` are refused *by design*, since they build references while the workbook
+  runs and no static dependency graph exists.
+- **Volatile workbooks are refused, not audited.** `RAND` appears in 2.67% of formula
+  cells. A proof is a comparison of two evaluations, and with `RAND` in the dependency
+  cone the two differ for reasons that have nothing to do with the finding.
+- **The recall figure is against seeded errors, not all errors.** 368 findings in the
+  corpus were already in Enron's files and are excluded from scoring, because no ground
+  truth exists for them. See *How to read these numbers* above.
+
+
+## Hot take
+
+**Most agent evaluations are measuring their own harness, and the number moves when you
+fix the harness, so it looks like progress.**
+
+This project's F1 went from 0.680 to 0.830 across three improvements. The detectors' code
+was byte-identical throughout. Every point came from fixing the benchmark:
+
+- a runtime cap that sliced the findings list instead of the proof queue, so bounding cost
+  silently deleted detections — 10 of 20 misses, four workbooks scoring zero
+- an answer key built by different code than the answer, so pre-existing dead cells in
+  Enron's own files were charged as false positives — 11 of 13 of them
+- a seeder that could put two errors in a three-formula row, making the *correct* cell the
+  outlier — the benchmark scoring the tool for not finding something it had deleted
+
+None of that was visible in the summary. `recall 0.630` is a perfectly plausible number
+for a hard problem. It was visible in about fifteen minutes of dumping every individual
+miss with its row context and reading them.
+
+The uncomfortable part is the shape they share. Each bug was a **second implementation of
+something that already existed once** — the cap re-derived "the findings", the exclusion
+list re-derived "what the detectors find", the seeder re-derived "what a row's majority
+is". Every eval harness is full of these, because a harness is by definition a
+reimplementation of the system's own semantics for scoring purposes. They drift silently,
+and the drift is always charged to the model.
+
+So the claim: when an agent benchmark reports a number, the prior should be that some of
+it is harness. **A benchmark result is not evidence until someone has read the individual
+failures.** Not sampled them — read them. If a project cannot show you what its misses
+actually looked like, it does not yet know what it measured.
+
+The defence is not vigilance. It is collapsing the second implementation into the first —
+here, one `pre_existing_findings` that calls the audit's own detectors at the audit's own
+settings, with a test asserting the two agree cell for cell — and where the copy cannot be
+removed, a test that asserts the two agree. Three such tests exist now, and each one was
+written *after* the bug it would have caught.
+
 
 ## Licence
 
