@@ -1,12 +1,12 @@
-| Metric | naive (baseline) | + screen | + proof (shipped) |
-|---|---|---|---|
-| Precision | 0.010 | 1.000 | 1.000 |
-| Recall | 0.868 | 0.868 | 0.868 |
-| F1 | 0.020 | 0.929 | 0.929 |
-| True positives | 46 | 46 | 46 |
-| False positives | 4420 | 0 | 0 |
-| Cells reported to the analyst | 4834 | 414 | 414 |
-| Findings carrying a proof | 0 | 0 | 32 |
-| Recall, *obvious* | 1.000 | 1.000 | 1.000 |
-| Recall, *realistic* | 1.000 | 1.000 | 1.000 |
-| Recall, *silent* | 0.767 | 0.767 | 0.767 |
+| Metric | naive (baseline) | + block | + screen | + proof (shipped) |
+|---|---|---|---|---|
+| Precision | 0.011 | 0.315 | 1.000 | 1.000 |
+| Recall | 1.000 | 0.943 | 0.924 | 0.924 |
+| F1 | 0.022 | 0.472 | 0.961 | 0.961 |
+| True positives | 53 | 50 | 49 | 49 |
+| False positives | 4607 | 109 | 0 | 0 |
+| Cells reported to the analyst | 5057 | 521 | 411 | 411 |
+| Findings carrying a proof | 0 | 0 | 0 | 35 |
+| Recall, *obvious* | 1.000 | 1.000 | 1.000 | 1.000 |
+| Recall, *realistic* | 1.000 | 1.000 | 1.000 | 1.000 |
+| Recall, *silent* | 1.000 | 0.900 | 0.867 | 0.867 |

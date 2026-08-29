@@ -6,8 +6,12 @@ The brief requires a simple baseline representing "a reasonable basic way to han
 the task before your solution", scored on the same cases with the same method, and a
 comparison showing the size of the improvement. These are those arms.
 
-  naive     Detectors only. Every pattern break and every typed constant among
-            formulas is reported, exactly as found. No screening, no proof.
+  naive     Detectors only, and without any of this project's ideas in them: a
+            typed constant is flagged whenever its row holds formulas of one shape,
+            wherever in the row they sit. Everything found is reported as found.
+  block     Adds `_peers_in_block`: the peers must belong to the same block of the
+            row as the candidate, so a data column is no longer compared against a
+            formula block elsewhere in its row.
   screened  Adds the scratch-column screen: a typed constant is only a dead cell if
             its value equals what the row's formula would produce.
   full      Adds proof by recomputation: apply the repair and show the numbers move,
@@ -18,9 +22,20 @@ comparison showing the size of the improvement. These are those arms.
 **On fairness.** The temptation with a baseline is to build a strawman, and a
 strawman would make every number here worthless. So the naive arm is not a worse
 tool -- it is *this* tool with the two contributions removed. Same detectors, same
-corpus, same seeds, same exclusion lists, same scorer. The delta between arms is
-therefore attributable to the screen and the proof gate specifically, rather than to
-a comparison rigged at the start.
+corpus, same seeds, same scorer. The delta between arms is therefore attributable to
+one named contribution each, rather than to a comparison rigged at the start.
+
+An earlier version of this file got that wrong in a way worth recording: `naive`
+called `detect_dead_cells` at its defaults, so once block membership landed in the
+detector the baseline silently inherited it, and its false positives fell from 4,420
+to 109. The baseline was quietly improving as the tool improved, which is the exact
+mechanism that makes a comparison flattering and meaningless.
+
+**Each arm computes its own exclusion list**, in-process, at that arm's settings.
+Pre-existing findings are excluded because Enron's files are full of anomalies with
+no ground truth; an arm that detects more of them must not be charged for the extra.
+Computing the list per arm rather than refreshing the shared manifests also means
+this script never mutates state another run might be reading.
 
 The naive arm is also a fair description of what a rule-based auditor does: flag
 structural anomalies and hand the analyst a list. That is the "manual process people
@@ -59,7 +74,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 SEEDED = ROOT / "data" / "seeded"
 RESULTS = ROOT / "results"
 
-ARMS = ("naive", "screened", "full")
+ARMS = ("naive", "block", "screened", "full")
+
+#: `naive` runs the detector as it was before block membership existed.
+CONTIGUOUS = {"naive": False, "block": True, "screened": True, "full": True}
 
 
 def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
@@ -74,6 +92,7 @@ def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
         screen_dead_cells,
     )
     from plumbline.scoring import Scorecard, score
+    from plumbline.seeding import pre_existing_findings
 
     total, rows = Scorecard(), []
     started = time.time()
@@ -86,6 +105,7 @@ def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
             continue
 
         t0 = time.time()
+        contiguous = CONTIGUOUS[arm]
         model, _ = _load(str(wb))
         sheets = _formulas_by_sheet(model)
 
@@ -93,10 +113,12 @@ def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
         dead = []
         for sheet, formulas in sheets.items():
             findings.extend(detect_pattern_breaks(sheet, formulas))
-            dead.extend(detect_dead_cells(str(wb), sheet, formulas, min_peers=MIN_ROW_PEERS))
+            dead.extend(detect_dead_cells(str(wb), sheet, formulas,
+                                          min_peers=MIN_ROW_PEERS,
+                                          contiguous=contiguous))
 
-        # The two contributions, added one at a time.
-        findings += dead if arm == "naive" else screen_dead_cells(str(wb), dead)
+        # The contributions, added one at a time.
+        findings += dead if arm in ("naive", "block") else screen_dead_cells(str(wb), dead)
         if arm == "full":
             head = findings[:max_proofs] if max_proofs else findings
             findings = prove(str(wb), head) + findings[len(head):]
@@ -108,7 +130,15 @@ def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
         ]
         # Every arm is scored identically, matching what the product does: an unproved
         # finding is still reported, in a separate section, for a human to judge.
-        card = score(payload, manifest, require_proof=False)
+        # This arm's own exclusion list, so a more sensitive arm is not charged for
+        # the extra pre-existing anomalies it correctly finds.
+        source = Path(manifest["source"])
+        scoped = dict(manifest)
+        if source.exists():
+            scoped["pre_existing_findings"] = pre_existing_findings(
+                source, min_peers=MIN_ROW_PEERS, contiguous=contiguous
+            )
+        card = score(payload, scoped, require_proof=False)
         total = total.merge(card)
         rows.append({
             "workbook": wb.name,
@@ -135,8 +165,8 @@ def table(results: dict[str, dict]) -> str:
         return results[arm]["summary"][key]
 
     lines = [
-        "| Metric | naive (baseline) | + screen | + proof (shipped) |",
-        "|---|---|---|---|",
+        "| Metric | naive (baseline) | + block | + screen | + proof (shipped) |",
+        "|---|---|---|---|---|",
     ]
     for label, key, fmt in (
         ("Precision", "precision", "{:.3f}"),

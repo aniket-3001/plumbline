@@ -74,43 +74,52 @@ otherwise.
 
 ### Baseline vs solution
 
-The brief's mandatory comparison. Three arms, **identical cases, identical scorer** —
-the only thing that changes is how much of this tool is switched on.
-`python scripts/run_arms.py`
+The brief's mandatory comparison. Four arms, **identical cases, identical scorer** —
+each one adds exactly one of this project's contributions. `python scripts/run_arms.py`
 
-| Metric | naive (baseline) | + screen | + proof (shipped) |
-|---|---|---|---|
-| **Precision** | 0.010 | **1.000** | **1.000** |
-| **Recall** | 0.868 | 0.868 | 0.868 |
-| **F1** | 0.020 | **0.929** | **0.929** |
-| True positives | 46 | 46 | 46 |
-| False positives | **4,420** | **0** | **0** |
-| Cells reported to the analyst | 4,834 | 414 | 414 |
-| Findings carrying a proof | 0 | 0 | **32** |
+| Metric | naive (baseline) | + block | + screen | + proof (shipped) |
+|---|---|---|---|---|
+| **Precision** | 0.011 | 0.315 | **1.000** | **1.000** |
+| **Recall** | 1.000 | 0.943 | 0.924 | 0.924 |
+| **F1** | 0.022 | 0.472 | **0.961** | **0.961** |
+| True positives | 53 | 50 | 49 | 49 |
+| False positives | **4,607** | 109 | **0** | **0** |
+| Cells reported to the analyst | 5,057 | 521 | 411 | 411 |
+| Findings carrying a proof | 0 | 0 | 0 | **35** |
 
-**The baseline is not a strawman** — it is this tool with the two contributions removed.
-Same detectors, same corpus, same seeds, same exclusion lists, same scorer. It also
-describes what a rule-based auditor actually does: flag structural anomalies and hand
-over the list. It finds *every* error the shipped system finds. It buries them in 4,420
-false ones, which is the documented failure of the commercial tools and the reason an
-analyst cannot use them.
+**The baseline is not a strawman** — it is this tool with every contribution removed,
+on the same corpus, seeds and scorer. It also describes what a rule-based auditor
+does: flag structural anomalies and hand over the list. It finds **all 53** seeded
+errors. It buries them in 4,607 false ones, which is the documented failure of the
+commercial tools and the reason an analyst cannot use them.
 
-Two things worth reading carefully, because neither is the shape a comparison table
+Each arm computes **its own exclusion list** at its own settings, so a more sensitive
+arm is never charged for the extra pre-existing anomalies it correctly finds.
+
+Three things worth reading carefully, because none is the shape a comparison table
 usually has:
 
-- **The screen does all the F1 work.** 0.020 → 0.929, by asking one question of each
-  candidate: does this typed constant equal what the row's formula would produce? That
-  question costs one extra parse per workbook.
-- **Proof does not improve F1, and is not meant to.** Recall, precision and F1 are
-  identical with it and without it. What changes is that 32 findings arrive carrying a
-  recomputation the analyst can rerun, instead of an assertion they must take on trust.
-  F1 cannot express that difference, which is why proof rate is its own row.
+- **Recall falls monotonically, and that is the trade being made.** 1.000 → 0.924.
+  Each gate costs a true positive or two and removes hundreds to thousands of false
+  ones. The baseline's perfect recall is worthless at precision 0.011.
+- **The screen does most of the work**, 0.472 → 0.961, by asking one question of each
+  candidate: does this typed constant equal what the row's formula would produce?
+- **Proof does not improve F1, and is not meant to.** Precision, recall and F1 are
+  identical with and without it. What changes is that 35 findings arrive carrying a
+  recomputation the analyst can rerun instead of an assertion they must trust. F1
+  cannot express that, which is why proof rate is its own row.
 
-I first scored this arm strictly — an unproved finding not counting at all — and got
-F1 0.753, which would have shown proof *hurting*. That was measuring the proof budget,
-not the proof gate: those findings were never disproved, only never reached. It was also
-not what the product does, since unproved findings are demoted to a *Suspected* section
-rather than discarded. Every arm is now scored the way the product behaves.
+Two mistakes in building this table are worth recording, since both would have
+flattered the result:
+
+- I first scored the proof arm **strictly**, an unproved finding not counting at all,
+  and got F1 0.753 — proof appearing to *hurt*. That measured the proof budget, not
+  the gate: those findings were never disproved, only never reached. It also is not
+  what the product does, which demotes them to a *Suspected* section.
+- The `naive` arm originally called the detector at its defaults, so when block
+  membership landed the **baseline silently inherited it** and its false positives
+  fell from 4,607 to 109. A baseline that improves as the tool improves makes the
+  comparison meaningless. `naive` is now pinned to the pre-contiguity detector.
 
 ### Headline
 
