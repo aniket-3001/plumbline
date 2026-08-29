@@ -131,7 +131,20 @@ def audit_with_model(path: Path, call, tag: str, budget: dict) -> set[tuple[str,
         try:
             reply, usage = call(PROMPT, user)
         except Exception as exc:  # noqa: BLE001 -- one bad chunk must not kill the run
-            print(f"      chunk {n} failed: {type(exc).__name__}: {exc}", flush=True)
+            message = str(exc)
+            # ...but some failures are not per-chunk, and retrying them is worse than
+            # useless. When the account runs out of credit every remaining request
+            # fails identically; the first run of this script logged 76 such failures
+            # before it was killed by hand. Fatal conditions abort immediately.
+            fatal = (
+                "credit balance is too low" in message
+                or "authentication_error" in message
+                or "invalid x-api-key" in message
+                or "permission_error" in message
+            )
+            print(f"      chunk {n} failed: {type(exc).__name__}: {message[:120]}", flush=True)
+            if fatal:
+                raise RuntimeError(f"aborting: {message[:200]}") from exc
             continue
 
         budget["in"] += usage[0]
@@ -187,6 +200,15 @@ def main(argv=None) -> int:
 
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--limit", type=int, default=0, help="only run N workbooks")
+    ap.add_argument(
+        "--max-usd",
+        type=float,
+        default=2.00,
+        help="hard spend ceiling; the run stops cleanly when the measured cost "
+        "reaches it and writes what it has. Raise it deliberately -- this default "
+        "is low because an unattended batch job spends real money, and the first "
+        "full run of this script drained an account mid-corpus.",
+    )
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--out", default="llm_baseline.json")
     ap.add_argument(
@@ -215,14 +237,28 @@ def main(argv=None) -> int:
 
     print(f"direct-prompt baseline: {len(manifests)} workbooks, {args.model}\n", flush=True)
 
+    stopped_early = None
     for mpath in manifests:
         manifest = json.loads(mpath.read_text(encoding="utf-8"))
         seeded = SEEDED / manifest["seeded"]
         if not seeded.exists():
             continue
+
+        spent = budget["in"] / 1e6 * IN_PER_M + budget["out"] / 1e6 * OUT_PER_M
+        if spent >= args.max_usd:
+            stopped_early = (f"spend ceiling reached: ${spent:.2f} of ${args.max_usd:.2f} "
+                             f"after {len(rows)} of {len(manifests)} workbooks")
+            print(f"\nSTOPPING: {stopped_early}", flush=True)
+            print("  Raise --max-usd to continue further.", flush=True)
+            break
         t0 = time.time()
 
-        flagged = audit_with_model(seeded, call, "seeded", budget)
+        try:
+            flagged = audit_with_model(seeded, call, "seeded", budget)
+        except RuntimeError as exc:
+            stopped_early = str(exc)
+            print(f"\n{exc}", flush=True)
+            break
 
         # This arm's own exclusion list: what it flags on the *untouched* original.
         pre: set[tuple[str, str]] = set()
@@ -230,7 +266,14 @@ def main(argv=None) -> int:
         if not original.exists():
             original = EVAL / Path(manifest["workbook"]).name
         if not args.skip_originals and original.exists():
-            pre = audit_with_model(original, call, "original", budget)
+            try:
+                pre = audit_with_model(original, call, "original", budget)
+            except RuntimeError as exc:
+                # The seeded half already cost money; discard this workbook rather
+                # than score it against an exclusion list that was never finished.
+                stopped_early = str(exc)
+                print(f"\n{exc}", flush=True)
+                break
 
         scoped = dict(manifest)
         scoped["pre_existing_findings"] = [f"{s}!{c}" for s, c in pre]
@@ -267,6 +310,9 @@ def main(argv=None) -> int:
         "output_tokens": budget["out"],
         "usd": round(spend, 2),
         "exclusions_computed": not args.skip_originals,
+        "max_usd": args.max_usd,
+        "stopped_early": stopped_early,
+        "complete": stopped_early is None and len(rows) == len(manifests),
         "total_seconds": round(time.time() - started, 1),
     })
     (RESULTS / args.out).write_text(
@@ -277,7 +323,8 @@ def main(argv=None) -> int:
     print("\n" + "=" * 66)
     print("  ARM: direct-prompt LLM")
     print("=" * 66)
-    print(f"  workbooks           {len(rows)}")
+    print(f"  workbooks           {len(rows)}"
+          + ("" if summary["complete"] else f"  ** PARTIAL: {stopped_early or 'run did not finish'} **"))
     print(f"  found               {total.true_positives}")
     print(f"  missed              {total.false_negatives}")
     print(f"  false positives     {total.false_positives}")
