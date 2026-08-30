@@ -1,6 +1,6 @@
 # Pipeline trace - scott_neal__38672__6th floorplan 01.30a.xlsx
 
-*10.6s, min_peers=2*
+*12.5s, min_peers=2*
 
 ## 0 readiness
 
@@ -14,9 +14,9 @@
 
 ## 1 detect
 
-**Tool.** `detect_pattern_breaks + detect_dead_cells(min_peers=2)`
+**Tool.** `audit.detect(min_peers=2, axes=['row', 'col'])`
 
-**Returned.** `{"formula_cells": 400, "pattern_breaks": 10, "dead_candidates": 71}`
+**Returned.** `{"formula_cells": 400, "pattern_breaks": 8, "dead_candidates": 72}`
 
 **Decision.** pass every candidate to the screen
 
@@ -26,7 +26,7 @@
 
 **Tool.** `screen_dead_cells (evaluates each candidate formula in a scratch column)`
 
-**Returned.** `{"kept": 4, "dropped": 67}`
+**Returned.** `{"kept": 5, "dropped": 67}`
 
 **Dropped.**
 
@@ -39,7 +39,7 @@
 - `{"cell": "Floor Plan!W35", "value": "387", "would_be": "=X35+1"}`
 - `{"cell": "Floor Plan!J41", "value": "5", "would_be": "=K41+1"}`
 
-**Decision.** discard 67 of 71 candidates
+**Decision.** discard 67 of 72 candidates
 
 **Why.** A typed constant among formulas is usually just data. Only one whose value equals what the row's formula would produce looks like a frozen formula. This step took the dead-cell detector from 40 false positives to 0 on the workbook that first exposed it.
 
@@ -47,24 +47,25 @@
 
 **Tool.** `prove (write a repaired copy, re-parse, compare; or perturb an input)`
 
-**Returned.** `{"attempted": 14, "proved": 11, "unproved": 3, "deferred_budget": 0}`
+**Returned.** `{"attempted": 13, "proved": 9, "unproved": 4, "deferred_budget": 0}`
 
 **Proved.**
 
-- `{"cell": "Sheet1!K7", "detector": "pattern_break", "proof": "K7: 1219 -> 1216 (-3)"}`
 - `{"cell": "Floor Plan!I14", "detector": "pattern_break", "proof": "I14: 24 -> 1 (-23)"}`
 - `{"cell": "Floor Plan!I21", "detector": "pattern_break", "proof": "I21: 2 -> 4 (+2)"}`
 - `{"cell": "Floor Plan!I26", "detector": "pattern_break", "proof": "I26: 12 -> 1 (-11)"}`
 - `{"cell": "Floor Plan!H38", "detector": "pattern_break", "proof": "H38: 136 -> 0 (-136)"}`
-- `{"cell": "Floor Plan!AA84", "detector": "pattern_break", "proof": "AA84: 1 -> 160 (+159)"}`
+- `{"cell": "Floor Plan!U32", "detector": "dead_cell", "proof": "set V32 602 -> 1602: U32 as-is 603 -> 603 (no response); as formula -> 1603 (responds)"}`
+- `{"cell": "Floor Plan!V47", "detector": "dead_cell", "proof": "set W47 362 -> 1362: V47 as-is 363 -> 363 (no response); as formula -> 1363 (responds)"}`
 
 **Not proved.**
 
-- `{"cell": "Floor Plan!I40", "outcome": "repair changes nothing; not reported"}`
+- `{"cell": "Floor Plan!N58", "outcome": "repair changes nothing; not reported"}`
 - `{"cell": "Floor Plan!C76", "outcome": "repair changes nothing; not reported"}`
 - `{"cell": "Floor Plan!J78", "outcome": "recomputation failed: ValueExcelError"}`
+- `{"cell": "Floor Plan!K40", "outcome": "repair changes nothing; not reported"}`
 
-**Decision.** 11 findings survive; 3 are demoted to suspected
+**Decision.** 9 findings survive; 4 are demoted to suspected
 
 **Why.** This is the only gate that can promote a suspicion to a finding. A repair that changes no number proves nothing and is reported as suspected, never as an error.
 
@@ -72,7 +73,7 @@
 
 **Tool.** `report.render_markdown`
 
-**Returned.** `{"proved": 11, "suspected": 3, "blind_spots_declared": true}`
+**Returned.** `{"proved": 9, "suspected": 4, "blind_spots_declared": true}`
 
 **Decision.** report, do not act
 

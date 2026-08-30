@@ -43,36 +43,41 @@ Three traces, chosen to cover the outcomes that actually occur:
 
 ### Trace 1 — how tools respond, and what gets thrown away
 
-On `chris_germany__1938`, 1,396 formula cells:
+On `chris_germany__1938`, 1,395 formula cells:
 
 ```
-1 detect    pattern_breaks 1 · dead_candidates 28
-2 screen    kept 1 · dropped 27
-              Sheet1!B7   30468   would be =+A7
-              Sheet1!E7   10000   would be =+D7
-              Sheet1!B10  30523   would be =+A10
-3 prove     attempted 2 · proved 2 · unproved 0
-              Sheet1!U8    10000 -> 2.1562 (-9997.8438)
-              Sheet1!AH25  set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000
-                           (no response); as formula -> 6000 (responds)
-5 triage    proved 2 · suspected 0 · report, do not act
+1 detect    pattern_breaks 2 - dead_candidates 28
+2 screen    kept 2 - dropped 26
+              Sheet1!E7      10000      would be =+D7
+              Sheet1!E8      2.1562     would be =+D8
+              Sheet1!E10     -10000     would be =+D10
+3 prove     attempted 4 - proved 4 - unproved 0
+              Sheet1!U46  U46: 0 -> -6800 (-6800)
+              Sheet1!AI74  AI74: -50000 -> 2.3845 (+50002.3845)
+5 triage    proved 4 - report, do not act
 ```
 
-**The 27 discards are the point.** A trace listing only survivors tells you what the
-tool believes; a trace listing what it discarded tells you whether to believe it.
-`B7 = 30468` sits in a row of carry-forward formulas and *looks* like a frozen
-formula, but `=+A7` would not produce 30468 — so it is ordinary typed data and the
-screen says so with the number that settles it. This step is what took the dead-cell
-detector from 40 false positives to 0.
+**The 26 discards are the point.** A trace listing only survivors tells you what
+the tool believes; a trace listing what it discarded tells you whether to believe
+it. A constant sitting in a row of carry-forward formulas *looks* like a frozen
+formula, and the screen answers with the number that settles it: the row's formula
+would not produce that value, so it is ordinary typed data. This step took the
+dead-cell detector from 40 false positives to 0.
+
+Detection runs along **both axes** here, via `audit.detect` -- the single definition
+of what this project detects. An earlier version of this script called the detectors
+directly and so kept tracing a row-only pipeline after the shipped one gained a
+column pass, which is a trace of a product the reader does not have.
 
 ### Trace 2 — retries, failures, and demotion
 
-`scott_neal__38672` attempts 14 proofs and 3 fail, each differently:
+`scott_neal__38672` attempts 13 proofs and 4 fail:
 
 ```
-Floor Plan!I40   repair changes nothing; not reported
-Floor Plan!C76   repair changes nothing; not reported
-Floor Plan!J78   recomputation failed: ValueExcelError
+Floor Plan!N58     repair changes nothing; not reported
+Floor Plan!C76     repair changes nothing; not reported
+Floor Plan!J78     recomputation failed: ValueExcelError
+Floor Plan!K40     repair changes nothing; not reported
 ```
 
 The first two are the interesting case. Both genuinely break their row's pattern, so

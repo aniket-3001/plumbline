@@ -1,6 +1,6 @@
 {
   "workbook": "scott_neal__38672__6th floorplan 01.30a.xlsx",
-  "seconds": 10.6,
+  "seconds": 12.5,
   "min_peers": 2,
   "steps": [
     {
@@ -15,11 +15,11 @@
     },
     {
       "stage": "1 detect",
-      "tool": "detect_pattern_breaks + detect_dead_cells(min_peers=2)",
+      "tool": "audit.detect(min_peers=2, axes=['row', 'col'])",
       "returned": {
         "formula_cells": 400,
-        "pattern_breaks": 10,
-        "dead_candidates": 71
+        "pattern_breaks": 8,
+        "dead_candidates": 72
       },
       "decision": "pass every candidate to the screen",
       "why": "Detection is deliberately loose. Precision is bought downstream, by recomputation, not by guessing harder here."
@@ -28,7 +28,7 @@
       "stage": "2 screen",
       "tool": "screen_dead_cells (evaluates each candidate formula in a scratch column)",
       "returned": {
-        "kept": 4,
+        "kept": 5,
         "dropped": 67
       },
       "dropped_examples": [
@@ -73,24 +73,19 @@
           "would_be": "=K41+1"
         }
       ],
-      "decision": "discard 67 of 71 candidates",
+      "decision": "discard 67 of 72 candidates",
       "why": "A typed constant among formulas is usually just data. Only one whose value equals what the row's formula would produce looks like a frozen formula. This step took the dead-cell detector from 40 false positives to 0 on the workbook that first exposed it."
     },
     {
       "stage": "3 prove",
       "tool": "prove (write a repaired copy, re-parse, compare; or perturb an input)",
       "returned": {
-        "attempted": 14,
-        "proved": 11,
-        "unproved": 3,
+        "attempted": 13,
+        "proved": 9,
+        "unproved": 4,
         "deferred_budget": 0
       },
       "proofs": [
-        {
-          "cell": "Sheet1!K7",
-          "detector": "pattern_break",
-          "proof": "K7: 1219 -> 1216 (-3)"
-        },
         {
           "cell": "Floor Plan!I14",
           "detector": "pattern_break",
@@ -112,14 +107,19 @@
           "proof": "H38: 136 -> 0 (-136)"
         },
         {
-          "cell": "Floor Plan!AA84",
-          "detector": "pattern_break",
-          "proof": "AA84: 1 -> 160 (+159)"
+          "cell": "Floor Plan!U32",
+          "detector": "dead_cell",
+          "proof": "set V32 602 -> 1602: U32 as-is 603 -> 603 (no response); as formula -> 1603 (responds)"
+        },
+        {
+          "cell": "Floor Plan!V47",
+          "detector": "dead_cell",
+          "proof": "set W47 362 -> 1362: V47 as-is 363 -> 363 (no response); as formula -> 1363 (responds)"
         }
       ],
       "retries_and_rejections": [
         {
-          "cell": "Floor Plan!I40",
+          "cell": "Floor Plan!N58",
           "outcome": "repair changes nothing; not reported"
         },
         {
@@ -129,17 +129,21 @@
         {
           "cell": "Floor Plan!J78",
           "outcome": "recomputation failed: ValueExcelError"
+        },
+        {
+          "cell": "Floor Plan!K40",
+          "outcome": "repair changes nothing; not reported"
         }
       ],
-      "decision": "11 findings survive; 3 are demoted to suspected",
+      "decision": "9 findings survive; 4 are demoted to suspected",
       "why": "This is the only gate that can promote a suspicion to a finding. A repair that changes no number proves nothing and is reported as suspected, never as an error."
     },
     {
       "stage": "5 triage",
       "tool": "report.render_markdown",
       "returned": {
-        "proved": 11,
-        "suspected": 3,
+        "proved": 9,
+        "suspected": 4,
         "blind_spots_declared": true
       },
       "decision": "report, do not act",

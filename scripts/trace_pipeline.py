@@ -15,7 +15,7 @@ a decision the pipeline made on evidence it can show you.
 Stages, in order, with the gate each applies:
 
   0 readiness      volatile / non-deterministic workbooks are refused outright
-  1 detect         row-majority pattern breaks, and typed constants among formulas
+  1 detect         majority pattern breaks along rows and columns; typed constants
   2 screen         does the constant match what the row's formula would produce?
   3 prove          apply the repair (or perturb an input) and recompute
   4 interpret      model supplies intent; the graph vetoes anything it invented
@@ -42,11 +42,11 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 def trace(path: Path, *, max_proofs: int, min_peers: int | None) -> dict:
     from plumbline.audit import (
+        AXES,
         MIN_ROW_PEERS,
         _formulas_by_sheet,
         _load,
-        detect_dead_cells,
-        detect_pattern_breaks,
+        detect,
         prove,
         screen_dead_cells,
     )
@@ -84,13 +84,13 @@ def trace(path: Path, *, max_proofs: int, min_peers: int | None) -> dict:
     # --- 1. detect ----------------------------------------------------------
     model, _ = _load(str(path))
     sheets = _formulas_by_sheet(model)
-    breaks, dead = [], []
-    for sheet, formulas in sheets.items():
-        breaks.extend(detect_pattern_breaks(sheet, formulas))
-        dead.extend(detect_dead_cells(str(path), sheet, formulas, min_peers=peers))
+    # Through `audit.detect`. A trace produced by a private copy of the detection
+    # logic documents a pipeline the reader does not have -- this file would have
+    # gone on describing a row-only tool after the shipped one gained a column pass.
+    breaks, dead = detect(str(path), sheets, min_peers=peers, axes=AXES)
     steps.append({
         "stage": "1 detect",
-        "tool": f"detect_pattern_breaks + detect_dead_cells(min_peers={peers})",
+        "tool": f"audit.detect(min_peers={peers}, axes={list(AXES)})",
         "returned": {
             "formula_cells": sum(len(v) for v in sheets.values()),
             "pattern_breaks": len(breaks),
