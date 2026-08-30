@@ -21,6 +21,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
+#: The full measurement record. The README keeps the headline and the changelog;
+#: the detailed tables live here, so this is what most of these checks parse.
+EVAL_DOC = ROOT / "Docs" / "EVALUATION.md"
 ARMS = ROOT / "results" / "arms.json"
 BASELINE = ROOT / "results" / "baseline.json"
 
@@ -28,8 +31,8 @@ BASELINE = ROOT / "results" / "baseline.json"
 ROW = r"^\|\s*{label}\s*\|(.+)\|\s*$"
 
 
-def _cells(label: str, width: int | None = None) -> list[str]:
-    """The cells of the README table row whose first column is `label`.
+def _cells(label: str, width: int | None = None, doc: Path | None = None) -> list[str]:
+    """The cells of the table row whose first column is `label`.
 
     Matched by **shape**, not by document order. The same label legitimately appears
     in more than one table -- "Precision" is a row of the four-arm comparison and
@@ -37,15 +40,16 @@ def _cells(label: str, width: int | None = None) -> list[str]:
     whichever table happens to come first, and adding a section above rearranges
     what the test is checking. Requiring the expected column count pins it.
     """
-    text = README.read_text(encoding="utf-8")
+    source = doc or EVAL_DOC
+    text = source.read_text(encoding="utf-8")
     rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
-    assert rows, f"README has no table row labelled {label!r}"
+    assert rows, f"{source.name} has no table row labelled {label!r}"
     for row in rows:
         cells = [c.strip().replace("*", "").replace(",", "") for c in row.split("|")]
         if width is None or len(cells) == width:
             return cells
     raise AssertionError(
-        f"no {width}-column table row labelled {label!r}; "
+        f"no {width}-column table row labelled {label!r} in {source.name}; "
         f"found widths {[len(r.split('|')) for r in rows]}"
     )
 
@@ -117,7 +121,7 @@ class TestHeadlineLadder:
         return json.loads(cls.V5.read_text(encoding="utf-8"))["summary"]
 
     def _ladder_final(self, label: str) -> float:
-        text = README.read_text(encoding="utf-8")
+        text = EVAL_DOC.read_text(encoding="utf-8")
         rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
         ladder = [r for r in rows if len(r.split("|")) == 5]
         assert ladder, f"no 5-column ladder row for {label}"
@@ -140,7 +144,7 @@ class TestCurrentBaselineTable:
     """The row-only vs row+column table is the current state, and must track it."""
 
     def _two_col(self, label: str) -> tuple[float, float]:
-        text = README.read_text(encoding="utf-8")
+        text = EVAL_DOC.read_text(encoding="utf-8")
         rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
         pair = [r for r in rows if len(r.split("|")) == 2]
         assert pair, f"no 2-column row for {label}"
@@ -168,9 +172,9 @@ class TestProseFigures:
 
     def test_the_excluded_population_is_stated_correctly(self, baseline):
         count = baseline["pre_existing_hits"]
-        text = README.read_text(encoding="utf-8")
+        text = EVAL_DOC.read_text(encoding="utf-8")
         assert f"{count} findings that were already in the original Enron files" in text, (
-            f"README should say {count} pre-existing findings"
+            f"EVALUATION.md should say {count} pre-existing findings"
         )
 
     def test_the_test_count_is_current(self):
@@ -190,4 +194,43 @@ class TestProseFigures:
         assert claimed, "README no longer states an expected pytest count"
         assert int(claimed.group(1)) == collected, (
             f"README claims {claimed.group(1)} passed; pytest collects {collected}"
+        )
+
+
+class TestReadmeHeadlineNumbers:
+    """The README quotes a few figures directly, and those must track the runs too.
+
+    Splitting the detail into EVALUATION.md moved most tables out of the README, but
+    the summary tables that sell the project stayed. They are the numbers most people
+    will read and the fewest people will check, so they get their own guard.
+    """
+
+    def test_does_it_work_table_matches_the_arms_run(self, arms):
+        for label, key in (("Precision", "precision"), ("F1", "f1")):
+            stated = _cells(label, width=2, doc=README)
+            naive, full = (_num(c) for c in stated)
+            assert naive == pytest.approx(arms["naive"]["summary"][key], abs=0.001)
+            assert full == pytest.approx(arms["full"]["summary"][key], abs=0.001)
+
+    def test_cells_to_judge_matches_the_arms_run(self, arms):
+        naive, full = (_num(c) for c in _cells("Cells you must judge, per workbook",
+                                               width=2, doc=README))
+        books = arms["full"]["summary"]["workbooks"]
+        assert round(arms["naive"]["summary"]["reported_total"] / books) == naive
+        assert round(arms["full"]["summary"]["reported_total"] / books) == full
+
+    def test_silent_recall_comparison_is_like_for_like(self):
+        """29% vs 82% both come from the 12-workbook run. The v6 corpus figure is
+        higher, and quoting it against the model arm would compare two different
+        question papers -- the exact mistake this project's hot take is about."""
+        llm = ROOT / "results" / "llm_baseline.json"
+        if not llm.exists():
+            pytest.skip("llm_baseline.json absent")
+        summary = json.loads(llm.read_text(encoding="utf-8"))["summary"]
+        prompt, plumbline = (_num(c) for c in _cells("Recall on **silent** errors",
+                                                     width=2, doc=README))
+        assert prompt == pytest.approx(summary["recall_by_difficulty"]["silent"], abs=0.001)
+        assert plumbline < 0.9, (
+            "the Plumbline side of this comparison must be the 12-workbook figure "
+            "(~0.824), not the v6 corpus headline"
         )
