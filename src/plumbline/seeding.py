@@ -95,28 +95,46 @@ class Seed:
         return "realistic"
 
 
-def _majority_rows(formulas: dict[str, str]) -> dict[int, list[tuple[str, int, str]]]:
-    """Rows where at least 3 formula cells agree on a single shape.
+def _majority_lines(
+    formulas: dict[str, str], axis: str = "row"
+) -> dict[int, list[tuple[str, int, str]]]:
+    """Rows -- or columns -- where at least 3 formula cells agree on a single shape.
 
     These are the only places worth seeding: the agreement is what makes a
     deviation detectable in principle.
+
+    The axis matters because a benchmark can only reward what it plants. Seeding
+    exclusively along rows made the corpus structurally incapable of measuring
+    column-wise detection: the column pass recovered **zero** of the 53 seeds, not
+    because it is useless but because no error was ever placed where it could see
+    one. A detector cannot be judged against a benchmark that never poses its
+    question.
     """
-    by_row: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
+    groups: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
     for ref, text in formulas.items():
         try:
             row, col = split_ref(ref)
         except ValueError:
             continue
-        by_row[row].append((ref, col, text))
+        line, position = (row, col) if axis == "row" else (col, row)
+        groups[line].append((ref, position, text))
 
     out = {}
-    for row, members in by_row.items():
+    for line, members in groups.items():
         if len(members) < 3:
             continue
-        shapes = {normalise(t, row, c) for _, c, t in members}
+        shapes = set()
+        for ref, _pos, text in members:
+            r, c = split_ref(ref)
+            shapes.add(normalise(text, r, c))
         if len(shapes) == 1:  # unanimous -- the cleanest possible ground truth
-            out[row] = members
+            out[line] = members
     return out
+
+
+def _majority_rows(formulas: dict[str, str]) -> dict[int, list[tuple[str, int, str]]]:
+    """Backwards-compatible alias; the row axis is what v1..v5 measured."""
+    return _majority_lines(formulas, "row")
 
 
 def _shift_range_end(formula: str, delta: int) -> str | None:
@@ -166,15 +184,24 @@ def _shift_first_reference(formula: str, delta: int) -> str | None:
     return formula[: m.start()] + replacement + formula[m.end() :]
 
 
-def plan_seeds(path: Path, rng: random.Random, max_seeds: int = 3) -> list[dict]:
-    """Choose what to inject, without touching the file yet."""
+def plan_seeds(
+    path: Path, rng: random.Random, max_seeds: int = 3, axes: tuple[str, ...] = ("row",)
+) -> list[dict]:
+    """Choose what to inject, without touching the file yet.
+
+    `axes` defaults to row-only, which is what v1..v5 measured. Passing both plants
+    errors that only a column-wise pass can see, so the corpus can finally ask that
+    question -- but it also makes a different corpus, and therefore a new benchmark
+    rather than the next rung of that ladder.
+    """
     from poc import load_formulas
 
     sheets = load_formulas(str(path))
     candidates: list[dict] = []
 
     for sheet, formulas in sheets.items():
-        for row, members in _majority_rows(formulas).items():
+      for axis in axes:
+        for line, members in _majority_lines(formulas, axis).items():
             # Seed the interior, never the first cell -- the majority must survive.
             for ref, col, text in members[1:]:
                 up = text.upper()
@@ -258,19 +285,25 @@ def plan_seeds(path: Path, rng: random.Random, max_seeds: int = 3) -> list[dict]
     # that, by the benchmark's own definition, is no longer there.
     chosen: list[dict] = []
     used_cells: set[tuple[str, str]] = set()
-    used_rows: set[tuple[str, int]] = set()
+    used_lines: set[tuple[str, str, int]] = set()
     per_class: dict[str, int] = defaultdict(int)
     cap = max(1, max_seeds // 2)
     for cand in candidates:
         key = (cand["sheet"], cand["cell"])
-        row_key = (cand["sheet"], _row_of(cand["cell"]))
-        if key in used_cells or row_key in used_rows:
+        row, col = _row_of(cand["cell"]), _col_of(cand["cell"])
+        # One seed per row **and** per column. The row rule exists because two
+        # errors in a three-formula row make the corrupted pair the majority and
+        # the correct cell the outlier. Seeding along columns as well makes the
+        # column the same hazard, and a corpus that plants both without this would
+        # reintroduce the bug on the other axis.
+        lines = {(cand["sheet"], "row", row), (cand["sheet"], "col", col)}
+        if key in used_cells or lines & used_lines:
             continue
         if per_class[cand["panko_class"]] >= cap:
             continue
         chosen.append(cand)
         used_cells.add(key)
-        used_rows.add(row_key)
+        used_lines |= lines
         per_class[cand["panko_class"]] += 1
         if len(chosen) >= max_seeds:
             break
@@ -279,6 +312,13 @@ def plan_seeds(path: Path, rng: random.Random, max_seeds: int = 3) -> list[dict]
 
 def _row_of(ref: str) -> int:
     return int(re.sub(r"[^0-9]", "", ref) or 0)
+
+
+def _col_of(ref: str) -> int:
+    from openpyxl.utils import column_index_from_string
+
+    letters = re.sub(r"[^A-Z]", "", ref.upper())
+    return column_index_from_string(letters) if letters else 0
 
 
 def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:

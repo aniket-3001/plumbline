@@ -428,3 +428,126 @@ class TestContiguityBlindSpot:
         from plumbline.seeding import plan_seeds  # noqa: F401  -- one seed per row
 
         assert True
+
+
+class TestTotalsAreNotErrors:
+    """A run of values with a sum at the end is the commonest shape in any sheet.
+
+    Along that run the sum is the only cell with a different formula, so a majority
+    vote calls the *total* the error -- and does it everywhere, because totals are
+    everywhere. On `darrell_schoolcraft__7407` the column pass went from 1 finding
+    to 124 on exactly this: rows 7-30 are hourly values, row 31 is `=SUM(E7:E30)`,
+    flagged in all four columns.
+
+    The benchmark could not have caught this. Those cells are all pre-existing, so
+    they land in the excluded bucket and precision looks untouched -- the same
+    blindness as the `min_peers` ablation, found this time before shipping.
+    """
+
+    @staticmethod
+    def _breaks(path, axis):
+        from plumbline.audit import detect_pattern_breaks
+        from poc import load_formulas
+
+        out = []
+        for sheet, formulas in load_formulas(str(path)).items():
+            out += detect_pattern_breaks(sheet, formulas, axis=axis)
+        return {f.cell for f in out}
+
+    @staticmethod
+    def _column_with_total(path):
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for row in range(2, 12):
+            ws.cell(row=row, column=1, value=row)
+            ws.cell(row=row, column=2, value=f"=A{row}*13.5")
+        ws["B12"] = "=SUM(B2:B11)"      # the total, not an error
+        wb.save(path)
+        return path
+
+    def test_a_column_total_is_not_flagged(self, tmp_path):
+        path = self._column_with_total(tmp_path / "total.xlsx")
+        assert "B12" not in self._breaks(path, "col")
+
+    def test_a_real_break_in_the_same_column_is_still_flagged(self, tmp_path):
+        """The guard must not be a blanket amnesty for anything containing SUM."""
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for row in range(2, 12):
+            ws.cell(row=row, column=1, value=row)
+            ws.cell(row=row, column=2, value=f"=A{row}*13.5")
+        ws["B7"] = "=A6*13.5"           # points one row up: a real break
+        ws["B12"] = "=SUM(B2:B11)"      # still the total
+        path = tmp_path / "mixed.xlsx"
+        wb.save(path)
+        found = self._breaks(path, "col")
+        assert "B7" in found, "a genuine break must survive the totals guard"
+        assert "B12" not in found
+
+    def test_a_subtotal_spanning_part_of_the_run_is_also_spared(self, tmp_path):
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for row in range(2, 12):
+            ws.cell(row=row, column=1, value=row)
+            ws.cell(row=row, column=2, value=f"=A{row}*2")
+        ws["B12"] = "=SUM(B2:B7)"       # covers half the run
+        path = tmp_path / "subtotal.xlsx"
+        wb.save(path)
+        assert "B12" not in self._breaks(path, "col")
+
+
+class TestSeedingCanTargetEitherAxis:
+    def test_column_sites_are_reachable(self, tmp_path):
+        """Row-only seeding made the corpus unable to measure column detection at
+        all -- the column pass recovered zero of 53 seeds because none was ever
+        placed where it could see one."""
+        import random
+
+        from openpyxl import Workbook
+
+        from plumbline.seeding import plan_seeds
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        # A column of like formulas, and no row anywhere holds three of them.
+        for row in range(2, 12):
+            ws.cell(row=row, column=1, value=row)
+            ws.cell(row=row, column=2, value=f"=A{row}*3")
+        path = tmp_path / "colonly.xlsx"
+        wb.save(path)
+
+        assert plan_seeds(path, random.Random(0), max_seeds=3, axes=("row",)) == []
+        assert plan_seeds(path, random.Random(0), max_seeds=3, axes=("row", "col"))
+
+    def test_one_seed_per_column_as_well_as_per_row(self, tmp_path):
+        import random
+
+        from openpyxl import Workbook
+
+        from plumbline.seeding import plan_seeds
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "S"
+        for row in range(2, 14):
+            for col in range(1, 6):
+                ws.cell(row=row, column=col,
+                        value=row * col if col == 1 else f"=A{row}*{col}")
+        path = tmp_path / "grid.xlsx"
+        wb.save(path)
+
+        plan = plan_seeds(path, random.Random(1), max_seeds=8, axes=("row", "col"))
+        cols = [c["cell"].rstrip("0123456789") for c in plan]
+        rows = ["".join(ch for ch in c["cell"] if ch.isdigit()) for c in plan]
+        assert len(cols) == len(set(cols)), f"two seeds share a column: {plan}"
+        assert len(rows) == len(set(rows)), f"two seeds share a row: {plan}"

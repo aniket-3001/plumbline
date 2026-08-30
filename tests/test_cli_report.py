@@ -215,3 +215,89 @@ class TestConsoleOutputIsAsciiEverywhere:
             if re.search(r"[^\x00-\x7F]", line)
         ]
         assert not offenders, f"non-ASCII in cli.py: {offenders}"
+
+
+class TestFindingsAreOrderedByMoney:
+    """Detection order is an artifact of the sheet walk. Nobody reads in that order.
+
+    The reader is signing off a board pack. If they get through half the list, that
+    half has to be the half that matters, so the largest correction goes first.
+    """
+
+    @staticmethod
+    def _report(*specs):
+        from plumbline.audit import AuditReport, Finding
+
+        report = AuditReport(workbook="x.xlsx", formula_cells=99)
+        for cell, detector, delta, probe in specs:
+            report.findings.append(Finding(
+                sheet="S", cell=cell, detector=detector, panko_class="m",
+                actual="=1", expected="=2", reason="r", proved=True, proof="p",
+                baseline_value=0, repaired_value=delta, delta=delta,
+                probe_response=probe,
+            ))
+        return report
+
+    def test_largest_absolute_correction_first(self):
+        report = self._report(
+            ("A1", "pattern_break", 12, None),
+            ("B2", "pattern_break", -5000, None),
+            ("C3", "pattern_break", 300, None),
+        )
+        assert [f.cell for f in report.proved] == ["B2", "C3", "A1"]
+
+    def test_a_loss_outranks_a_smaller_gain(self):
+        """Sign must not decide priority -- a -3,000,000 error is not less urgent
+        than a +40 one."""
+        report = self._report(("A1", "pattern_break", 40, None),
+                              ("B2", "pattern_break", -3_000_000, None))
+        assert [f.cell for f in report.proved] == ["B2", "A1"]
+
+    def test_dead_cells_sort_last_and_stably(self):
+        """A dead cell's impact today is zero -- that is what makes it dead -- so it
+        cannot compete on money, but its order must not wander between runs."""
+        report = self._report(
+            ("Z9", "dead_cell", None, 1000),
+            ("A1", "dead_cell", None, 1000),
+            ("M5", "pattern_break", 7, None),
+        )
+        assert [f.cell for f in report.proved] == ["M5", "A1", "Z9"]
+
+
+class TestTheHeadlineFigureIsARealCorrection:
+    """`delta` used to mean two different things, and the headline read the wrong one.
+
+    For a pattern break it is the money impact of the repair. For a dead cell it was
+    the size of the probe's perturbation -- always 1000, an artifact of how the proof
+    is constructed. The report then announced "the largest single correction changes
+    a figure by +1,000" on a workbook whose largest real correction was +159.
+    """
+
+    def test_a_probe_response_is_never_quoted_as_a_correction(self):
+        from plumbline.audit import AuditReport, Finding
+
+        report = AuditReport(workbook="x.xlsx", formula_cells=99)
+        report.findings = [
+            Finding(sheet="S", cell="A1", detector="dead_cell", panko_class="hardcoding",
+                    actual="603", expected="=B1", reason="r", proved=True, proof="p",
+                    baseline_value=603, delta=None, probe_response=1000),
+            Finding(sheet="S", cell="B2", detector="pattern_break", panko_class="m",
+                    actual="=X1", expected="=X2", reason="r", proved=True, proof="p",
+                    baseline_value=1, repaired_value=160, delta=159),
+        ]
+        body = render_markdown(report)
+        assert "+159" in body
+        assert "1,000" not in body, "the probe perturbation is not a correction"
+
+    def test_a_dead_cell_alone_quotes_no_figure(self):
+        from plumbline.audit import AuditReport, Finding
+
+        report = AuditReport(workbook="x.xlsx", formula_cells=99)
+        report.findings = [
+            Finding(sheet="S", cell="A1", detector="dead_cell", panko_class="hardcoding",
+                    actual="603", expected="=B1", reason="r", proved=True, proof="p",
+                    baseline_value=603, delta=None, probe_response=1000),
+        ]
+        body = render_markdown(report)
+        assert "1 proved problem" in body
+        assert "largest single correction" not in body

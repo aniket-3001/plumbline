@@ -11,6 +11,7 @@ Everything else is reported as unproved and, under the strict contract, dropped.
 from __future__ import annotations
 
 import os
+import re
 import sys
 import tempfile
 import warnings
@@ -23,6 +24,8 @@ warnings.filterwarnings("ignore")
 _SCRIPTS = Path(__file__).resolve().parents[2] / "scripts"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
+
+from openpyxl.utils import column_index_from_string  # noqa: E402
 
 from poc import native, normalise, rebase, split_ref  # noqa: E402
 
@@ -40,7 +43,16 @@ class Finding:
     proof: str = ""
     baseline_value: object = None
     repaired_value: object = None
+    #: How much the reported figure moves if this cell is corrected **today**.
+    #: For a dead cell that is zero by definition -- being correct today is what
+    #: makes it dead -- so `delta` stays None there and the probe's effect goes in
+    #: `probe_response`. Conflating the two put the probe's perturbation size into
+    #: the report's "largest single correction" headline, which was simply false.
     delta: object = None
+    probe_response: object = None
+    #: Which orientation found this. Two detectors can flag the same cell from
+    #: different directions, and the report says which so a reader can check it.
+    axis: str = "row"
     impacted: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -61,7 +73,25 @@ class AuditReport:
 
     @property
     def proved(self) -> list[Finding]:
-        return [f for f in self.findings if f.proved]
+        """Proved findings, largest money impact first.
+
+        Detection order is an artifact of how the sheets happened to be walked, and
+        it is not the order anyone reads in. The user is signing off a board pack:
+        a correction worth three million belongs above one worth thirty, because if
+        they only get through half the list, that is the half that has to matter.
+
+        Dead cells have no delta -- repairing one changes nothing today, which is
+        the whole reason they need a sensitivity probe -- so they sort after the
+        cells whose impact is a number, and by address among themselves so the order
+        is at least stable between runs.
+        """
+        def impact(f: Finding):
+            delta = f.delta if isinstance(f.delta, (int, float)) else None
+            return (0 if delta is not None else 1,
+                    -abs(delta) if delta is not None else 0,
+                    f.sheet, f.cell)
+
+        return sorted((f for f in self.findings if f.proved), key=impact)
 
     def to_dict(self) -> dict:
         return {
@@ -100,38 +130,78 @@ def _formulas_by_sheet(model) -> dict[str, dict[str, str]]:
     return out
 
 
-def detect_pattern_breaks(sheet: str, formulas: dict[str, str]) -> list[Finding]:
-    """A formula cell whose shape disagrees with its row neighbours."""
-    by_row: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
+#: The two orientations a spreadsheet pattern can run in.
+#:
+#: Everything here was row-only until v6, and the report said so in its blind-spots
+#: section. That was half the surface: a model has line items down the rows and
+#: periods across the columns, so a growth-rate column or a running total is a
+#: pattern the row-wise pass cannot see at all. The detectors are identical apart
+#: from which coordinate groups and which varies, so the axis is a parameter rather
+#: than a second copy of the logic that would drift from the first.
+AXES = ("row", "col")
+
+
+def _grouped(formulas: dict[str, str], axis: str):
+    """(line, [(ref, position, text)]) for each row -- or each column.
+
+    `position` is the coordinate that varies along the line, which is what both the
+    majority vote and the nearest-peer search need; `line` is the one that is fixed.
+    """
+    groups: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
     for ref, text in formulas.items():
         try:
             row, col = split_ref(ref)
         except ValueError:
             continue
-        by_row[row].append((ref, col, text))
+        line, position = (row, col) if axis == "row" else (col, row)
+        groups[line].append((ref, position, text))
+    return groups
 
+
+def detect_pattern_breaks(
+    sheet: str, formulas: dict[str, str], *, axis: str = "row"
+) -> list[Finding]:
+    """A formula cell whose shape disagrees with its neighbours along one axis."""
     findings: list[Finding] = []
-    for row, members in by_row.items():
+    for line, members in _grouped(formulas, axis).items():
         if len(members) < 3:
             continue
-        shapes = {ref: normalise(text, row, col) for ref, col, text in members}
+
+        # Drop aggregates *before* the vote, not after. A total is a deviant by any
+        # measure, so leaving it in means a line holding both a total and a real
+        # error has two deviants, fails the "exactly one" rule, and reports nothing.
+        # Filtering first restores the error to being the only deviant.
+        positions = [p for _, p, _ in members]
+        members = [
+            (r, p, t) for r, p, t in members
+            if not _aggregates_its_peers(t, axis, [q for q in positions if q != p])
+        ]
+        if len(members) < 3:
+            continue
+
+        shapes = {}
+        for ref, _pos, text in members:
+            r, c = split_ref(ref)
+            shapes[ref] = normalise(text, r, c)
         counts = Counter(shapes.values())
         majority, n = counts.most_common(1)[0]
         # Require a clear majority: exactly one deviant, everyone else agreeing.
         if n != len(members) - 1:
             continue
-        conformers = [(r, c, t) for r, c, t in members if shapes[r] == majority]
-        for ref, col, text in members:
+        conformers = [(r, p, t) for r, p, t in members if shapes[r] == majority]
+        for ref, pos, text in members:
             if shapes[ref] == majority:
                 continue
             # Translate from the NEAREST conforming peer. Rebasing shifts every
-            # relative reference by the column distance, so a distant peer can push
-            # references off the left edge of the sheet entirely.
-            twin_ref, twin_col, twin_text = min(conformers, key=lambda m: abs(m[1] - col))
-            twin_row, _ = split_ref(twin_ref)
+            # relative reference by the distance, so a distant peer can push
+            # references off the edge of the sheet entirely.
+            twin_ref, _twin_pos, twin_text = min(conformers, key=lambda m: abs(m[1] - pos))
+            twin_row, twin_col = split_ref(twin_ref)
+            row, col = split_ref(ref)
             expected = rebase(twin_text, twin_row, twin_col, row, col)
             if expected is None or expected == text:
                 continue  # no usable expectation; proposing nothing beats proposing nonsense
+            where = f"row {line}" if axis == "row" else f"column {_col_name(line)}"
             findings.append(
                 Finding(
                     sheet=sheet,
@@ -140,13 +210,71 @@ def detect_pattern_breaks(sheet: str, formulas: dict[str, str]) -> list[Finding]
                     panko_class="mechanical/logic",
                     actual=text,
                     expected=expected,
+                    axis=axis,
                     reason=(
-                        f"{n} of {len(members)} formula cells in row {row} share one shape; "
+                        f"{n} of {len(members)} formula cells in {where} share one shape; "
                         f"{ref} does not."
                     ),
                 )
             )
     return findings
+
+
+def _dedupe(findings: list[Finding]) -> list[Finding]:
+    """One finding per cell, preferring the row reading when both axes agree."""
+    best: dict[tuple[str, str], Finding] = {}
+    for f in findings:
+        key = (f.sheet, f.cell)
+        if key not in best or (best[key].axis != "row" and f.axis == "row"):
+            best[key] = f
+    return list(best.values())
+
+
+def _where(axis: str, line: int) -> str:
+    return f"row {line}" if axis == "row" else f"column {_col_name(line)}"
+
+
+RANGE_RE = re.compile(r"([A-Z]{1,3})([1-9][0-9]{0,6}):([A-Z]{1,3})([1-9][0-9]{0,6})")
+
+
+def _aggregates_its_peers(text: str, axis: str, peer_positions: list[int]) -> bool:
+    """Is this cell the total of the very cells it is being compared against?
+
+    The single most common shape in any spreadsheet is a run of values with a sum
+    at the end of it. Along that run the sum is the only cell with a different
+    formula, so a naive majority vote calls the **total** the error -- and does it
+    everywhere, because totals are everywhere.
+
+    Measured on the corpus before this guard existed, the column pass produced 235
+    findings the row pass missed, and on `darrell_schoolcraft__7407` it went from 1
+    to 124: rows 7-30 are hourly values and row 31 is `=SUM(E7:E30)`, flagged as a
+    break in all four columns. Those were not errors, and the benchmark could not
+    have told us -- they are all pre-existing, so they land in the excluded bucket
+    and precision would have looked untouched. Same shape as the `min_peers`
+    ablation, caught this time before it shipped.
+
+    A cell that spans its own peers is aggregating them, not failing to copy them.
+    """
+    if not peer_positions:
+        return False
+    lo, hi = min(peer_positions), max(peer_positions)
+    for c1, r1, c2, r2 in RANGE_RE.findall(text or ""):
+        if axis == "row":
+            start, end = column_index_from_string(c1), column_index_from_string(c2)
+        else:
+            start, end = int(r1), int(r2)
+        covered = [p for p in peer_positions if start <= p <= end]
+        # Half is enough: a subtotal often spans a block of the run rather than
+        # all of it, and a genuine off-by-one copy never spans its neighbours.
+        if len(covered) >= max(2, len(peer_positions) // 2) and start <= hi and end >= lo:
+            return True
+    return False
+
+
+def _col_name(index: int) -> str:
+    from openpyxl.utils import get_column_letter
+
+    return get_column_letter(index)
 
 
 #: How many formula peers a row needs before a typed constant in it means anything.
@@ -228,17 +356,12 @@ def detect_dead_cells(
     *,
     min_peers: int = MIN_ROW_PEERS,
     contiguous: bool = True,
+    axis: str = "row",
 ) -> list[Finding]:
     """A typed constant sitting where every neighbour holds a formula."""
     from openpyxl import load_workbook
 
-    by_row: dict[int, list[tuple[str, int, str]]] = defaultdict(list)
-    for ref, text in formulas.items():
-        try:
-            row, col = split_ref(ref)
-        except ValueError:
-            continue
-        by_row[row].append((ref, col, text))
+    grouped = _grouped(formulas, axis)
 
     wb = load_workbook(path, data_only=False, read_only=True)
     try:
@@ -260,21 +383,25 @@ def detect_dead_cells(
             row, col = split_ref(ref)
         except ValueError:
             continue
-        peers = by_row.get(row, [])
+        line, pos = (row, col) if axis == "row" else (col, row)
+        peers = grouped.get(line, [])
         if len(peers) < min_peers:
             continue
-        shapes = {normalise(t, row, c) for _, c, t in peers}
+        shapes = set()
+        for pref, _p, t in peers:
+            pr, pc = split_ref(pref)
+            shapes.add(normalise(t, pr, pc))
         if len(shapes) != 1:
             continue  # peers disagree among themselves; no clean expectation
 
         if contiguous:
-            near = set(_peers_in_block(col, [c for _, c, _ in peers]))
+            near = set(_peers_in_block(pos, [p for _, p, _ in peers]))
             if len(near) < min_peers:
-                continue  # peers exist, but in another block of this row
-            peers = [(r, c, t) for r, c, t in peers if c in near]
+                continue  # peers exist, but in another block of this line
+            peers = [(r, p, t) for r, p, t in peers if p in near]
 
-        twin_ref, twin_col, twin_text = min(peers, key=lambda m: abs(m[1] - col))
-        twin_row, _ = split_ref(twin_ref)
+        twin_ref, _twin_pos, twin_text = min(peers, key=lambda m: abs(m[1] - pos))
+        twin_row, twin_col = split_ref(twin_ref)
         expected = rebase(twin_text, twin_row, twin_col, row, col)
         if expected is None:
             continue  # translation would land off-sheet; no expectation to offer
@@ -286,12 +413,13 @@ def detect_dead_cells(
                 panko_class="hardcoding",
                 actual=str(value),
                 expected=expected,
+                axis=axis,
                 reason=(
-                    f"{len(peers)} adjacent cells in row {row} share one formula shape; "
-                    f"{ref} sits among them as a typed constant."
+                    f"{len(peers)} adjacent cells in {_where(axis, line)} share one "
+                    f"formula shape; {ref} sits among them as a typed constant."
                     if contiguous else
-                    f"all {len(peers)} other cells in row {row} share one formula shape; "
-                    f"{ref} is a typed constant."
+                    f"all {len(peers)} other cells in {_where(axis, line)} share one "
+                    f"formula shape; {ref} is a typed constant."
                 ),
             )
         )
@@ -488,9 +616,11 @@ def prove(path: str, findings: list[Finding], watch_limit: int = 250) -> list[Fi
                 if unresponsive and control_responded:
                     finding.proved = True
                     try:
-                        finding.delta = as_formula - as_is
+                        # The probe's effect, not a correction: it is the size of the
+                        # perturbation this cell failed to follow. Never a money figure.
+                        finding.probe_response = as_formula - as_is
                     except TypeError:
-                        finding.delta = None
+                        finding.probe_response = None
                     finding.proof = (
                         f"set {target} {original} -> {perturbed}: "
                         f"{finding.cell} as-is {finding.baseline_value} -> {as_is} (no response); "
@@ -515,6 +645,7 @@ def audit(
     max_proofs: int = 0,
     min_peers: int = MIN_ROW_PEERS,
     contiguous: bool = True,
+    axes: tuple[str, ...] = AXES,
 ) -> AuditReport:
     """Full deterministic audit of one workbook."""
     from plumbline.determinism import check, find_volatile
@@ -544,11 +675,19 @@ def audit(
     findings: list[Finding] = []
     dead_candidates: list[Finding] = []
     for sheet, formulas in sheets.items():
-        findings.extend(detect_pattern_breaks(sheet, formulas))
-        dead_candidates.extend(
-            detect_dead_cells(path, sheet, formulas, min_peers=min_peers,
-                              contiguous=contiguous)
-        )
+        for axis in axes:
+            findings.extend(detect_pattern_breaks(sheet, formulas, axis=axis))
+            dead_candidates.extend(
+                detect_dead_cells(path, sheet, formulas, min_peers=min_peers,
+                                  contiguous=contiguous, axis=axis)
+            )
+
+    # A genuinely wrong cell is often wrong in both directions at once, and the same
+    # address reported twice is a bug in the report, not two findings. Keep the row
+    # reading when both agree -- it is the one every earlier measurement used, so the
+    # v1..v5 numbers stay comparable -- and keep whichever arrived first otherwise.
+    findings = _dedupe(findings)
+    dead_candidates = _dedupe(dead_candidates)
 
     report.dead_candidates = len(dead_candidates)
     screened = screen_dead_cells(path, dead_candidates)

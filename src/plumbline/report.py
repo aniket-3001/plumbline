@@ -70,7 +70,12 @@ def render_markdown(report, *, source: str | None = None) -> str:
             add(f"{len(unproved)} cell(s) looked irregular but could not be proved wrong, "
                 "so they are listed under *Suspected* rather than reported as errors.")
     else:
-        money = [f.delta for f in proved if isinstance(f.delta, (int, float))]
+        # Only cells with a correction that moves a number today. A dead cell's
+        # impact is zero today and unbounded later, which is not a figure to quote.
+        money = [
+            f.delta for f in proved
+            if f.detector == "pattern_break" and isinstance(f.delta, (int, float))
+        ]
         add(f"**{len(proved)} proved problem(s)** across {report.formula_cells:,} formula cells.")
         if money:
             largest = max(money, key=abs)
