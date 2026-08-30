@@ -83,18 +83,18 @@ each one adds exactly one of this project's contributions. `python scripts/run_a
 
 | Metric | naive (baseline) | + block | + screen | + proof (shipped) |
 |---|---|---|---|---|
-| **Precision** | 0.011 | 0.315 | **1.000** | **1.000** |
-| **Recall** | 1.000 | 0.943 | 0.924 | 0.924 |
-| **F1** | 0.022 | 0.472 | **0.961** | **0.961** |
-| True positives | 53 | 50 | 49 | 49 |
-| False positives | **4,607** | 109 | **0** | **0** |
-| Cells reported to the analyst | 5,057 | 521 | 411 | 411 |
-| Findings carrying a proof | 0 | 0 | 0 | **35** |
+| **Precision** | 0.011 | 0.197 | 1.000 | 1.000 |
+| **Recall** | 1.000 | 0.981 | 0.981 | 0.981 |
+| **F1** | 0.021 | 0.328 | 0.990 | 0.990 |
+| True positives | 52 | 51 | 51 | 51 |
+| False positives | 4,777 | 208 | 0 | 0 |
+| Cells reported to the analyst | 5,187 | 565 | 357 | 357 |
+| Findings carrying a proof | 0 | 0 | 0 | 32 |
 
 **The baseline is not a strawman** — it is this tool with every contribution removed,
 on the same corpus, seeds and scorer. It also describes what a rule-based auditor
-does: flag structural anomalies and hand over the list. It finds **all 53** seeded
-errors. It buries them in 4,607 false ones, which is the documented failure of the
+does: flag structural anomalies and hand over the list. It finds **52 of 53** seeded
+errors. It buries them in 4,777 false ones, which is the documented failure of the
 commercial tools and the reason an analyst cannot use them.
 
 Each arm computes **its own exclusion list** at its own settings, so a more sensitive
@@ -103,13 +103,13 @@ arm is never charged for the extra pre-existing anomalies it correctly finds.
 Three things worth reading carefully, because none is the shape a comparison table
 usually has:
 
-- **Recall falls monotonically, and that is the trade being made.** 1.000 → 0.924.
+- **Recall falls slightly, and that is the trade being made.** 1.000 → 0.981.
   Each gate costs a true positive or two and removes hundreds to thousands of false
-  ones. The baseline's perfect recall is worthless at precision 0.011.
-- **The screen does most of the work**, 0.472 → 0.961, by asking one question of each
+  ones. The baseline's near-perfect recall is worthless at precision 0.011.
+- **The screen does most of the work**, 0.328 → 0.990, by asking one question of each
   candidate: does this typed constant equal what the row's formula would produce?
 - **Proof does not improve F1, and is not meant to.** Precision, recall and F1 are
-  identical with and without it. What changes is that 35 findings arrive carrying a
+  identical with and without it. What changes is that 32 findings arrive carrying a
   recomputation the analyst can rerun instead of an assertion they must trust. F1
   cannot express that, which is why proof rate is its own row.
 
@@ -122,7 +122,7 @@ flattered the result:
   what the product does, which demotes them to a *Suspected* section.
 - The `naive` arm originally called the detector at its defaults, so when block
   membership landed the **baseline silently inherited it** and its false positives
-  fell from 4,607 to 109. A baseline that improves as the tool improves makes the
+  fell by an order of magnitude. A baseline that improves as the tool improves makes the
   comparison meaningless. `naive` is now pinned to the pre-contiguity detector.
 
 ### Headline
@@ -198,11 +198,13 @@ finds 82%. That is not a prompting failure. Nothing in the formula text says whe
 a typed constant is data or a frozen formula, so no amount of reading can settle it.
 Only changing an input and watching the cell fail to respond can.
 
-**This run is partial and the table above says so honestly.** It covers **12 of 21
-workbooks**, stopping when the API account ran out of credit ~$4.85 in, so the
-deterministic column is recomputed on those same 12 rather than quoted from the
-full-corpus run. Comparing it against the headline 0.924 would be comparing
-different corpora. Raw per-workbook data, marked `"complete": false`, is in
+**This run is partial, and on the older corpus.** It covers **12 of 21 workbooks**,
+stopping when the API account ran out of credit ~$4.85 in, so the deterministic
+column is recomputed on those same 12 rather than quoted from any full-corpus run.
+It was measured on the **v5** corpus and has not been re-run on v6, because that
+costs money this project no longer has. Both columns come from the same 12
+workbooks and the same seeds, so the comparison between them stands; neither should
+be read against the v6 figures above. Raw per-workbook data, marked `"complete": false`, is in
 [`results/llm_baseline.json`](results/llm_baseline.json).
 
 Not a strawman: same model (`claude-opus-5`), same effort, formulas in reading order

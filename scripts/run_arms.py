@@ -83,11 +83,11 @@ CONTIGUOUS = {"naive": False, "block": True, "screened": True, "full": True}
 def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
     """One arm over every workbook. Only `arm` changes between calls."""
     from plumbline.audit import (
+        AXES,
         MIN_ROW_PEERS,
         _formulas_by_sheet,
         _load,
-        detect_dead_cells,
-        detect_pattern_breaks,
+        detect,
         prove,
         screen_dead_cells,
     )
@@ -109,13 +109,13 @@ def run_arm(arm: str, manifests: list[Path], *, max_proofs: int) -> dict:
         model, _ = _load(str(wb))
         sheets = _formulas_by_sheet(model)
 
-        findings = []
-        dead = []
-        for sheet, formulas in sheets.items():
-            findings.extend(detect_pattern_breaks(sheet, formulas))
-            dead.extend(detect_dead_cells(str(wb), sheet, formulas,
-                                          min_peers=MIN_ROW_PEERS,
-                                          contiguous=contiguous))
+        # Through `audit.detect`, not a private copy of it. Calling the detectors
+        # directly is how this file silently went on measuring the row-only tool
+        # after the shipped one gained a column pass -- the mandatory comparison
+        # then described a product that does not exist.
+        findings, dead = detect(
+            str(wb), sheets, min_peers=MIN_ROW_PEERS, contiguous=contiguous, axes=AXES
+        )
 
         # The contributions, added one at a time.
         findings += dead if arm in ("naive", "block") else screen_dead_cells(str(wb), dead)
