@@ -1,7 +1,7 @@
 # Spreadsheet Audit Agent — Design
 
-Status: **decisions locked 2026-08-28.** Companion to `HACKATHON_BRIEF.md`,
-`CANDIDATE_IDEAS.md`, `WINNING_PATTERNS.md`.
+Status: **decisions locked 2026-08-28.** Companion to `REPRODUCTION.md` and
+`MIN_PEERS_ABLATION.md`.
 
 ---
 

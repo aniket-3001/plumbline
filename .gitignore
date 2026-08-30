@@ -14,6 +14,11 @@ data/seeded/
 
 # Results are regenerated, but keep the committed evaluation snapshots
 results/scratch/
+# Run transcripts: console noise. The .json summaries carry the numbers, and they
+# are what the docs and tests actually cite.
+results/*.log
+# Crash-safety partial written during a long baseline run; superseded on completion
+results/baseline_partial.json
 # Smoke-test scratch output: regenerated on every run, evidence of nothing
 results/smoke_*
 

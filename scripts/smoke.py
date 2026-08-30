@@ -124,11 +124,12 @@ def checks(quick: bool) -> list[Check]:
 
     out += [
         Check(
-            "plumbline audit (the video's demo shot)", "VIDEO_SCRIPT.md 0:35",
+            "plumbline audit (the headline demo)", "README Reproduction",
             [*cli, "audit", DEMO],
             expect_exit=1,
-            # The exact lines the script puts on screen. If the detector changes
-            # what this workbook reports, the video script is wrong and this fails.
+            # The exact lines this workbook reports. Pinned because a detector
+            # change that alters them also invalidates anything quoting them --
+            # the README's examples, and the video script kept outside this repo.
             must_contain=[
                 "Sheet1!AI74", "=+AH73", "=+AH74", "+50002",
                 "Sheet1!AG55", "=+AF55", "no response", "responds",
@@ -136,7 +137,7 @@ def checks(quick: bool) -> list[Check]:
             ],
         ),
         Check(
-            "plumbline audit --report", "VIDEO_SCRIPT.md 1:25",
+            "plumbline audit --report", "README Reproduction",
             [*cli, "audit", DEMO, "--report", "results/smoke_report.md"],
             expect_exit=1,
             must_contain=["wrote results"],

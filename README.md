@@ -369,7 +369,6 @@ mean less than it appears to.
 | [`Docs/DESIGN.md`](Docs/DESIGN.md) | Architecture, why each layer exists, and what the evaluation taught (§6d) |
 | [`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJECTORIES.md) | Whole-pipeline traces and the Layer 2 agent, with its instructions |
 | [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md) | The threshold sweep, hand-labelled, and why the worse-scoring arm shipped |
-| [`Docs/VIDEO_SCRIPT.md`](Docs/VIDEO_SCRIPT.md) | Script and shot list for the solution video |
 
 ## Reproduction
 
