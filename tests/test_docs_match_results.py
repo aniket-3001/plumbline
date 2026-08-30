@@ -28,12 +28,26 @@ BASELINE = ROOT / "results" / "baseline.json"
 ROW = r"^\|\s*{label}\s*\|(.+)\|\s*$"
 
 
-def _cells(label: str) -> list[str]:
-    """The cells of the README table row whose first column is `label`."""
+def _cells(label: str, width: int | None = None) -> list[str]:
+    """The cells of the README table row whose first column is `label`.
+
+    Matched by **shape**, not by document order. The same label legitimately appears
+    in more than one table -- "Precision" is a row of the four-arm comparison and
+    also a row of the proposed rubric -- so taking the first match silently reads
+    whichever table happens to come first, and adding a section above rearranges
+    what the test is checking. Requiring the expected column count pins it.
+    """
     text = README.read_text(encoding="utf-8")
-    match = re.search(ROW.format(label=re.escape(label)), text, re.MULTILINE)
-    assert match, f"README has no table row labelled {label!r}"
-    return [c.strip().replace("*", "").replace(",", "") for c in match.group(1).split("|")]
+    rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
+    assert rows, f"README has no table row labelled {label!r}"
+    for row in rows:
+        cells = [c.strip().replace("*", "").replace(",", "") for c in row.split("|")]
+        if width is None or len(cells) == width:
+            return cells
+    raise AssertionError(
+        f"no {width}-column table row labelled {label!r}; "
+        f"found widths {[len(r.split('|')) for r in rows]}"
+    )
 
 
 def _num(cell: str) -> float:
@@ -71,8 +85,7 @@ class TestBaselineVsSolutionTable:
         ],
     )
     def test_row_matches_the_run(self, arms, label, key):
-        cells = _cells(label)
-        assert len(cells) == 4, f"{label}: expected 4 arms, found {len(cells)}"
+        cells = _cells(label, width=4)
         for arm, cell in zip(self.ORDER, cells):
             expected = arms[arm]["summary"][key]
             assert _num(cell) == pytest.approx(expected, abs=0.001), (
@@ -80,7 +93,7 @@ class TestBaselineVsSolutionTable:
             )
 
     def test_cells_reported_matches(self, arms):
-        for arm, cell in zip(self.ORDER, _cells("Cells reported to the analyst")):
+        for arm, cell in zip(self.ORDER, _cells("Cells reported to the analyst", width=4)):
             assert _num(cell) == arms[arm]["summary"]["reported_total"]
 
 

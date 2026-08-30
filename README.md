@@ -70,6 +70,77 @@ exercised on real API responses ([`Docs/AGENT_TRAJECTORIES.md`](Docs/AGENT_TRAJE
 rather than only unit-tested. Whether its *explanations* are good would need human judgement, and
 that has not been run.
 
+## How this was evaluated
+
+**Primary metric: F1 on seeded errors.** Fixed in [`Docs/DESIGN.md`](Docs/DESIGN.md)
+§5 before the first evaluation ran, along with the corpus, the baselines and the
+scoring rule. Ground truth is exact because the errors are injected, so precision
+and recall are counted rather than judged.
+
+**What a good result looks like, and when we said so.** The target set in advance
+was a detector that beats the structural baseline on F1 *without* losing precision —
+because for an audit tool a false positive costs more than a miss. An analyst who
+chases two dead ends stops trusting the third finding. We did **not** set a numeric
+threshold in advance, and saying otherwise afterwards would be inventing the target
+to fit the result. What we did fix in advance is the rule that decided every
+subsequent tradeoff, and it is why the `min_peers` ablation shipped the arm with the
+*worse* benchmark score.
+
+**Cases: 21 real workbooks, 53 injected errors.** Same cases for every arm. Errors
+are drawn from Panko's taxonomy and stratified by difficulty, because a single
+blended recall figure lets a detector that only catches loud breakage look identical
+to one that catches silent corruption.
+
+### The comparison, in the brief's format
+
+| Metric | Manual process today | Simple baseline | Plumbline | Change |
+|---|---|---|---|---|
+| **Primary outcome (F1)** | — | 0.021 | **0.990** | **+0.969** |
+| Cells the analyst must judge, per workbook | 1,774 | 247 | **17** | **−99%** vs manual |
+| Human time per workbook | ~5 h | ~2 h | **~8 min** | see note |
+| Cost per workbook | analyst time | $0 | **$0** | no API, no key |
+| Machine time per workbook | — | ~5 s | ~33 s | slower on purpose |
+
+*Human time is an estimate, not a measurement, and the assumption is stated so you
+can disagree with it: ~10 s to read a formula and its neighbours during a full manual
+sweep, ~30 s to adjudicate a cell something has flagged. The measured input is the
+cell counts, which come from [`results/arms.json`](results/arms.json). Nobody
+actually does the 5-hour sweep — that is the point, and it is why the honest
+comparison for the manual column is "spot-check and hope".*
+
+Plumbline is **slower per workbook than the naive detector and that is deliberate**:
+the extra 28 seconds are spent recomputing the workbook to prove findings, which is
+what turns 247 cells to squint at into 17 with evidence attached.
+
+### The rubric we propose
+
+The brief's sample format has one primary outcome; a spreadsheet audit needs four
+numbers, because "found it" and "can show you why" are different achievements. If
+you would rather score this project on its own terms, these are the numbers we would
+use, and all four are in [`results/`](results/):
+
+| | What it measures | Why it earns a place |
+|---|---|---|
+| **Precision** | Of what we report, how much is real | The product-critical one. A tool that cries wolf is worse than no tool |
+| **Recall, split by difficulty** | Of what is there, how much we find — separately for *obvious*, *realistic* and *silent* | Blending them hides whether the hard class works at all |
+| **Proof rate** | Share of findings carrying a recomputation the reader can rerun | This is the product's actual claim, and F1 cannot express it |
+| **Unverified findings** | Cells reported that ground truth cannot adjudicate | The honesty metric. It is the bucket the score cannot see, and it is where a detector hides its costs |
+
+### The challenging case, and what it revealed
+
+`darrell_schoolcraft__7407` is an hourly-volume sheet: rows 7–30 are values, row 31
+is `=SUM(E7:E30)`. When column-wise detection was added, findings on this one
+workbook went from 1 to **124** — the detector was flagging the **column totals** as
+errors, because along a run of values the total is the only cell with a different
+formula. Totals are in every spreadsheet ever written.
+
+What it revealed is the thing this project is really about: **the benchmark called
+that free.** Every one of those 124 cells is pre-existing, so it lands in the
+excluded bucket and precision looked untouched. The bug was caught by reading the
+number by hand, not by the score. Aggregates are now filtered before the majority
+vote, and a genuinely wrong total is a declared blind spot rather than a silent one.
+
+
 ## Improvement Changelog
 
 Every meaningful experiment, its evidence, and the decision it drove — including the ones that were
