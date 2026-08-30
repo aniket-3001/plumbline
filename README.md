@@ -279,7 +279,7 @@ Full clean-machine guide: [`Docs/REPRODUCTION.md`](Docs/REPRODUCTION.md).
 
 ```bash
 python -m venv .venv && .venv/Scripts/python.exe -m pip install -e ".[dev]"
-.venv/Scripts/python.exe -m pytest tests/ -q          # 181 passed, ~10s, no data needed
+.venv/Scripts/python.exe -m pytest tests/ -q          # 186 passed, ~10s, no data needed
 .venv/Scripts/python.exe scripts/fetch_corpus.py      # 993 MB, resumable
 .venv/Scripts/python.exe scripts/build_eval_corpus.py --scan 900 --target 40
 .venv/Scripts/python.exe scripts/seed_corpus.py --seeds-per-workbook 4 --seed 42

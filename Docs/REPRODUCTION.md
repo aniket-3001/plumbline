@@ -26,7 +26,7 @@ test.
 | **OS** | Developed on Windows 11. No OS-specific code; Linux and macOS should work |
 
 **Verified from a clean clone**, not just asserted: `git clone` into an empty directory,
-fresh venv, `pip install -e ".[dev]"` (exit 0), `pytest` → 181 passed. The step that
+fresh venv, `pip install -e ".[dev]"` (exit 0), `pytest` → 186 passed. The step that
 had been broken for weeks and this caught is in §1.
 
 There are no credentials, API keys, or accounts involved in the baseline arm.
@@ -56,7 +56,7 @@ Throughout this guide `PY` means the interpreter inside the venv —
 PY -m pytest tests/ -q
 ```
 
-Expected: `181 passed`. If this fails, stop — nothing downstream will be meaningful.
+Expected: `186 passed`. If this fails, stop — nothing downstream will be meaningful.
 
 Then check that the commands in this guide actually run, which the unit tests do not
 cover:
