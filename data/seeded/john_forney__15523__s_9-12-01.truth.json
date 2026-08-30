@@ -9,15 +9,15 @@
       "seed_id": "john_forney__15523__s_9-12-01-1",
       "panko_class": "mechanical",
       "sheet": "Sheet1",
-      "cell": "O2",
-      "original_formula": "=O5-O6-O7",
-      "seeded_formula": "=O4-O6-O7",
+      "cell": "V2",
+      "original_formula": "=V5-V6-V7",
+      "seeded_formula": "=V4-V6-V7",
       "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
       "detectable_by": [
         "pattern_break"
       ],
-      "baseline_value": 360,
-      "seeded_value": 163,
+      "baseline_value": 400,
+      "seeded_value": 170,
       "value_changed": true,
       "difficulty": "realistic",
       "propagates_to": []

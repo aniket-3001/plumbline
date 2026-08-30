@@ -2,42 +2,77 @@
   "workbook": "chris_germany__1938__Mar2002_EstateGas.xlsx",
   "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\chris_germany__1938__Mar2002_EstateGas.xlsx",
   "seeded": "chris_germany__1938__Mar2002_EstateGas.xlsx",
-  "seed_count": 2,
+  "seed_count": 4,
   "pre_existing_findings": [],
   "seeds": [
     {
       "seed_id": "chris_germany__1938__Mar2002_EstateGas-0",
+      "panko_class": "hardcoding",
+      "sheet": "Sheet1",
+      "cell": "AG55",
+      "original_formula": "=+AF55",
+      "seeded_formula": -4000,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "detectable_by": [
+        "dead_cell",
+        "sensitivity_probe"
+      ],
+      "baseline_value": -4000,
+      "seeded_value": -4000,
+      "value_changed": false,
+      "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "chris_germany__1938__Mar2002_EstateGas-1",
       "panko_class": "mechanical",
       "sheet": "Sheet1",
-      "cell": "U8",
-      "original_formula": "=+T8",
-      "seeded_formula": "=+T7",
+      "cell": "U46",
+      "original_formula": "=+T46",
+      "seeded_formula": "=+T45",
       "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
       "detectable_by": [
         "pattern_break"
       ],
-      "baseline_value": 2.1562,
-      "seeded_value": 10000,
+      "baseline_value": -6800,
+      "seeded_value": 0,
       "value_changed": true,
-      "difficulty": "realistic",
+      "difficulty": "obvious",
       "propagates_to": []
     },
     {
       "seed_id": "chris_germany__1938__Mar2002_EstateGas-2",
       "panko_class": "hardcoding",
       "sheet": "Sheet1",
-      "cell": "AH25",
-      "original_formula": "=+AG25",
-      "seeded_formula": 5000,
+      "cell": "T57",
+      "original_formula": "=+T52+T55",
+      "seeded_formula": 0,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
         "dead_cell",
         "sensitivity_probe"
       ],
-      "baseline_value": 5000,
-      "seeded_value": 5000,
+      "baseline_value": 0,
+      "seeded_value": 0,
       "value_changed": false,
       "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "chris_germany__1938__Mar2002_EstateGas-3",
+      "panko_class": "mechanical",
+      "sheet": "Sheet1",
+      "cell": "AI74",
+      "original_formula": "=+AH74",
+      "seeded_formula": "=+AH73",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 2.3845,
+      "seeded_value": -50000,
+      "value_changed": true,
+      "difficulty": "realistic",
       "propagates_to": []
     }
   ]

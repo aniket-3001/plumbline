@@ -6,7 +6,7 @@ Every command below is real and has been run. Every number is from a committed f
 in `results/`. Nothing here needs staging, and if a take goes wrong the commands can
 simply be re-run.
 
-**Before recording:** `PY -m pytest tests/ -q` → `186 passed`, and check
+**Before recording:** `PY -m pytest tests/ -q` → `189 passed`, and check
 `data/seeded/` is populated. Total runtime of everything shown live is ~30 seconds;
 the baseline numbers are read from committed JSON rather than re-run, which is
 stated on screen.
@@ -44,36 +44,40 @@ Real Enron workbook, seeded with a known error.
 plumbline audit data/seeded/chris_germany__1938__Mar2002_EstateGas.xlsx
 ```
 
-*Let it run. ~2 seconds, 1,396 formula cells.*
+*Let it run. ~3 seconds, 1,395 formula cells.*
 
 ```
-PROVED  Sheet1!U8  (formula differs from the rest of its row)
-        is        =+T7
-        should be =+T8
-        U8: 10000 -> 2.1562 (-9997.8438)
+PROVED  Sheet1!AI74  (formula differs from the rest of its row)
+        is        =+AH73
+        should be =+AH74
+        AI74: -50000 -> 2.3845 (+50002.3845)
 
-PROVED  Sheet1!AH25  (typed-in value where a formula belongs)
-        is        5000
-        should be =+AG25
-        set AG25 5000 -> 6000: AH25 as-is 5000 -> 5000 (no response);
-                               as formula -> 6000 (responds)
+...
+
+PROVED  Sheet1!AG55  (typed-in value where a formula belongs)
+        is        -4000
+        should be =+AF55
+        set AF55 -4000 -> -3000: AG55 as-is -4000 -> -4000 (no response);
+                                 as formula -> -3000 (responds)
 ```
 
-> Two findings, and the difference between them is the whole idea.
+*Findings are ordered by money impact, so the fifty-thousand correction leads.*
+
+> Two kinds of finding, and the difference between them is the whole idea.
 >
-> `U8` is in a carry-forward chain — every cell reads the one to its left. `U8`
-> reads one row *up*. A dragged formula. We prove it by repairing the cell,
-> recomputing the workbook, and showing you the number moves: ten thousand becomes
-> two point one six.
+> `AI74` is in a carry-forward chain — every cell reads the one to its left. This
+> one reads one row *up*. A dragged formula. We prove it by repairing the cell,
+> recomputing the workbook, and showing you the number moves — by fifty thousand.
+> That is why it's first: the list is ordered by what it costs you.
 >
-> `AH25` is harder. Someone typed five thousand over a formula. **It is correct
-> today** — five thousand is exactly what the formula would give. Repairing it
+> `AG55` is harder. Someone typed minus four thousand over a formula. **It is
+> correct today** — that is exactly what the formula would give. Repairing it
 > changes nothing, so there's no delta to show.
 >
-> So we prove it differently. Nudge the input it should depend on: `AG25` goes to
-> six thousand. A live formula would follow. `AH25` sits there. It's not a number
-> any more, it's a monument — and the day someone updates that input, the model is
-> silently wrong.
+> So we prove it differently. Nudge the input it should depend on: `AF55` moves to
+> minus three thousand. A live formula would follow. `AG55` sits there. It's not a
+> number any more, it's a monument — and the day someone updates that input, the
+> model is silently wrong.
 >
 > **No delta, no finding.** Nothing reaches the analyst that isn't tied to a cell
 > and a recomputation they can rerun.

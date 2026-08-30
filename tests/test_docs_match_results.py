@@ -85,38 +85,69 @@ class TestBaselineVsSolutionTable:
 
 
 class TestHeadlineLadder:
-    """The v1..v5 table. Only the last column names the current state; the earlier
-    columns describe runs that happened and are deliberately not re-derived."""
+    """The v1..v5 ladder is history and ends at v5 on purpose.
 
-    @pytest.mark.parametrize(
-        ("label", "key"),
-        [
-            ("**Precision**", "precision"),
-            ("**Recall**", "recall"),
-            ("**F1**", "f1"),
-        ],
-    )
-    def test_final_column_is_the_current_baseline(self, baseline, label, key):
-        # Two rows carry these labels; the ladder is the 5-cell one.
+    v6 detects along columns, and measuring that needs a corpus containing column
+    errors -- so it re-seeds, which makes it a different benchmark rather than the
+    next rung. Quoting v6's recall against v5's would compare two question papers.
+    The ladder's last column is therefore checked against the **v5** results file,
+    not against the current one.
+    """
+
+    V5 = ROOT / "results" / "baseline_v5_contiguity.json"
+
+    @pytest.fixture(scope="class")
+    @classmethod
+    def v5(cls):
+        if not cls.V5.exists():
+            pytest.skip("v5 snapshot absent")
+        return json.loads(cls.V5.read_text(encoding="utf-8"))["summary"]
+
+    def _ladder_final(self, label: str) -> float:
         text = README.read_text(encoding="utf-8")
         rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
         ladder = [r for r in rows if len(r.split("|")) == 5]
         assert ladder, f"no 5-column ladder row for {label}"
-        final = ladder[0].split("|")[-1].strip().replace("*", "")
-        assert _num(final) == pytest.approx(baseline[key], abs=0.001), (
-            f"README ladder ends at {final} for {label}; "
-            f"results/baseline.json says {baseline[key]}"
+        return _num(ladder[0].split("|")[-1].strip().replace("*", ""))
+
+    @pytest.mark.parametrize(
+        ("label", "key"),
+        [("**Precision**", "precision"), ("**Recall**", "recall"), ("**F1**", "f1")],
+    )
+    def test_ladder_ends_at_the_v5_snapshot(self, v5, label, key):
+        assert self._ladder_final(label) == pytest.approx(v5[key], abs=0.001)
+
+    def test_ladder_silent_recall_matches_v5(self, v5):
+        assert self._ladder_final("Recall, *silent*") == pytest.approx(
+            v5["recall_by_difficulty"]["silent"], abs=0.001
         )
 
-    def test_silent_recall_matches(self, baseline):
+
+class TestCurrentBaselineTable:
+    """The row-only vs row+column table is the current state, and must track it."""
+
+    def _two_col(self, label: str) -> tuple[float, float]:
         text = README.read_text(encoding="utf-8")
-        rows = re.findall(ROW.format(label=re.escape("Recall, *silent*")), text, re.MULTILINE)
-        ladder = [r for r in rows if len(r.split("|")) == 5]
-        assert ladder
-        final = ladder[0].split("|")[-1].strip().replace("*", "")
-        assert _num(final) == pytest.approx(
-            baseline["recall_by_difficulty"]["silent"], abs=0.001
-        )
+        rows = re.findall(ROW.format(label=re.escape(label)), text, re.MULTILINE)
+        pair = [r for r in rows if len(r.split("|")) == 2]
+        assert pair, f"no 2-column row for {label}"
+        a, b = (c.strip().replace("*", "").replace(",", "") for c in pair[0].split("|"))
+        return _num(a), _num(b)
+
+    @pytest.mark.parametrize(
+        ("label", "key"),
+        [("Precision", "precision"), ("Recall", "recall"), ("F1", "f1")],
+    )
+    def test_both_arms_match_their_runs(self, label, key):
+        row_only = ROOT / "results" / "baseline_v6_rowonly.json"
+        both = ROOT / "results" / "baseline_v6_bothaxes.json"
+        if not (row_only.exists() and both.exists()):
+            pytest.skip("v6 arms absent")
+        r = json.loads(row_only.read_text(encoding="utf-8"))["summary"]
+        b = json.loads(both.read_text(encoding="utf-8"))["summary"]
+        stated_row, stated_both = self._two_col(label)
+        assert stated_row == pytest.approx(r[key], abs=0.001)
+        assert stated_both == pytest.approx(b[key], abs=0.001)
 
 
 class TestProseFigures:

@@ -130,9 +130,9 @@ def checks(quick: bool) -> list[Check]:
             # The exact lines the script puts on screen. If the detector changes
             # what this workbook reports, the video script is wrong and this fails.
             must_contain=[
-                "Sheet1!U8", "=+T7", "=+T8", "10000 -> 2.1562",
-                "Sheet1!AH25", "=+AG25", "no response", "responds",
-                "1,396 formula cells checked",
+                "Sheet1!AI74", "=+AH73", "=+AH74", "+50002",
+                "Sheet1!AG55", "=+AF55", "no response", "responds",
+                "1,395 formula cells checked",
             ],
         ),
         Check(

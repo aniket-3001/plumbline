@@ -185,9 +185,21 @@ def _shift_first_reference(formula: str, delta: int) -> str | None:
 
 
 def plan_seeds(
-    path: Path, rng: random.Random, max_seeds: int = 3, axes: tuple[str, ...] = ("row",)
+    path: Path,
+    rng: random.Random,
+    max_seeds: int = 3,
+    axes: tuple[str, ...] = ("row",),
+    avoid: set[str] | None = None,
 ) -> list[dict]:
     """Choose what to inject, without touching the file yet.
+
+    `avoid` is the set of `Sheet!Cell` refs the untouched original already flags.
+    Seeding one of those produces a finding that was going to be reported anyway, so
+    it is not evidence about the seed -- and because pre-existing findings are also
+    excluded from scoring, the same cell would be both a planted error and an
+    exclusion. The laundering guard in the scorer caught exactly that on
+    `tracy_geaccone__40381!L15`, which the row pass saw as unanimous and the column
+    pass already considered broken.
 
     `axes` defaults to row-only, which is what v1..v5 measured. Passing both plants
     errors that only a column-wise pass can see, so the corpus can finally ask that
@@ -288,8 +300,11 @@ def plan_seeds(
     used_lines: set[tuple[str, str, int]] = set()
     per_class: dict[str, int] = defaultdict(int)
     cap = max(1, max_seeds // 2)
+    blocked = avoid or set()
     for cand in candidates:
         key = (cand["sheet"], cand["cell"])
+        if f"{cand['sheet']}!{cand['cell']}" in blocked:
+            continue  # already flagged before we touched it; seeding proves nothing
         row, col = _row_of(cand["cell"]), _col_of(cand["cell"])
         # One seed per row **and** per column. The row rule exists because two
         # errors in a three-formula row make the corrupted pair the majority and
@@ -398,7 +413,11 @@ def apply_seeds(src: Path, dest: Path, plan: list[dict]) -> list[Seed]:
 
 
 def pre_existing_findings(
-    path: Path, *, min_peers: int | None = None, contiguous: bool = True
+    path: Path,
+    *,
+    min_peers: int | None = None,
+    contiguous: bool = True,
+    axes: tuple[str, ...] | None = None,
 ) -> list[str]:
     """Cells the *original* workbook already flags, before any seed is injected.
 
@@ -424,44 +443,43 @@ def pre_existing_findings(
     all: run this on the seeded copy and it excludes the seeds themselves, and
     recall becomes meaningless while every number still looks plausible.
     """
-    from plumbline.audit import (
-        MIN_ROW_PEERS,
-        detect_dead_cells,
-        detect_pattern_breaks,
-        screen_dead_cells,
-    )
+    from plumbline.audit import AXES, MIN_ROW_PEERS, detect, screen_dead_cells
     from poc import load_formulas
 
     min_peers = MIN_ROW_PEERS if min_peers is None else min_peers
+    axes = AXES if axes is None else axes
 
     try:
         sheets = load_formulas(str(path))
     except Exception:  # noqa: BLE001
         return []
 
-    refs: list[str] = []
-    dead: list = []
-    for sheet, formulas in sheets.items():
-        try:
-            refs.extend(f"{sheet}!{f.cell}" for f in detect_pattern_breaks(sheet, formulas))
-            dead.extend(detect_dead_cells(str(path), sheet, formulas, min_peers=min_peers,
-                                          contiguous=contiguous))
-        except Exception:  # noqa: BLE001
-            continue
-
-    # Screened the same way the audit screens, so the two agree cell for cell.
+    # `audit.detect` is the single definition of what this project detects, and this
+    # calls it rather than re-deriving it. Every previous version of this function
+    # was a second implementation, and every one of them drifted.
     try:
-        refs.extend(f"{f.sheet}!{f.cell}" for f in screen_dead_cells(str(path), dead))
+        breaks, dead = detect(
+            str(path), sheets, min_peers=min_peers, contiguous=contiguous, axes=axes
+        )
+    except Exception:  # noqa: BLE001
+        return []
+
+    refs = [f"{f.sheet}!{f.cell}" for f in breaks]
+    try:
+        refs += [f"{f.sheet}!{f.cell}" for f in screen_dead_cells(str(path), dead)]
     except Exception:  # noqa: BLE001
         pass
     return sorted(set(refs))
 
 
-def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int = 3) -> dict | None:
+def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int = 3, axes: tuple[str, ...] = ("row",)) -> dict | None:
     """Seed one workbook and return its ground-truth manifest."""
     from poc import detect_row_pattern_breaks, load_formulas
 
-    plan = plan_seeds(src, rng, max_seeds=max_seeds)
+    # Computed before planning so seed sites can avoid it, and reused for the
+    # manifest so the two can never disagree.
+    pre_existing = pre_existing_findings(src)
+    plan = plan_seeds(src, rng, max_seeds=max_seeds, axes=axes, avoid=set(pre_existing))
     if not plan:
         return None
 
@@ -475,7 +493,6 @@ def seed_workbook(src: Path, dest_dir: Path, rng: random.Random, max_seeds: int 
 
     # What does the untouched workbook already flag? Those are not our seeds, and
     # counting them as false positives would understate precision.
-    pre_existing = pre_existing_findings(src)
 
     manifest = {
         "workbook": src.name,

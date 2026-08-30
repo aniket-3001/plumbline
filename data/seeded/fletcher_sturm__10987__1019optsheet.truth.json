@@ -85,36 +85,35 @@
       "seed_id": "fletcher_sturm__10987__1019optsheet-0",
       "panko_class": "hardcoding",
       "sheet": "sheet 1",
-      "cell": "C169",
-      "original_formula": "=C168",
-      "seeded_formula": 30,
+      "cell": "C259",
+      "original_formula": "=C258",
+      "seeded_formula": 31.2,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
         "dead_cell",
         "sensitivity_probe"
       ],
-      "baseline_value": 30,
-      "seeded_value": 30,
+      "baseline_value": 31.2,
+      "seeded_value": 31.2,
       "value_changed": false,
       "difficulty": "silent",
       "propagates_to": []
     },
     {
       "seed_id": "fletcher_sturm__10987__1019optsheet-1",
-      "panko_class": "hardcoding",
+      "panko_class": "mechanical",
       "sheet": "sheet 1",
-      "cell": "C44",
-      "original_formula": "=C43",
-      "seeded_formula": 26.15,
-      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
+      "cell": "B157",
+      "original_formula": "=+B149",
+      "seeded_formula": "=+B148",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
       "detectable_by": [
-        "dead_cell",
-        "sensitivity_probe"
+        "pattern_break"
       ],
-      "baseline_value": 26.15,
-      "seeded_value": 26.15,
-      "value_changed": false,
-      "difficulty": "silent",
+      "baseline_value": null,
+      "seeded_value": 0,
+      "value_changed": true,
+      "difficulty": "obvious",
       "propagates_to": []
     }
   ]

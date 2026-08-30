@@ -638,6 +638,41 @@ def prove(path: str, findings: list[Finding], watch_limit: int = 250) -> list[Fi
     return findings
 
 
+def detect(
+    path: str,
+    sheets: dict[str, dict[str, str]],
+    *,
+    min_peers: int = MIN_ROW_PEERS,
+    contiguous: bool = True,
+    axes: tuple[str, ...] = AXES,
+) -> tuple[list[Finding], list[Finding]]:
+    """Every candidate, on every axis. The single definition of "what we detect".
+
+    `audit` and `seeding.pre_existing_findings` both need this and must not diverge:
+    the exclusion list is subtracted from the audit's output, so any detector the one
+    knows about and the other does not becomes a false positive with no cause. That
+    has now happened five times in this project -- one detector out of two, a
+    threshold mismatch, a contiguity mismatch, a per-arm settings mismatch, and an
+    axis mismatch -- which is four times more than any amount of care was going to
+    prevent. So there is one function, and both callers go through it.
+    """
+    findings: list[Finding] = []
+    dead: list[Finding] = []
+    for sheet, formulas in sheets.items():
+        for axis in axes:
+            findings.extend(detect_pattern_breaks(sheet, formulas, axis=axis))
+            dead.extend(
+                detect_dead_cells(path, sheet, formulas, min_peers=min_peers,
+                                  contiguous=contiguous, axis=axis)
+            )
+
+    # A genuinely wrong cell is often wrong in both directions at once, and the same
+    # address reported twice is a bug in the report, not two findings. Keep the row
+    # reading when both agree -- it is the one every earlier measurement used, so the
+    # v1..v5 numbers stay comparable -- and keep whichever arrived first otherwise.
+    return _dedupe(findings), _dedupe(dead)
+
+
 def audit(
     path: str | Path,
     *,
@@ -672,22 +707,9 @@ def audit(
     sheets = _formulas_by_sheet(model)
     report.formula_cells = sum(len(v) for v in sheets.values())
 
-    findings: list[Finding] = []
-    dead_candidates: list[Finding] = []
-    for sheet, formulas in sheets.items():
-        for axis in axes:
-            findings.extend(detect_pattern_breaks(sheet, formulas, axis=axis))
-            dead_candidates.extend(
-                detect_dead_cells(path, sheet, formulas, min_peers=min_peers,
-                                  contiguous=contiguous, axis=axis)
-            )
-
-    # A genuinely wrong cell is often wrong in both directions at once, and the same
-    # address reported twice is a bug in the report, not two findings. Keep the row
-    # reading when both agree -- it is the one every earlier measurement used, so the
-    # v1..v5 numbers stay comparable -- and keep whichever arrived first otherwise.
-    findings = _dedupe(findings)
-    dead_candidates = _dedupe(dead_candidates)
+    findings, dead_candidates = detect(
+        path, sheets, min_peers=min_peers, contiguous=contiguous, axes=axes
+    )
 
     report.dead_candidates = len(dead_candidates)
     screened = screen_dead_cells(path, dead_candidates)

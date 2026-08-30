@@ -2,86 +2,29 @@
   "workbook": "lisa_gang__22348__EES_Schedule.xlsx",
   "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\lisa_gang__22348__EES_Schedule.xlsx",
   "seeded": "lisa_gang__22348__EES_Schedule.xlsx",
-  "seed_count": 4,
+  "seed_count": 1,
   "pre_existing_findings": [
-    "EES-Schedule day 1!D106",
-    "EES-Schedule day 1!D107",
-    "EES-Schedule day 1!D108",
+    "EES-Schedule day 1!A4",
     "EES-Schedule day 1!D81",
-    "day 2!D106",
-    "day 2!D107",
-    "day 2!D108",
+    "day 2!A4",
     "day 2!D81"
   ],
   "seeds": [
     {
-      "seed_id": "lisa_gang__22348__EES_Schedule-0",
-      "panko_class": "logic",
-      "sheet": "EES-Schedule day 1",
-      "cell": "U52",
-      "original_formula": "=SUM(U17:U38)-SUM(U39:U50)-U16",
-      "seeded_formula": "=AVERAGE(U17:U38)-SUM(U39:U50)-U16",
-      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
-      "detectable_by": [
-        "pattern_break"
-      ],
-      "baseline_value": 102.6083792218073,
-      "seeded_value": -350.8007116872836,
-      "value_changed": true,
-      "difficulty": "realistic",
-      "propagates_to": []
-    },
-    {
-      "seed_id": "lisa_gang__22348__EES_Schedule-1",
-      "panko_class": "hardcoding",
-      "sheet": "EES-Schedule day 1",
-      "cell": "Y136",
-      "original_formula": "=SUM(Y134:Y135)",
-      "seeded_formula": 832.4785050824601,
-      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
-      "detectable_by": [
-        "dead_cell",
-        "sensitivity_probe"
-      ],
-      "baseline_value": 832.4785050824601,
-      "seeded_value": 832.4785050824601,
-      "value_changed": false,
-      "difficulty": "silent",
-      "propagates_to": []
-    },
-    {
       "seed_id": "lisa_gang__22348__EES_Schedule-2",
       "panko_class": "logic",
       "sheet": "day 2",
-      "cell": "V52",
-      "original_formula": "=SUM(V17:V38)-SUM(V39:V50)-V16",
-      "seeded_formula": "=AVERAGE(V17:V38)-SUM(V39:V50)-V16",
+      "cell": "L130",
+      "original_formula": "=SUM(L109:L120)-SUM(L121:L128)-L108",
+      "seeded_formula": "=AVERAGE(L109:L120)-SUM(L121:L128)-L108",
       "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
       "detectable_by": [
         "pattern_break"
       ],
-      "baseline_value": 181.6989362394756,
-      "seeded_value": -449.25560921506985,
+      "baseline_value": -20.16248290512132,
+      "seeded_value": -20.162482905121315,
       "value_changed": true,
       "difficulty": "realistic",
-      "propagates_to": []
-    },
-    {
-      "seed_id": "lisa_gang__22348__EES_Schedule-3",
-      "panko_class": "hardcoding",
-      "sheet": "day 2",
-      "cell": "P99",
-      "original_formula": "=SUM(P64:P85)-SUM(P86:P97)-P63",
-      "seeded_formula": -49.61759602703978,
-      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
-      "detectable_by": [
-        "dead_cell",
-        "sensitivity_probe"
-      ],
-      "baseline_value": -49.61759602703978,
-      "seeded_value": -49.61759602703978,
-      "value_changed": false,
-      "difficulty": "silent",
       "propagates_to": []
     }
   ]

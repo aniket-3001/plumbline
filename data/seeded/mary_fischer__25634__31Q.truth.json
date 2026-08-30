@@ -2,54 +2,44 @@
   "workbook": "mary_fischer__25634__31Q.xlsx",
   "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\mary_fischer__25634__31Q.xlsx",
   "seeded": "mary_fischer__25634__31Q.xlsx",
-  "seed_count": 3,
+  "seed_count": 2,
   "pre_existing_findings": [
-    "E-6.XLS!Q19",
+    "E1.XLS !G25",
+    "E1.XLS !K25",
+    "E1.XLS !O25",
+    "E1.XLS !S25",
+    "E12.XLS!O36",
+    "E12.XLS!Y46",
     "E16.XLS!W47",
     "E20.XLS!K41",
-    "E3.XLS!S38"
+    "E21.XLS !AC36",
+    "E21.XLS!AC36"
   ],
   "seeds": [
     {
-      "seed_id": "mary_fischer__25634__31Q-0",
-      "panko_class": "logic",
-      "sheet": "E1.XLS ",
-      "cell": "S34",
-      "original_formula": "=SUM(O34:Q34)",
-      "seeded_formula": "=AVERAGE(O34:Q34)",
-      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
-      "detectable_by": [
-        "pattern_break"
-      ],
-      "baseline_value": 0,
-      "seeded_value": "#VALUE!",
-      "value_changed": true,
-      "difficulty": "realistic",
-      "propagates_to": []
-    },
-    {
       "seed_id": "mary_fischer__25634__31Q-1",
-      "panko_class": "logic",
-      "sheet": "E1.XLS ",
-      "cell": "M25",
-      "original_formula": "=SUM(M19:M23)",
-      "seeded_formula": "=AVERAGE(M19:M23)",
-      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
+      "panko_class": "hardcoding",
+      "sheet": "E2.XLS",
+      "cell": "S22",
+      "original_formula": "=SUM(O22:Q22)",
+      "seeded_formula": 0,
+      "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
-        "pattern_break"
+        "dead_cell",
+        "sensitivity_probe"
       ],
       "baseline_value": 0,
-      "seeded_value": "#VALUE!",
-      "value_changed": true,
-      "difficulty": "realistic",
+      "seeded_value": 0,
+      "value_changed": false,
+      "difficulty": "silent",
       "propagates_to": []
     },
     {
-      "seed_id": "mary_fischer__25634__31Q-3",
+      "seed_id": "mary_fischer__25634__31Q-2",
       "panko_class": "hardcoding",
-      "sheet": "E1.XLS ",
-      "cell": "I39",
-      "original_formula": "=SUM(I30:I38)",
+      "sheet": "E2.XLS",
+      "cell": "O31",
+      "original_formula": "=SUM(K31:M31)",
       "seeded_formula": 0,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [

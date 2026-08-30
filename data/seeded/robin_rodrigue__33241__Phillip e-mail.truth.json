@@ -2,7 +2,7 @@
   "workbook": "robin_rodrigue__33241__Phillip e-mail.xlsx",
   "source": "D:\\Aniket\\Frontier Engineering Challenge\\plumbline\\data\\eval_corpus\\robin_rodrigue__33241__Phillip e-mail.xlsx",
   "seeded": "robin_rodrigue__33241__Phillip e-mail.xlsx",
-  "seed_count": 3,
+  "seed_count": 2,
   "pre_existing_findings": [
     "Report!AG21",
     "Report!AG26",
@@ -28,8 +28,8 @@
       "seed_id": "robin_rodrigue__33241__Phillip e-mail-0",
       "panko_class": "hardcoding",
       "sheet": "Report",
-      "cell": "L67",
-      "original_formula": "=SUM(M69:M71)-M63+M66",
+      "cell": "I50",
+      "original_formula": "=SUM(I41:I49)",
       "seeded_formula": 0,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
@@ -43,36 +43,19 @@
       "propagates_to": []
     },
     {
-      "seed_id": "robin_rodrigue__33241__Phillip e-mail-1",
-      "panko_class": "logic",
-      "sheet": "Report",
-      "cell": "AE86",
-      "original_formula": "=SUM(AE77:AE85)",
-      "seeded_formula": "=AVERAGE(AE77:AE85)",
-      "description": "SUM replaced by AVERAGE -- plausible formula, wrong intent.",
-      "detectable_by": [
-        "pattern_break"
-      ],
-      "baseline_value": -20375,
-      "seeded_value": -2263.8888888888887,
-      "value_changed": true,
-      "difficulty": "realistic",
-      "propagates_to": []
-    },
-    {
       "seed_id": "robin_rodrigue__33241__Phillip e-mail-3",
       "panko_class": "hardcoding",
       "sheet": "Report",
-      "cell": "Y50",
-      "original_formula": "=SUM(Y41:Y49)",
-      "seeded_formula": 0,
+      "cell": "AG86",
+      "original_formula": "=SUM(AG77:AG85)",
+      "seeded_formula": 41854174.0301,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
         "dead_cell",
         "sensitivity_probe"
       ],
-      "baseline_value": 0,
-      "seeded_value": 0,
+      "baseline_value": 41854174.0301,
+      "seeded_value": 41854174.0301,
       "value_changed": false,
       "difficulty": "silent",
       "propagates_to": []

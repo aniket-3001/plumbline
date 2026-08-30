@@ -13,17 +13,17 @@
       "seed_id": "mike_carson__27556__102601 NE & NY Optionsheet-1",
       "panko_class": "mechanical",
       "sheet": "Options",
-      "cell": "C44",
-      "original_formula": "=C43",
-      "seeded_formula": "=C42",
+      "cell": "D37",
+      "original_formula": "=D36",
+      "seeded_formula": "=D35",
       "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
       "detectable_by": [
         "pattern_break"
       ],
-      "baseline_value": null,
-      "seeded_value": 0,
+      "baseline_value": 38.25,
+      "seeded_value": 57.25,
       "value_changed": true,
-      "difficulty": "obvious",
+      "difficulty": "realistic",
       "propagates_to": []
     }
   ]

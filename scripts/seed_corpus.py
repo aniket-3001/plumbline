@@ -25,7 +25,8 @@ SEEDED = ROOT / "data" / "seeded"
 RESULTS = ROOT / "results"
 
 
-def _refresh_pre_existing(min_peers: int, no_contiguous: bool = False) -> int:
+def _refresh_pre_existing(min_peers: int, no_contiguous: bool = False,
+                          detect_axes: str = "row,col") -> int:
     """Recompute `pre_existing_findings` on the originals, leaving the seeds alone.
 
     Pre-existing findings are a property of the *unseeded* workbook, so they can be
@@ -51,7 +52,8 @@ def _refresh_pre_existing(min_peers: int, no_contiguous: bool = False) -> int:
             continue
         old = m.get("pre_existing_findings", [])
         new = pre_existing_findings(source, min_peers=min_peers or None,
-                                    contiguous=not no_contiguous)
+                                    contiguous=not no_contiguous,
+                                    axes=tuple(detect_axes.split(",")))
         before += len(old)
         after += len(new)
         m["pre_existing_findings"] = new
@@ -71,12 +73,23 @@ def main() -> int:
     ap.add_argument("--seeds-per-workbook", type=int, default=4)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument(
+        "--axes",
+        default="row",
+        help="which orientations to plant errors along: 'row' (what v1..v5 measured) "
+        "or 'row,col'. Seeding along columns makes a different corpus, so it is a new "
+        "benchmark rather than the next rung of that ladder.",
+    )
+    ap.add_argument(
         "--min-peers",
         type=int,
         default=0,
         help="peer threshold to compute pre-existing findings at; 0 uses the audit's "
         "default. Must match the threshold the audit will run at, or every extra "
         "pre-existing cell a more sensitive audit finds is charged to it.",
+    )
+    ap.add_argument(
+        "--detect-axes", default="row,col",
+        help="axes to compute the exclusion list along; must match the audit's.",
     )
     ap.add_argument(
         "--no-contiguous",
@@ -99,7 +112,7 @@ def main() -> int:
     from plumbline.seeding import seed_workbook
 
     if args.refresh_pre_existing:
-        return _refresh_pre_existing(args.min_peers, args.no_contiguous)
+        return _refresh_pre_existing(args.min_peers, args.no_contiguous, args.detect_axes)
 
     books = sorted(p for p in EVAL.glob("*.xlsx"))
     if not books:
@@ -115,7 +128,9 @@ def main() -> int:
     print(f"seeding {len(books)} workbooks (rng seed {args.seed})\n")
     for book in books:
         try:
-            manifest = seed_workbook(book, SEEDED, rng, max_seeds=args.seeds_per_workbook)
+            manifest = seed_workbook(book, SEEDED, rng,
+                                     max_seeds=args.seeds_per_workbook,
+                                     axes=tuple(args.axes.split(",")))
         except Exception as exc:  # noqa: BLE001
             skipped.append({"workbook": book.name, "reason": f"{type(exc).__name__}: {exc}"})
             print(f"  [skip] {book.name[:58]:58} {type(exc).__name__}")

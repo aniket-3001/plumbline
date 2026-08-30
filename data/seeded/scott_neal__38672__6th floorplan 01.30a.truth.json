@@ -13,76 +13,75 @@
     "Floor Plan!J78",
     "Floor Plan!K52",
     "Floor Plan!R85",
-    "Floor Plan!U32",
-    "Sheet1!K7"
+    "Floor Plan!U32"
   ],
   "seeds": [
     {
       "seed_id": "scott_neal__38672__6th floorplan 01.30a-0",
       "panko_class": "hardcoding",
       "sheet": "Floor Plan",
-      "cell": "Y41",
-      "original_formula": "=Z41+1",
-      "seeded_formula": 229,
+      "cell": "E65",
+      "original_formula": "=F65+1",
+      "seeded_formula": 524,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
         "dead_cell",
         "sensitivity_probe"
       ],
-      "baseline_value": 229,
-      "seeded_value": 229,
+      "baseline_value": 524,
+      "seeded_value": 524,
       "value_changed": false,
       "difficulty": "silent",
       "propagates_to": []
     },
     {
       "seed_id": "scott_neal__38672__6th floorplan 01.30a-1",
-      "panko_class": "mechanical",
-      "sheet": "Gen Invets",
-      "cell": "I23",
-      "original_formula": "=J23+1",
-      "seeded_formula": "=J22+1",
-      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
-      "detectable_by": [
-        "pattern_break"
-      ],
-      "baseline_value": 149,
-      "seeded_value": 1,
-      "value_changed": true,
-      "difficulty": "realistic",
-      "propagates_to": []
-    },
-    {
-      "seed_id": "scott_neal__38672__6th floorplan 01.30a-2",
       "panko_class": "hardcoding",
       "sheet": "Floor Plan",
-      "cell": "AB91",
-      "original_formula": "=AC91+1",
-      "seeded_formula": 142,
+      "cell": "V47",
+      "original_formula": "=W47+1",
+      "seeded_formula": 363,
       "description": "Formula replaced by its current value: correct today, silently dead the moment an input moves.",
       "detectable_by": [
         "dead_cell",
         "sensitivity_probe"
       ],
-      "baseline_value": 142,
-      "seeded_value": 142,
+      "baseline_value": 363,
+      "seeded_value": 363,
       "value_changed": false,
       "difficulty": "silent",
+      "propagates_to": []
+    },
+    {
+      "seed_id": "scott_neal__38672__6th floorplan 01.30a-2",
+      "panko_class": "mechanical",
+      "sheet": "Floor Plan",
+      "cell": "K40",
+      "original_formula": "=L40+1",
+      "seeded_formula": "=L39+1",
+      "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
+      "detectable_by": [
+        "pattern_break"
+      ],
+      "baseline_value": 487,
+      "seeded_value": "#VALUE!",
+      "value_changed": true,
+      "difficulty": "realistic",
       "propagates_to": []
     },
     {
       "seed_id": "scott_neal__38672__6th floorplan 01.30a-3",
       "panko_class": "mechanical",
       "sheet": "Floor Plan",
-      "cell": "AA84",
-      "original_formula": "=AB84+1",
-      "seeded_formula": "=AB83+1",
+      "cell": "N58",
+      "original_formula": "=O58+1",
+      "seeded_formula": "=O57+1",
       "description": "Reference lands one row above its neighbours' -- the formula was dragged or copied off by one.",
       "detectable_by": [
         "pattern_break"
       ],
-      "baseline_value": 160,
-      "seeded_value": 1,
+      "baseline_value": 444,
+      "seeded_value": "#VALUE!",
       "value_changed": true,
       "difficulty": "realistic",
       "propagates_to": []

@@ -4,6 +4,8 @@
   "seeded": "john_zufferli__16801__marks.xlsx",
   "seed_count": 1,
   "pre_existing_findings": [
+    "Sheet1!E32",
+    "Sheet1!F32",
     "Sheet1!K32"
   ],
   "seeds": [

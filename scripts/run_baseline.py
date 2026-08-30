@@ -53,6 +53,11 @@ def main() -> int:
         help="drop the requirement that a dead cell's peers sit next to it. Scores the "
         "pre-contiguity detector; the exclusion list must be refreshed to match.",
     )
+    ap.add_argument(
+        "--axes", default="row,col",
+        help="orientations to detect along. The exclusion list must be refreshed to "
+        "match, or the more sensitive arm is charged for what it correctly finds.",
+    )
     ap.add_argument("--out", default="baseline.json", help="filename under results/")
     args = ap.parse_args()
 
@@ -84,7 +89,8 @@ def main() -> int:
         # so the timing reflects the audit itself.
         report = audit(wb, check_determinism=False, max_proofs=args.max_proofs,
                        min_peers=args.min_peers or MIN_ROW_PEERS,
-                       contiguous=not args.no_contiguous)
+                       contiguous=not args.no_contiguous,
+                       axes=tuple(args.axes.split(",")))
         elapsed = time.time() - t0
 
         if report.skipped:

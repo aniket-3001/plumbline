@@ -127,7 +127,7 @@ flattered the result:
 
 ### Headline
 
-| | v1 | v2 | v3 | v4 | **v5** |
+| | v1 | v2 | v3 | v4 | v5 |
 |---|---|---|---|---|---|
 | **Precision** | 0.739 | 0.750 | 0.975 | 1.000 | **1.000** |
 | **Recall** | 0.630 | 0.722 | 0.722 | 0.868 | **0.924** |
@@ -136,6 +136,29 @@ flattered the result:
 | Recall, *realistic* | 0.750 | 0.750 | 0.750 | 1.000 | **1.000** |
 | Recall, *silent* | 0.562 | 0.719 | 0.719 | 0.767 | **0.867** |
 | TP / FP / FN | 34/12/20 | 39/13/15 | 39/1/15 | 46/0/7 | **49/0/4** |
+
+**v6 detects down columns as well as across rows**, and it is deliberately *not* a
+sixth column above. Measuring a column detector needs a corpus containing column
+errors, so v6 re-seeds along both axes — a different corpus, and therefore a
+different benchmark. Quoting 0.981 against v5's 0.924 would be comparing two
+different question papers.
+
+The attributable comparison is both arms on the **same v6 corpus**, each with its
+own exclusion list:
+
+| | row only | **row + column** |
+|---|---|---|
+| Precision | 1.000 | **1.000** |
+| Recall | 0.750 | **0.981** |
+| F1 | 0.857 | **0.990** |
+| Recall, *silent* | 0.793 | **0.966** |
+| TP / FP / FN | 39 / 0 / 13 | **51 / 0 / 1** |
+
+Twelve more real errors at unchanged precision. It costs 114 more unverified
+pre-existing findings, and a sample of those was read by hand rather than trusted:
+`Feb01!R34`, `S34` and `T34` are three parallel columns each pointing one row past
+the pattern their neighbours follow — one dragged formula, replicated. Real errors,
+in the file Enron shipped.
 
 21 real Enron workbooks. v1–v3 share one corpus of 54 seeded errors with a single fix
 isolated per step, so every movement is attributable. v4 re-seeds (53 errors) because its
@@ -191,14 +214,14 @@ as false positives, which is the identical bug that cost the deterministic arm 1
 ### How to read these numbers
 
 **Precision and recall are measured against the seeded errors only.** The audit also
-returns 362 findings that were already in the original Enron files. Those are excluded
+returns 306 findings that were already in the original Enron files. Those are excluded
 from scoring — not counted as hits, not counted against precision — because nobody knows
 the ground truth for a 25-year-old workbook, and guessing it would be inventing the
 answer key.
 
 So `precision 1.000` means something narrower than it looks: **every finding was either
 an error we planted or a cell that was already anomalous before we touched the file.**
-The detector produced nothing that was neither. It does **not** mean the 362 are all real
+The detector produced nothing that was neither. It does **not** mean the 306 are all real
 defects. Some clearly are — on `scott_neal__38672`, six typed constants sit inside
 `=Z41+1` counter rows, which is textbook hardcoding in the file Enron shipped — but that
 is a spot check, not a measurement, and it is not claimed as one.
@@ -238,6 +261,9 @@ mean less than it appears to.
 | Precision | Screen candidates by batch in-place replacement | Cascaded: repairs fed each other and **all 41 candidates were discarded, including the seeded error** | **Removed.** A screen that can discard a true positive is worse than no screen |
 | **Main contribution** | Screen by evaluating each candidate's formula in a far-right scratch column | A1 references are literal text, so a formula means the same thing anywhere on its own sheet. One extra parse for the whole workbook, no original cell touched, no cascade. **TP 2/2, FP 0** (was TP 2, FP 40) | **Kept.** See `SCRATCH_COL` in `audit.py` |
 | **Ablation** | The dead-cell detector required 3 formula peers in a row, a number chosen by argument. Swept it against 2 | Benchmark says 2 wins outright: recall 0.868 → **0.981**, F1 0.929 → **0.991**, precision unchanged at 1.000. But all 29 extra findings are *pre-existing*, and pre-existing findings are excluded from scoring — so the benchmark shows the benefit and is **structurally blind to the cost**. Reading all 29 by hand: ~3 real, ~10 ordinary data flagged wrongly, ~16 unverifiable zeros | **Shipped the arm with the worse score**, and read the 29 by hand instead of accepting the number. That labelling is what identified cross-block comparison as the real signal — which the next row acts on, and which then made `2` safe after all. `--min-peers` makes the sweep repeatable |
+| **v5 → v6** | Detection ran down rows only, which the report had admitted for the whole project. Line items run down rows and periods across columns, so a growth-rate or running-total column was invisible | The column pass immediately produced 235 findings the row pass missed, and on `darrell_schoolcraft__7407` went from 1 to 124 — it was flagging **column totals** as breaks, because along a run of values the total is the only cell with a different formula. Totals are in every spreadsheet ever written | **Aggregates are filtered before the majority vote.** Filtering after leaves the total counting as a deviant, so a line holding both a total and a real error has two deviants and reports nothing. Unverified findings fell row 250 → 116 and column 235 → 44, with seed detection unchanged |
+| **v5 → v6** | *Then* measured, on a corpus re-seeded along both axes so the question could actually be asked | Row-only vs row+column on that corpus: recall **0.750 → 0.981**, F1 **0.857 → 0.990**, precision 1.000 in both. Twelve more real errors | **Kept.** A sample of the 114 extra unverified findings was hand-read: `Feb01!R34/S34/T34` are three parallel columns each pointing one row past their neighbours' pattern — one dragged formula, replicated |
+| **Benchmark** | Seeding only ever planted errors along rows | The column pass recovered **zero** of 53 seeds — not because it was useless, but because no error was ever placed where it could see one | **A detector cannot be judged against a benchmark that never poses its question.** Seeding takes an axis, one seed per column as well as per row |
 | **v4 → v5** | The hand-labelling said peer count was a *proxy*: every clear false positive was a **cross-block** comparison, candidate in one block of the row and its "peers" in another. Built `_peers_in_block` — a block is a run on one regular stride, so `C D E F` and `C _ E _ G` are each one block | With block membership enforced, `min_peers = 2` becomes safe: recall **0.868 → 0.924**, silent recall **0.767 → 0.867**, and the unverified pre-existing population goes **down**, 368 → 362. Precision is 1.000 in all four arms, so the threshold was never the precision knob it looked like | **Kept — the first change to a detector rather than the harness.** Blind spot pinned as tests: contiguity assumes corruption is one cell wide, and the seeder only ever injects one error per row, so the benchmark cannot see that limit. Both failing shapes are documented in [`Docs/MIN_PEERS_ABLATION.md`](Docs/MIN_PEERS_ABLATION.md) |
 | Scale | Prove every finding | One full workbook re-parse per finding. A 10,387-formula workbook ran for minutes at 674 MB and the corpus run could not finish | **Capped**, and the cap is recorded as `proof_truncated` so a truncated audit can never be read as a clean one |
 
@@ -279,7 +305,7 @@ Full clean-machine guide: [`Docs/REPRODUCTION.md`](Docs/REPRODUCTION.md).
 
 ```bash
 python -m venv .venv && .venv/Scripts/python.exe -m pip install -e ".[dev]"
-.venv/Scripts/python.exe -m pytest tests/ -q          # 186 passed, ~10s, no data needed
+.venv/Scripts/python.exe -m pytest tests/ -q          # 189 passed, ~10s, no data needed
 .venv/Scripts/python.exe scripts/fetch_corpus.py      # 993 MB, resumable
 .venv/Scripts/python.exe scripts/build_eval_corpus.py --scan 900 --target 40
 .venv/Scripts/python.exe scripts/seed_corpus.py --seeds-per-workbook 4 --seed 42
@@ -339,7 +365,7 @@ Three narrower limits, all measured rather than estimated:
 - **Volatile workbooks are refused, not audited.** `RAND` appears in 2.67% of formula
   cells. A proof is a comparison of two evaluations, and with `RAND` in the dependency
   cone the two differ for reasons that have nothing to do with the finding.
-- **The recall figure is against seeded errors, not all errors.** 362 findings in the
+- **The recall figure is against seeded errors, not all errors.** 306 findings in the
   corpus were already in Enron's files and are excluded from scoring, because no ground
   truth exists for them. See *How to read these numbers* above.
 
