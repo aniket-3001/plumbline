@@ -288,6 +288,11 @@ removed, a test that asserts the two agree. Three such tests exist now, and each
 written *after* the bug it would have caught.
 
 
+## AI Disclosure
+
+This project was developed with assistance from **Claude Code** (Anthropic) as an AI pair-programming assistant for implementation, test authoring, and documentation drafting. All system architecture, mathematical verification contracts, error taxonomy mapping, benchmark design, and final code reviews were directed and verified by the author.
+
+
 ## Licence
 
 MIT — see [`LICENSE`](LICENSE).
